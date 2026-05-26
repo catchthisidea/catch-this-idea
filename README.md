@@ -9,3 +9,7 @@ This project is in its early stages. More details coming soon.
 ## Contributing
 
 Feel free to open issues or pull requests with suggestions.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
