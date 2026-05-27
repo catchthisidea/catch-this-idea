@@ -178,9 +178,21 @@ body.dark .how{background:#110d0a;color:#f0ece4}
 .pwd-req.ok{color:#1e7e34}
 .pwd-req.ok::before{content:'✓'}
 body.dark .pwd-req.ok{color:#60c070}
+
+/* ── Salpicos decorativos ──────────────────────────────── */
+.splash{position:fixed;top:0;bottom:0;width:220px;pointer-events:none;z-index:1;display:flex;align-items:center}
+.splash-l{left:-90px}
+.splash-r{right:-90px;transform:scaleX(-1)}
+.splash img{width:100%;height:auto;opacity:.55;filter:drop-shadow(0 0 18px rgba(232,96,0,.18))}
+body.dark .splash img{opacity:.38}
+@media(max-width:1280px){.splash{display:none}}
 </style>
 </head>
 <body>
+<!-- Salpicos decorativos laterais -->
+<div class="splash splash-l" aria-hidden="true"><img src="/logotipo2.png" alt=""></div>
+<div class="splash splash-r" aria-hidden="true"><img src="/logotipo2.png" alt=""></div>
+
 <h2 class="sr-only">Catch This Idea — marketplace de ideias criativas por realizar</h2>
 <nav>
   <div class="logo">
