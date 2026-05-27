@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Cookies — Catch This Idea</title>
+<link rel="icon" type="image/x-icon" href="/logotipo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;--or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;--or-border:#f5c890;--muted:#7a6040;--border:#ddd0b8;--serif:"Instrument Serif",Georgia,serif;--sans:"DM Sans",sans-serif}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--or-border:#4a3520;--muted:#9a8a70;--border:#3a3028}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;transition:background .25s,color .25s}
+nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-icon{width:40px;height:40px;object-fit:contain;flex-shrink:0}
+.logo-type{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.05}
+.logo-type em{font-style:italic}
+.logo-type .sep{color:var(--or1);margin:0 1px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-wrap{display:flex;gap:5px}
+.lang-pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:background .15s,color .15s,border-color .15s}
+.lang-pill.active{background:var(--or1);color:#fff;border-color:var(--or1)}
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s}
+.dark-btn:hover{background:var(--paper2)}
+.legal-wrap{max-width:780px;margin:0 auto;padding:3rem 2rem 5rem}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .15s}
+.back-link:hover{color:var(--ink)}
+.legal-wrap h1{font-family:var(--serif);font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:.5rem}
+.legal-updated{font-size:13px;color:var(--muted);margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.legal-wrap h2{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--or1);margin:2rem 0 .7rem}
+.legal-wrap p{font-size:14.5px;color:var(--muted);line-height:1.8;margin-bottom:.9rem}
+.legal-wrap ul{padding-left:1.4rem;margin-bottom:1rem}
+.legal-wrap ul li{font-size:14.5px;color:var(--muted);line-height:1.8;margin-bottom:.35rem}
+.legal-wrap strong{color:var(--ink);font-weight:500}
+.legal-wrap a{color:var(--or1);text-decoration:none}
+.legal-wrap a:hover{text-decoration:underline}
+.cookie-table{width:100%;border-collapse:collapse;margin-bottom:1.2rem;font-size:13.5px}
+.cookie-table th{text-align:left;padding:.6rem .9rem;background:var(--paper2);color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.cookie-table td{padding:.65rem .9rem;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+.cookie-table td:first-child{font-weight:500;color:var(--ink);white-space:nowrap}
+.browser-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem;margin-bottom:1rem}
+.browser-item{background:var(--paper2);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-size:13.5px;color:var(--muted)}
+.browser-item strong{display:block;color:var(--ink);margin-bottom:2px}
+.legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
+.legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
+.legal-footer-links a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index-app.html">
+    <img class="logo-icon" src="/logotipo.png" alt="Catch This Idea">
+    <div class="logo-type">Catch<span class="sep">·</span><em>This</em><span class="sep">·</span>Idea</div>
+  </a>
+  <div class="nav-right">
+    <div class="lang-wrap">
+      <button class="lang-pill active" onclick="setLang('pt')">PT</button>
+      <button class="lang-pill" onclick="setLang('en')">EN</button>
+      <button class="lang-pill" onclick="setLang('fr')">FR</button>
+      <button class="lang-pill" onclick="setLang('es')">ES</button>
+    </div>
+    <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema">
+      <i class="ti ti-moon" id="dark-icon"></i>
+    </button>
+  </div>
+</nav>
+
+<div class="legal-wrap">
+  <a href="/index-app.html" class="back-link" id="back-link"><i class="ti ti-arrow-left"></i> <span id="back-txt">Voltar</span></a>
+  <h1 id="page-h1">Política de Cookies</h1>
+  <p class="legal-updated" id="updated-txt">Última atualização: 27 de maio de 2026</p>
+  <div id="content"></div>
+</div>
+
+<div class="legal-footer">
+  <span id="footer-copy">© 2026 Catch This Idea</span>
+  <div class="legal-footer-links">
+    <a href="/terms.html" id="lnk-terms">Termos de Uso</a>
+    <a href="/privacy.html" id="lnk-privacy">Privacidade</a>
+    <a href="/cookies.html" id="lnk-cookies">Cookies</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const saved=localStorage.getItem('cti_theme');
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+})();
+
+function toggleDark(){
+  const on=document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className=on?'ti ti-sun':'ti ti-moon';
+  localStorage.setItem('cti_theme',on?'dark':'light');
+}
+
+const C={
+  pt:{
+    title:'Política de Cookies — Catch This Idea',
+    h1:'Política de Cookies',
+    updated:'Última atualização: 27 de maio de 2026',
+    back:'Voltar',
+    copy:'© 2026 Catch This Idea',
+    terms:'Termos de Uso', privacy:'Privacidade', cookies:'Cookies',
+    html:`
+<h2>O que são Cookies</h2>
+<p>Cookies são pequenos ficheiros de texto armazenados no seu dispositivo quando visita um website. Permitem que o site reconheça o seu dispositivo entre visitas e recorde preferências como idioma e tema visual.</p>
+
+<h2>Cookies que Utilizamos</h2>
+<table class="cookie-table">
+  <thead><tr><th>Cookie</th><th>Tipo</th><th>Finalidade</th><th>Duração</th></tr></thead>
+  <tbody>
+    <tr><td>cti_theme</td><td>Necessário</td><td>Guarda a preferência de tema (claro/escuro)</td><td>Persistente</td></tr>
+    <tr><td>cti_lang</td><td>Necessário</td><td>Guarda o idioma selecionado</td><td>Persistente</td></tr>
+    <tr><td>sb-access-token</td><td>Necessário</td><td>Token de autenticação da sessão (Supabase)</td><td>Sessão / 1 hora</td></tr>
+    <tr><td>sb-refresh-token</td><td>Necessário</td><td>Renovação automática da sessão (Supabase)</td><td>60 dias</td></tr>
+  </tbody>
+</table>
+<p>Estes cookies são <strong>estritamente necessários</strong> para o funcionamento da plataforma. Sem eles, não é possível manter a sessão ativa nem guardar as suas preferências.</p>
+
+<h2>Cookies de Terceiros</h2>
+<ul>
+  <li><strong>Supabase</strong> — gestão de autenticação e sessão. Servidor na União Europeia.</li>
+  <li><strong>Google Fonts</strong> — carregamento de tipografia. Não define cookies de rastreamento.</li>
+</ul>
+
+<h2>O que Não Utilizamos</h2>
+<ul>
+  <li>Cookies de publicidade comportamental</li>
+  <li>Cookies de rastreamento de redes sociais</li>
+  <li>Cookies de análise de terceiros (ex.: Google Analytics)</li>
+  <li>Cookies de partilha de dados com anunciantes</li>
+</ul>
+
+<h2>Como Gerir os Cookies</h2>
+<p>Pode controlar e eliminar cookies através das definições do seu navegador:</p>
+<div class="browser-grid">
+  <div class="browser-item"><strong>Chrome</strong>Definições → Privacidade e segurança → Cookies</div>
+  <div class="browser-item"><strong>Firefox</strong>Opções → Privacidade e segurança</div>
+  <div class="browser-item"><strong>Safari</strong>Preferências → Privacidade</div>
+  <div class="browser-item"><strong>Edge</strong>Definições → Privacidade, pesquisa e serviços</div>
+</div>
+<p>⚠ Desativar os cookies essenciais pode impedir o funcionamento correto da plataforma, nomeadamente o acesso à sua conta.</p>
+
+<h2>Alterações</h2>
+<p>Podemos atualizar esta política sempre que necessário. A versão mais recente estará sempre disponível nesta página.</p>
+
+<h2>Contacto</h2>
+<p>Para questões sobre cookies: <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a></p>
+`},
+  en:{
+    title:'Cookie Policy — Catch This Idea',
+    h1:'Cookie Policy',
+    updated:'Last updated: 27 May 2026',
+    back:'Back',
+    copy:'© 2026 Catch This Idea',
+    terms:'Terms of Use', privacy:'Privacy', cookies:'Cookies',
+    html:`
+<h2>What Are Cookies</h2>
+<p>Cookies are small text files stored on your device when you visit a website. They allow the site to recognise your device between visits and remember preferences such as language and visual theme.</p>
+
+<h2>Cookies We Use</h2>
+<table class="cookie-table">
+  <thead><tr><th>Cookie</th><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead>
+  <tbody>
+    <tr><td>cti_theme</td><td>Necessary</td><td>Stores theme preference (light/dark)</td><td>Persistent</td></tr>
+    <tr><td>cti_lang</td><td>Necessary</td><td>Stores selected language</td><td>Persistent</td></tr>
+    <tr><td>sb-access-token</td><td>Necessary</td><td>Authentication session token (Supabase)</td><td>Session / 1 hour</td></tr>
+    <tr><td>sb-refresh-token</td><td>Necessary</td><td>Automatic session renewal (Supabase)</td><td>60 days</td></tr>
+  </tbody>
+</table>
+<p>These cookies are <strong>strictly necessary</strong> for the platform to function. Without them, it is not possible to maintain an active session or save your preferences.</p>
+
+<h2>Third-Party Cookies</h2>
+<ul>
+  <li><strong>Supabase</strong> — authentication and session management. EU servers.</li>
+  <li><strong>Google Fonts</strong> — typography loading. Does not set tracking cookies.</li>
+</ul>
+
+<h2>What We Don't Use</h2>
+<ul>
+  <li>Behavioural advertising cookies</li>
+  <li>Social media tracking cookies</li>
+  <li>Third-party analytics cookies (e.g. Google Analytics)</li>
+  <li>Data sharing cookies with advertisers</li>
+</ul>
+
+<h2>How to Manage Cookies</h2>
+<p>You can control and delete cookies through your browser settings:</p>
+<div class="browser-grid">
+  <div class="browser-item"><strong>Chrome</strong>Settings → Privacy and security → Cookies</div>
+  <div class="browser-item"><strong>Firefox</strong>Options → Privacy &amp; Security</div>
+  <div class="browser-item"><strong>Safari</strong>Preferences → Privacy</div>
+  <div class="browser-item"><strong>Edge</strong>Settings → Privacy, search and services</div>
+</div>
+<p>⚠ Disabling essential cookies may prevent the platform from functioning correctly, including access to your account.</p>
+
+<h2>Changes</h2>
+<p>We may update this policy as needed. The latest version will always be available on this page.</p>
+
+<h2>Contact</h2>
+<p>For questions about cookies: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
+`},
+  fr:{
+    title:'Politique de Cookies — Catch This Idea',
+    h1:'Politique de Cookies',
+    updated:'Dernière mise à jour : 27 mai 2026',
+    back:'Retour',
+    copy:'© 2026 Catch This Idea',
+    terms:"Conditions d'utilisation", privacy:'Confidentialité', cookies:'Cookies',
+    html:`
+<h2>Qu'est-ce qu'un Cookie ?</h2>
+<p>Les cookies sont de petits fichiers texte stockés sur votre appareil lorsque vous visitez un site web. Ils permettent au site de reconnaître votre appareil entre les visites et de mémoriser vos préférences de langue et de thème visuel.</p>
+
+<h2>Cookies Utilisés</h2>
+<table class="cookie-table">
+  <thead><tr><th>Cookie</th><th>Type</th><th>Finalité</th><th>Durée</th></tr></thead>
+  <tbody>
+    <tr><td>cti_theme</td><td>Nécessaire</td><td>Mémorise la préférence de thème (clair/sombre)</td><td>Persistant</td></tr>
+    <tr><td>cti_lang</td><td>Nécessaire</td><td>Mémorise la langue sélectionnée</td><td>Persistant</td></tr>
+    <tr><td>sb-access-token</td><td>Nécessaire</td><td>Jeton d'authentification de session (Supabase)</td><td>Session / 1 heure</td></tr>
+    <tr><td>sb-refresh-token</td><td>Nécessaire</td><td>Renouvellement automatique de session (Supabase)</td><td>60 jours</td></tr>
+  </tbody>
+</table>
+<p>Ces cookies sont <strong>strictement nécessaires</strong> au fonctionnement de la plateforme. Sans eux, il n'est pas possible de maintenir une session active ni de sauvegarder vos préférences.</p>
+
+<h2>Cookies Tiers</h2>
+<ul>
+  <li><strong>Supabase</strong> — gestion de l'authentification et de la session. Serveurs UE.</li>
+  <li><strong>Google Fonts</strong> — chargement de la typographie. Ne définit pas de cookies de suivi.</li>
+</ul>
+
+<h2>Ce que Nous N'utilisons Pas</h2>
+<ul>
+  <li>Cookies de publicité comportementale</li>
+  <li>Cookies de suivi des réseaux sociaux</li>
+  <li>Cookies d'analyse tiers (ex. Google Analytics)</li>
+  <li>Cookies de partage de données avec des annonceurs</li>
+</ul>
+
+<h2>Comment Gérer les Cookies</h2>
+<p>Vous pouvez contrôler et supprimer les cookies via les paramètres de votre navigateur :</p>
+<div class="browser-grid">
+  <div class="browser-item"><strong>Chrome</strong>Paramètres → Confidentialité → Cookies</div>
+  <div class="browser-item"><strong>Firefox</strong>Options → Vie privée et sécurité</div>
+  <div class="browser-item"><strong>Safari</strong>Préférences → Confidentialité</div>
+  <div class="browser-item"><strong>Edge</strong>Paramètres → Confidentialité et services</div>
+</div>
+<p>⚠ La désactivation des cookies essentiels peut empêcher le bon fonctionnement de la plateforme, notamment l'accès à votre compte.</p>
+
+<h2>Modifications</h2>
+<p>Nous pouvons mettre à jour cette politique à tout moment. La version la plus récente sera toujours disponible sur cette page.</p>
+
+<h2>Contact</h2>
+<p>Pour toute question sur les cookies : <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
+`},
+  es:{
+    title:'Política de Cookies — Catch This Idea',
+    h1:'Política de Cookies',
+    updated:'Última actualización: 27 de mayo de 2026',
+    back:'Volver',
+    copy:'© 2026 Catch This Idea',
+    terms:'Términos de uso', privacy:'Privacidad', cookies:'Cookies',
+    html:`
+<h2>¿Qué son las Cookies?</h2>
+<p>Las cookies son pequeños archivos de texto almacenados en tu dispositivo cuando visitas un sitio web. Permiten que el sitio reconozca tu dispositivo entre visitas y recuerde preferencias como el idioma y el tema visual.</p>
+
+<h2>Cookies que Utilizamos</h2>
+<table class="cookie-table">
+  <thead><tr><th>Cookie</th><th>Tipo</th><th>Finalidad</th><th>Duración</th></tr></thead>
+  <tbody>
+    <tr><td>cti_theme</td><td>Necesaria</td><td>Guarda la preferencia de tema (claro/oscuro)</td><td>Persistente</td></tr>
+    <tr><td>cti_lang</td><td>Necesaria</td><td>Guarda el idioma seleccionado</td><td>Persistente</td></tr>
+    <tr><td>sb-access-token</td><td>Necesaria</td><td>Token de autenticación de sesión (Supabase)</td><td>Sesión / 1 hora</td></tr>
+    <tr><td>sb-refresh-token</td><td>Necesaria</td><td>Renovación automática de sesión (Supabase)</td><td>60 días</td></tr>
+  </tbody>
+</table>
+<p>Estas cookies son <strong>estrictamente necesarias</strong> para el funcionamiento de la plataforma. Sin ellas, no es posible mantener la sesión activa ni guardar tus preferencias.</p>
+
+<h2>Cookies de Terceros</h2>
+<ul>
+  <li><strong>Supabase</strong> — gestión de autenticación y sesión. Servidores en la UE.</li>
+  <li><strong>Google Fonts</strong> — carga de tipografía. No establece cookies de seguimiento.</li>
+</ul>
+
+<h2>Lo que No Utilizamos</h2>
+<ul>
+  <li>Cookies de publicidad comportamental</li>
+  <li>Cookies de seguimiento de redes sociales</li>
+  <li>Cookies de análisis de terceros (ej. Google Analytics)</li>
+  <li>Cookies de intercambio de datos con anunciantes</li>
+</ul>
+
+<h2>Cómo Gestionar las Cookies</h2>
+<p>Puedes controlar y eliminar cookies a través de la configuración de tu navegador:</p>
+<div class="browser-grid">
+  <div class="browser-item"><strong>Chrome</strong>Configuración → Privacidad → Cookies</div>
+  <div class="browser-item"><strong>Firefox</strong>Opciones → Privacidad y seguridad</div>
+  <div class="browser-item"><strong>Safari</strong>Preferencias → Privacidad</div>
+  <div class="browser-item"><strong>Edge</strong>Configuración → Privacidad y servicios</div>
+</div>
+<p>⚠ Desactivar las cookies esenciales puede impedir el correcto funcionamiento de la plataforma, incluido el acceso a tu cuenta.</p>
+
+<h2>Cambios</h2>
+<p>Podemos actualizar esta política cuando sea necesario. La versión más reciente siempre estará disponible en esta página.</p>
+
+<h2>Contacto</h2>
+<p>Para preguntas sobre cookies: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
+`}
+};
+
+let lang='pt';
+function setLang(l){
+  lang=l;
+  const c=C[l];
+  document.title=c.title;
+  document.documentElement.lang=l;
+  document.getElementById('page-h1').textContent=c.h1;
+  document.getElementById('updated-txt').textContent=c.updated;
+  document.getElementById('back-txt').textContent=c.back;
+  document.getElementById('content').innerHTML=c.html;
+  document.getElementById('footer-copy').textContent=c.copy;
+  document.getElementById('lnk-terms').textContent=c.terms;
+  document.getElementById('lnk-privacy').textContent=c.privacy;
+  document.getElementById('lnk-cookies').textContent=c.cookies;
+  document.querySelectorAll('.lang-pill').forEach(p=>p.classList.toggle('active',p.textContent===l.toUpperCase()));
+  localStorage.setItem('cti_lang',l);
+}
+setLang(localStorage.getItem('cti_lang')||'pt');
+</script>
+</body>
+</html>

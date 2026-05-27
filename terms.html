@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Termos de Uso — Catch This Idea</title>
+<link rel="icon" type="image/x-icon" href="/logotipo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;--or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;--or-border:#f5c890;--muted:#7a6040;--border:#ddd0b8;--serif:"Instrument Serif",Georgia,serif;--sans:"DM Sans",sans-serif}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--or-border:#4a3520;--muted:#9a8a70;--border:#3a3028}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;transition:background .25s,color .25s}
+nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-icon{width:40px;height:40px;object-fit:contain;flex-shrink:0}
+.logo-type{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.05}
+.logo-type em{font-style:italic}
+.logo-type .sep{color:var(--or1);margin:0 1px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-wrap{display:flex;gap:5px}
+.lang-pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:background .15s,color .15s,border-color .15s}
+.lang-pill.active{background:var(--or1);color:#fff;border-color:var(--or1)}
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s}
+.dark-btn:hover{background:var(--paper2)}
+.legal-wrap{max-width:780px;margin:0 auto;padding:3rem 2rem 5rem}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .15s}
+.back-link:hover{color:var(--ink)}
+.legal-wrap h1{font-family:var(--serif);font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:.5rem}
+.legal-updated{font-size:13px;color:var(--muted);margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.legal-wrap h2{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--or1);margin:2rem 0 .7rem}
+.legal-wrap p{font-size:14.5px;color:var(--muted);line-height:1.8;margin-bottom:.9rem}
+.legal-wrap ul{padding-left:1.4rem;margin-bottom:1rem}
+.legal-wrap ul li{font-size:14.5px;color:var(--muted);line-height:1.8;margin-bottom:.35rem}
+.legal-wrap strong{color:var(--ink);font-weight:500}
+.legal-wrap a{color:var(--or1);text-decoration:none}
+.legal-wrap a:hover{text-decoration:underline}
+.legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
+.legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
+.legal-footer-links a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index-app.html">
+    <img class="logo-icon" src="/logotipo.png" alt="Catch This Idea">
+    <div class="logo-type">Catch<span class="sep">·</span><em>This</em><span class="sep">·</span>Idea</div>
+  </a>
+  <div class="nav-right">
+    <div class="lang-wrap">
+      <button class="lang-pill active" onclick="setLang('pt')">PT</button>
+      <button class="lang-pill" onclick="setLang('en')">EN</button>
+      <button class="lang-pill" onclick="setLang('fr')">FR</button>
+      <button class="lang-pill" onclick="setLang('es')">ES</button>
+    </div>
+    <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema">
+      <i class="ti ti-moon" id="dark-icon"></i>
+    </button>
+  </div>
+</nav>
+
+<div class="legal-wrap">
+  <a href="/index-app.html" class="back-link" id="back-link"><i class="ti ti-arrow-left"></i> <span id="back-txt">Voltar</span></a>
+  <h1 id="page-h1">Termos de Uso</h1>
+  <p class="legal-updated" id="updated-txt">Última atualização: 27 de maio de 2026</p>
+  <div id="content"></div>
+</div>
+
+<div class="legal-footer">
+  <span id="footer-copy">© 2026 Catch This Idea</span>
+  <div class="legal-footer-links">
+    <a href="/terms.html" id="lnk-terms">Termos de Uso</a>
+    <a href="/privacy.html" id="lnk-privacy">Privacidade</a>
+    <a href="/cookies.html" id="lnk-cookies">Cookies</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const saved=localStorage.getItem('cti_theme');
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+})();
+
+function toggleDark(){
+  const on=document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className=on?'ti ti-sun':'ti ti-moon';
+  localStorage.setItem('cti_theme',on?'dark':'light');
+}
+
+const C={
+  pt:{
+    title:'Termos de Uso',
+    h1:'Termos de Uso',
+    updated:'Última atualização: 27 de maio de 2026',
+    back:'Voltar',
+    copy:'© 2026 Catch This Idea',
+    terms:'Termos de Uso', privacy:'Privacidade', cookies:'Cookies',
+    html:`
+<h2>1. Aceitação dos Termos</h2>
+<p>Ao aceder e utilizar a plataforma Catch This Idea, o utilizador aceita integralmente os presentes Termos de Uso. Caso não concorde com alguma das disposições, deverá abster-se de utilizar o serviço.</p>
+
+<h2>2. O Serviço</h2>
+<p>O Catch This Idea é um marketplace online para compra e venda de ideias criativas: slogans, nomes de empresa, conceitos de apps, receitas, designs e planos de negócio. Atuamos como intermediários e não somos parte nas transações entre utilizadores.</p>
+
+<h2>3. Registo e Conta</h2>
+<ul>
+  <li>É necessário ter pelo menos 18 anos de idade.</li>
+  <li>É responsável pela confidencialidade das suas credenciais de acesso.</li>
+  <li>Deve fornecer informações verdadeiras e atualizadas.</li>
+  <li>Uma conta por pessoa ou entidade.</li>
+  <li>É proibido partilhar ou ceder a conta a terceiros.</li>
+</ul>
+
+<h2>4. Vendedores — Publicação de Ideias</h2>
+<ul>
+  <li>O vendedor declara ser o autor original da ideia publicada ou deter os direitos para a vender.</li>
+  <li>A ideia não pode violar propriedade intelectual de terceiros.</li>
+  <li>O Catch This Idea pode remover conteúdo que viole estas condições, sem aviso prévio.</li>
+  <li>O vendedor define o preço e a modalidade (licença, exclusividade ou encomenda personalizada).</li>
+</ul>
+
+<h2>5. Compradores — Aquisição de Ideias</h2>
+<ul>
+  <li>O comprador adquire os direitos conforme a modalidade escolhida.</li>
+  <li>O acesso à ideia completa só é concedido após confirmação de pagamento.</li>
+  <li>Não são aceites devoluções após a entrega da ideia, exceto em caso de fraude comprovada.</li>
+</ul>
+
+<h2>6. Comissões e Pagamentos</h2>
+<ul>
+  <li>Cobramos uma comissão de <strong>15%</strong> sobre o valor de cada venda concluída.</li>
+  <li>Os pagamentos são processados de forma segura através dos nossos parceiros.</li>
+  <li>Todos os preços são apresentados em euros (€) e incluem IVA quando aplicável.</li>
+</ul>
+
+<h2>7. Propriedade Intelectual</h2>
+<p>As ideias publicadas pertencem aos respetivos criadores, não ao Catch This Idea. A marca, logótipo, design e tecnologia da plataforma são propriedade exclusiva do Catch This Idea e não podem ser reproduzidos sem autorização escrita.</p>
+
+<h2>8. Conteúdo Proibido</h2>
+<p>É proibido publicar ideias que:</p>
+<ul>
+  <li>Violem direitos de propriedade intelectual de terceiros</li>
+  <li>Contenham conteúdo ilegal, ofensivo, discriminatório ou prejudicial</li>
+  <li>Sejam enganosas ou fraudulentas</li>
+  <li>Promovam atividades ilegais ou prejudiciais</li>
+</ul>
+
+<h2>9. Responsabilidade</h2>
+<p>O Catch This Idea não garante a originalidade absoluta das ideias publicadas nem se responsabiliza por disputas entre utilizadores. A nossa responsabilidade máxima é limitada ao valor das comissões recebidas na transação em causa.</p>
+
+<h2>10. Rescisão</h2>
+<p>Podemos suspender ou encerrar contas que violem estes Termos, sem aviso prévio em casos graves de fraude ou abuso.</p>
+
+<h2>11. Alterações</h2>
+<p>Reservamo-nos o direito de atualizar estes Termos a qualquer momento. Notificaremos os utilizadores registados em caso de alterações significativas, por email.</p>
+
+<h2>12. Lei Aplicável</h2>
+<p>Estes Termos são regidos pela lei portuguesa. Para resolução de litígios, é competente o Tribunal da Comarca de Lisboa.</p>
+
+<h2>13. Contacto</h2>
+<p>Para questões relacionadas com estes Termos: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
+`},
+  en:{
+    title:'Terms of Use — Catch This Idea',
+    h1:'Terms of Use',
+    updated:'Last updated: 27 May 2026',
+    back:'Back',
+    copy:'© 2026 Catch This Idea',
+    terms:'Terms of Use', privacy:'Privacy', cookies:'Cookies',
+    html:`
+<h2>1. Acceptance of Terms</h2>
+<p>By accessing and using the Catch This Idea platform, you fully accept these Terms of Use. If you disagree with any provision, you must refrain from using the service.</p>
+
+<h2>2. The Service</h2>
+<p>Catch This Idea is an online marketplace for buying and selling creative ideas: slogans, company names, app concepts, recipes, designs and business plans. We act as intermediaries and are not party to transactions between users.</p>
+
+<h2>3. Registration and Account</h2>
+<ul>
+  <li>You must be at least 18 years old.</li>
+  <li>You are responsible for keeping your credentials confidential.</li>
+  <li>You must provide accurate and up-to-date information.</li>
+  <li>One account per person or entity.</li>
+  <li>Sharing or transferring your account to third parties is prohibited.</li>
+</ul>
+
+<h2>4. Sellers — Publishing Ideas</h2>
+<ul>
+  <li>The seller declares they are the original author or hold the rights to sell the idea.</li>
+  <li>The idea must not infringe third-party intellectual property rights.</li>
+  <li>Catch This Idea may remove content that violates these conditions without prior notice.</li>
+  <li>The seller sets the price and modality (licence, exclusivity or custom order).</li>
+</ul>
+
+<h2>5. Buyers — Purchasing Ideas</h2>
+<ul>
+  <li>The buyer acquires rights according to the chosen modality.</li>
+  <li>Access to the full idea is only granted after payment confirmation.</li>
+  <li>No refunds are accepted after the idea has been delivered, except in cases of proven fraud.</li>
+</ul>
+
+<h2>6. Commission and Payments</h2>
+<ul>
+  <li>We charge a commission of <strong>15%</strong> on the value of each completed sale.</li>
+  <li>Payments are processed securely through our partners.</li>
+  <li>All prices are shown in euros (€) and include VAT where applicable.</li>
+</ul>
+
+<h2>7. Intellectual Property</h2>
+<p>Published ideas belong to their respective creators, not to Catch This Idea. The platform's brand, logo, design and technology are the exclusive property of Catch This Idea and may not be reproduced without written authorisation.</p>
+
+<h2>8. Prohibited Content</h2>
+<p>It is prohibited to publish ideas that:</p>
+<ul>
+  <li>Infringe third-party intellectual property rights</li>
+  <li>Contain illegal, offensive, discriminatory or harmful content</li>
+  <li>Are misleading or fraudulent</li>
+  <li>Promote illegal or harmful activities</li>
+</ul>
+
+<h2>9. Liability</h2>
+<p>Catch This Idea does not guarantee the absolute originality of published ideas and is not liable for disputes between users. Our maximum liability is limited to the commissions received in the transaction in question.</p>
+
+<h2>10. Termination</h2>
+<p>We may suspend or close accounts that violate these Terms, without prior notice in serious cases of fraud or abuse.</p>
+
+<h2>11. Changes</h2>
+<p>We reserve the right to update these Terms at any time. We will notify registered users of significant changes by email.</p>
+
+<h2>12. Governing Law</h2>
+<p>These Terms are governed by Portuguese law. The Lisbon Court has jurisdiction for dispute resolution.</p>
+
+<h2>13. Contact</h2>
+<p>For questions related to these Terms: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
+`},
+  fr:{
+    title:"Conditions d'Utilisation — Catch This Idea",
+    h1:"Conditions d'Utilisation",
+    updated:'Dernière mise à jour : 27 mai 2026',
+    back:'Retour',
+    copy:'© 2026 Catch This Idea',
+    terms:"Conditions d'utilisation", privacy:'Confidentialité', cookies:'Cookies',
+    html:`
+<h2>1. Acceptation des Conditions</h2>
+<p>En accédant à la plateforme Catch This Idea, vous acceptez pleinement ces Conditions d'Utilisation. Si vous n'êtes pas d'accord, veuillez ne pas utiliser le service.</p>
+
+<h2>2. Le Service</h2>
+<p>Catch This Idea est un marketplace en ligne pour l'achat et la vente d'idées créatives : slogans, noms d'entreprises, concepts d'applications, recettes, designs et plans d'affaires. Nous agissons en tant qu'intermédiaires et ne sommes pas partie aux transactions entre utilisateurs.</p>
+
+<h2>3. Inscription et Compte</h2>
+<ul>
+  <li>Vous devez avoir au moins 18 ans.</li>
+  <li>Vous êtes responsable de la confidentialité de vos identifiants.</li>
+  <li>Des informations exactes et à jour sont obligatoires.</li>
+  <li>Un compte par personne ou entité.</li>
+  <li>Il est interdit de partager ou de céder son compte à des tiers.</li>
+</ul>
+
+<h2>4. Vendeurs — Publication d'Idées</h2>
+<ul>
+  <li>Le vendeur déclare être l'auteur original de l'idée ou détenir les droits pour la vendre.</li>
+  <li>L'idée ne doit pas violer la propriété intellectuelle de tiers.</li>
+  <li>Catch This Idea peut supprimer du contenu violant ces conditions sans préavis.</li>
+  <li>Le vendeur fixe le prix et la modalité (licence, exclusivité ou commande personnalisée).</li>
+</ul>
+
+<h2>5. Acheteurs — Acquisition d'Idées</h2>
+<ul>
+  <li>L'acheteur acquiert les droits selon la modalité choisie.</li>
+  <li>L'accès à l'idée complète n'est accordé qu'après confirmation du paiement.</li>
+  <li>Aucun remboursement n'est accepté après la livraison de l'idée, sauf fraude avérée.</li>
+</ul>
+
+<h2>6. Commissions et Paiements</h2>
+<ul>
+  <li>Nous prélevons une commission de <strong>15 %</strong> sur le montant de chaque vente conclue.</li>
+  <li>Les paiements sont traités de manière sécurisée par nos partenaires.</li>
+  <li>Tous les prix sont affichés en euros (€) et incluent la TVA le cas échéant.</li>
+</ul>
+
+<h2>7. Propriété Intellectuelle</h2>
+<p>Les idées publiées appartiennent à leurs créateurs respectifs, pas à Catch This Idea. La marque, le logo, le design et la technologie de la plateforme sont la propriété exclusive de Catch This Idea et ne peuvent être reproduits sans autorisation écrite.</p>
+
+<h2>8. Contenu Interdit</h2>
+<p>Il est interdit de publier des idées qui :</p>
+<ul>
+  <li>Violent les droits de propriété intellectuelle de tiers</li>
+  <li>Contiennent du contenu illégal, offensant, discriminatoire ou nuisible</li>
+  <li>Sont trompeuses ou frauduleuses</li>
+  <li>Font la promotion d'activités illégales ou nuisibles</li>
+</ul>
+
+<h2>9. Responsabilité</h2>
+<p>Catch This Idea ne garantit pas l'originalité absolue des idées publiées et n'est pas responsable des litiges entre utilisateurs. Notre responsabilité maximale est limitée aux commissions perçues dans la transaction concernée.</p>
+
+<h2>10. Résiliation</h2>
+<p>Nous pouvons suspendre ou fermer des comptes violant ces Conditions, sans préavis dans les cas graves de fraude ou d'abus.</p>
+
+<h2>11. Modifications</h2>
+<p>Nous nous réservons le droit de mettre à jour ces Conditions à tout moment. Les utilisateurs inscrits seront notifiés des changements importants par e-mail.</p>
+
+<h2>12. Droit Applicable</h2>
+<p>Ces Conditions sont régies par le droit portugais. Le Tribunal de Lisbonne est compétent pour la résolution des litiges.</p>
+
+<h2>13. Contact</h2>
+<p>Pour toute question relative à ces Conditions : <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
+`},
+  es:{
+    title:'Términos de Uso — Catch This Idea',
+    h1:'Términos de Uso',
+    updated:'Última actualización: 27 de mayo de 2026',
+    back:'Volver',
+    copy:'© 2026 Catch This Idea',
+    terms:'Términos de uso', privacy:'Privacidad', cookies:'Cookies',
+    html:`
+<h2>1. Aceptación de los Términos</h2>
+<p>Al acceder y usar la plataforma Catch This Idea, aceptas plenamente estos Términos de Uso. Si no estás de acuerdo, debes abstenerte de usar el servicio.</p>
+
+<h2>2. El Servicio</h2>
+<p>Catch This Idea es un marketplace en línea para la compra y venta de ideas creativas: slogans, nombres de empresas, conceptos de apps, recetas, diseños y planes de negocio. Actuamos como intermediarios y no somos parte en las transacciones entre usuarios.</p>
+
+<h2>3. Registro y Cuenta</h2>
+<ul>
+  <li>Debes tener al menos 18 años de edad.</li>
+  <li>Eres responsable de mantener la confidencialidad de tus credenciales.</li>
+  <li>Debes proporcionar información veraz y actualizada.</li>
+  <li>Una cuenta por persona o entidad.</li>
+  <li>Está prohibido compartir o ceder la cuenta a terceros.</li>
+</ul>
+
+<h2>4. Vendedores — Publicación de Ideas</h2>
+<ul>
+  <li>El vendedor declara ser el autor original de la idea o tener los derechos para venderla.</li>
+  <li>La idea no puede infringir la propiedad intelectual de terceros.</li>
+  <li>Catch This Idea puede eliminar contenido que viole estas condiciones sin previo aviso.</li>
+  <li>El vendedor fija el precio y la modalidad (licencia, exclusividad o encargo personalizado).</li>
+</ul>
+
+<h2>5. Compradores — Adquisición de Ideas</h2>
+<ul>
+  <li>El comprador adquiere los derechos según la modalidad elegida.</li>
+  <li>El acceso a la idea completa solo se concede tras la confirmación del pago.</li>
+  <li>No se aceptan devoluciones tras la entrega de la idea, salvo fraude comprobado.</li>
+</ul>
+
+<h2>6. Comisiones y Pagos</h2>
+<ul>
+  <li>Cobramos una comisión del <strong>15 %</strong> sobre el valor de cada venta concluida.</li>
+  <li>Los pagos se procesan de forma segura a través de nuestros socios.</li>
+  <li>Todos los precios se muestran en euros (€) e incluyen IVA cuando corresponde.</li>
+</ul>
+
+<h2>7. Propiedad Intelectual</h2>
+<p>Las ideas publicadas pertenecen a sus respectivos creadores, no a Catch This Idea. La marca, logotipo, diseño y tecnología de la plataforma son propiedad exclusiva de Catch This Idea y no pueden reproducirse sin autorización escrita.</p>
+
+<h2>8. Contenido Prohibido</h2>
+<p>Está prohibido publicar ideas que:</p>
+<ul>
+  <li>Infrinjan derechos de propiedad intelectual de terceros</li>
+  <li>Contengan contenido ilegal, ofensivo, discriminatorio o dañino</li>
+  <li>Sean engañosas o fraudulentas</li>
+  <li>Promuevan actividades ilegales o perjudiciales</li>
+</ul>
+
+<h2>9. Responsabilidad</h2>
+<p>Catch This Idea no garantiza la originalidad absoluta de las ideas publicadas ni se responsabiliza de los conflictos entre usuarios. Nuestra responsabilidad máxima se limita a las comisiones recibidas en la transacción en cuestión.</p>
+
+<h2>10. Rescisión</h2>
+<p>Podemos suspender o cerrar cuentas que violen estos Términos, sin previo aviso en casos graves de fraude o abuso.</p>
+
+<h2>11. Cambios</h2>
+<p>Nos reservamos el derecho de actualizar estos Términos en cualquier momento. Notificaremos a los usuarios registrados de cambios significativos por correo electrónico.</p>
+
+<h2>12. Ley Aplicable</h2>
+<p>Estos Términos se rigen por la ley portuguesa. El Tribunal de Lisboa es competente para la resolución de conflictos.</p>
+
+<h2>13. Contacto</h2>
+<p>Para preguntas relacionadas con estos Términos: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
+`}
+};
+
+let lang='pt';
+function setLang(l){
+  lang=l;
+  const c=C[l];
+  document.title=c.title;
+  document.documentElement.lang=l;
+  document.getElementById('page-h1').textContent=c.h1;
+  document.getElementById('updated-txt').textContent=c.updated;
+  document.getElementById('back-txt').textContent=c.back;
+  document.getElementById('content').innerHTML=c.html;
+  document.getElementById('footer-copy').textContent=c.copy;
+  document.getElementById('lnk-terms').textContent=c.terms;
+  document.getElementById('lnk-privacy').textContent=c.privacy;
+  document.getElementById('lnk-cookies').textContent=c.cookies;
+  document.querySelectorAll('.lang-pill').forEach(p=>p.classList.toggle('active',p.textContent===l.toUpperCase()));
+  localStorage.setItem('cti_lang',l);
+}
+setLang(localStorage.getItem('cti_lang')||'pt');
+</script>
+</body>
+</html>

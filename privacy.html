@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de Privacidade — Catch This Idea</title>
+<link rel="icon" type="image/x-icon" href="/logotipo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;--or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;--or-border:#f5c890;--muted:#7a6040;--border:#ddd0b8;--serif:"Instrument Serif",Georgia,serif;--sans:"DM Sans",sans-serif}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--or-border:#4a3520;--muted:#9a8a70;--border:#3a3028}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;transition:background .25s,color .25s}
+nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-icon{width:40px;height:40px;object-fit:contain;flex-shrink:0}
+.logo-type{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.05}
+.logo-type em{font-style:italic}
+.logo-type .sep{color:var(--or1);margin:0 1px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-wrap{display:flex;gap:5px}
+.lang-pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:background .15s,color .15s,border-color .15s}
+.lang-pill.active{background:var(--or1);color:#fff;border-color:var(--or1)}
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s}
+.dark-btn:hover{background:var(--paper2)}
+.legal-wrap{max-width:780px;margin:0 auto;padding:3rem 2rem 5rem}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:2.5rem;transition:color .15s}
+.back-link:hover{color:var(--ink)}
+.legal-wrap h1{font-family:var(--serif);font-size:2.2rem;font-weight:400;line-height:1.15;margin-bottom:.5rem}
+.legal-updated{font-size:13px;color:var(--muted);margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.legal-wrap h2{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--or1);margin:2rem 0 .7rem}
+.legal-wrap p{font-size:14.5px;color:var(--muted);line-height:1.8;margin-bottom:.9rem}
+.legal-wrap ul{padding-left:1.4rem;margin-bottom:1rem}
+.legal-wrap ul li{font-size:14.5px;color:var(--muted);line-height:1.8;margin-bottom:.35rem}
+.legal-wrap strong{color:var(--ink);font-weight:500}
+.legal-wrap a{color:var(--or1);text-decoration:none}
+.legal-wrap a:hover{text-decoration:underline}
+.rights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem;margin-bottom:1rem}
+.right-item{background:var(--paper2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:.5rem}
+.right-item i{color:var(--or1);font-size:16px;flex-shrink:0}
+.legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
+.legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
+.legal-footer-links a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index-app.html">
+    <img class="logo-icon" src="/logotipo.png" alt="Catch This Idea">
+    <div class="logo-type">Catch<span class="sep">·</span><em>This</em><span class="sep">·</span>Idea</div>
+  </a>
+  <div class="nav-right">
+    <div class="lang-wrap">
+      <button class="lang-pill active" onclick="setLang('pt')">PT</button>
+      <button class="lang-pill" onclick="setLang('en')">EN</button>
+      <button class="lang-pill" onclick="setLang('fr')">FR</button>
+      <button class="lang-pill" onclick="setLang('es')">ES</button>
+    </div>
+    <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema">
+      <i class="ti ti-moon" id="dark-icon"></i>
+    </button>
+  </div>
+</nav>
+
+<div class="legal-wrap">
+  <a href="/index-app.html" class="back-link" id="back-link"><i class="ti ti-arrow-left"></i> <span id="back-txt">Voltar</span></a>
+  <h1 id="page-h1">Política de Privacidade</h1>
+  <p class="legal-updated" id="updated-txt">Última atualização: 27 de maio de 2026</p>
+  <div id="content"></div>
+</div>
+
+<div class="legal-footer">
+  <span id="footer-copy">© 2026 Catch This Idea</span>
+  <div class="legal-footer-links">
+    <a href="/terms.html" id="lnk-terms">Termos de Uso</a>
+    <a href="/privacy.html" id="lnk-privacy">Privacidade</a>
+    <a href="/cookies.html" id="lnk-cookies">Cookies</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  const saved=localStorage.getItem('cti_theme');
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+})();
+
+function toggleDark(){
+  const on=document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className=on?'ti ti-sun':'ti ti-moon';
+  localStorage.setItem('cti_theme',on?'dark':'light');
+}
+
+const C={
+  pt:{
+    title:'Política de Privacidade — Catch This Idea',
+    h1:'Política de Privacidade',
+    updated:'Última atualização: 27 de maio de 2026',
+    back:'Voltar',
+    copy:'© 2026 Catch This Idea',
+    terms:'Termos de Uso', privacy:'Privacidade', cookies:'Cookies',
+    html:`
+<h2>1. Responsável pelo Tratamento</h2>
+<p>O responsável pelo tratamento dos seus dados pessoais é a <strong>Catch This Idea</strong>, contactável através de <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a>.</p>
+
+<h2>2. Dados Recolhidos</h2>
+<p>Recolhemos os seguintes dados pessoais:</p>
+<ul>
+  <li><strong>Nome completo e email</strong> — fornecidos no momento do registo</li>
+  <li><strong>Dados de utilização</strong> — ideias publicadas, compras realizadas, interações na plataforma</li>
+  <li><strong>Dados técnicos</strong> — endereço IP, tipo de navegador, sistema operativo</li>
+  <li><strong>Dados de pagamento</strong> — processados pelos nossos parceiros; não armazenamos dados de cartão</li>
+</ul>
+
+<h2>3. Finalidade e Base Legal</h2>
+<ul>
+  <li><strong>Prestação do serviço e gestão da conta</strong> — base legal: execução de contrato</li>
+  <li><strong>Emails transacionais</strong> (confirmação de conta, recuperação de password) — base legal: execução de contrato</li>
+  <li><strong>Notificações de segurança</strong> — base legal: interesse legítimo</li>
+  <li><strong>Prevenção de fraude</strong> — base legal: interesse legítimo</li>
+  <li><strong>Cumprimento de obrigações legais</strong> — base legal: obrigação legal</li>
+</ul>
+
+<h2>4. Conservação dos Dados</h2>
+<p>Conservamos os seus dados enquanto a conta estiver ativa. Após encerramento, os dados pessoais são eliminados no prazo de <strong>90 dias</strong>, exceto quando a conservação seja exigida por lei (ex.: registos contabilísticos).</p>
+
+<h2>5. Partilha de Dados</h2>
+<p>Não vendemos nem cedemos os seus dados a terceiros para fins comerciais. Partilhamos apenas com:</p>
+<ul>
+  <li><strong>Supabase</strong> — infraestrutura de autenticação e base de dados (servidor na União Europeia)</li>
+  <li><strong>Resend</strong> — envio de emails transacionais</li>
+  <li><strong>Parceiros de pagamento</strong> — processamento seguro de transações</li>
+</ul>
+
+<h2>6. Os Seus Direitos (RGPD)</h2>
+<div class="rights-grid">
+  <div class="right-item"><i class="ti ti-eye"></i> Direito de acesso</div>
+  <div class="right-item"><i class="ti ti-edit"></i> Direito de retificação</div>
+  <div class="right-item"><i class="ti ti-trash"></i> Direito ao apagamento</div>
+  <div class="right-item"><i class="ti ti-ban"></i> Direito de oposição</div>
+  <div class="right-item"><i class="ti ti-transfer"></i> Portabilidade dos dados</div>
+  <div class="right-item"><i class="ti ti-flag"></i> Reclamação à CNPD</div>
+</div>
+<p>Para exercer os seus direitos, contacte: <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a>. Tem também o direito de apresentar reclamação à <a href="https://www.cnpd.pt" target="_blank" rel="noopener">CNPD</a>.</p>
+
+<h2>7. Segurança</h2>
+<p>Aplicamos medidas técnicas e organizativas para proteger os seus dados, incluindo encriptação em trânsito (HTTPS/TLS) e em repouso, e autenticação segura.</p>
+
+<h2>8. Cookies</h2>
+<p>Para informação detalhada sobre os cookies utilizados, consulte a nossa <a href="/cookies.html">Política de Cookies</a>.</p>
+
+<h2>9. Transferências Internacionais</h2>
+<p>Os dados são processados dentro da União Europeia. Caso ocorram transferências para países terceiros, garantimos proteções adequadas nos termos do RGPD.</p>
+
+<h2>10. Alterações</h2>
+<p>Em caso de alterações significativas, notificaremos os utilizadores registados por email. A versão em vigor está sempre disponível nesta página.</p>
+
+<h2>11. Contacto</h2>
+<p>Para questões de privacidade: <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a></p>
+`},
+  en:{
+    title:'Privacy Policy — Catch This Idea',
+    h1:'Privacy Policy',
+    updated:'Last updated: 27 May 2026',
+    back:'Back',
+    copy:'© 2026 Catch This Idea',
+    terms:'Terms of Use', privacy:'Privacy', cookies:'Cookies',
+    html:`
+<h2>1. Data Controller</h2>
+<p>The data controller for your personal data is <strong>Catch This Idea</strong>, reachable at <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>.</p>
+
+<h2>2. Data Collected</h2>
+<p>We collect the following personal data:</p>
+<ul>
+  <li><strong>Full name and email</strong> — provided at registration</li>
+  <li><strong>Usage data</strong> — published ideas, purchases, platform interactions</li>
+  <li><strong>Technical data</strong> — IP address, browser type, operating system</li>
+  <li><strong>Payment data</strong> — processed by our partners; we do not store card details</li>
+</ul>
+
+<h2>3. Purpose and Legal Basis</h2>
+<ul>
+  <li><strong>Service delivery and account management</strong> — legal basis: contract performance</li>
+  <li><strong>Transactional emails</strong> (account confirmation, password recovery) — legal basis: contract performance</li>
+  <li><strong>Security notifications</strong> — legal basis: legitimate interest</li>
+  <li><strong>Fraud prevention</strong> — legal basis: legitimate interest</li>
+  <li><strong>Legal compliance</strong> — legal basis: legal obligation</li>
+</ul>
+
+<h2>4. Data Retention</h2>
+<p>We retain your data for as long as your account is active. After account closure, personal data is deleted within <strong>90 days</strong>, unless retention is required by law (e.g., accounting records).</p>
+
+<h2>5. Data Sharing</h2>
+<p>We do not sell or transfer your data to third parties for commercial purposes. We share data only with:</p>
+<ul>
+  <li><strong>Supabase</strong> — authentication and database infrastructure (EU servers)</li>
+  <li><strong>Resend</strong> — transactional email delivery</li>
+  <li><strong>Payment partners</strong> — secure transaction processing</li>
+</ul>
+
+<h2>6. Your Rights (GDPR)</h2>
+<div class="rights-grid">
+  <div class="right-item"><i class="ti ti-eye"></i> Right of access</div>
+  <div class="right-item"><i class="ti ti-edit"></i> Right to rectification</div>
+  <div class="right-item"><i class="ti ti-trash"></i> Right to erasure</div>
+  <div class="right-item"><i class="ti ti-ban"></i> Right to object</div>
+  <div class="right-item"><i class="ti ti-transfer"></i> Data portability</div>
+  <div class="right-item"><i class="ti ti-flag"></i> Lodge a complaint</div>
+</div>
+<p>To exercise your rights, contact: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>. You also have the right to lodge a complaint with your national data protection authority.</p>
+
+<h2>7. Security</h2>
+<p>We apply technical and organisational measures to protect your data, including encryption in transit (HTTPS/TLS) and at rest, and secure authentication.</p>
+
+<h2>8. Cookies</h2>
+<p>For detailed information about the cookies we use, please see our <a href="/cookies.html">Cookie Policy</a>.</p>
+
+<h2>9. International Transfers</h2>
+<p>Data is processed within the European Union. Should transfers to third countries occur, we ensure appropriate safeguards under GDPR.</p>
+
+<h2>10. Changes</h2>
+<p>In case of significant changes, we will notify registered users by email. The current version is always available on this page.</p>
+
+<h2>11. Contact</h2>
+<p>For privacy questions: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
+`},
+  fr:{
+    title:'Politique de Confidentialité — Catch This Idea',
+    h1:'Politique de Confidentialité',
+    updated:'Dernière mise à jour : 27 mai 2026',
+    back:'Retour',
+    copy:'© 2026 Catch This Idea',
+    terms:"Conditions d'utilisation", privacy:'Confidentialité', cookies:'Cookies',
+    html:`
+<h2>1. Responsable du Traitement</h2>
+<p>Le responsable du traitement de vos données personnelles est <strong>Catch This Idea</strong>, joignable à <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>.</p>
+
+<h2>2. Données Collectées</h2>
+<p>Nous collectons les données personnelles suivantes :</p>
+<ul>
+  <li><strong>Nom complet et email</strong> — fournis lors de l'inscription</li>
+  <li><strong>Données d'utilisation</strong> — idées publiées, achats, interactions sur la plateforme</li>
+  <li><strong>Données techniques</strong> — adresse IP, type de navigateur, système d'exploitation</li>
+  <li><strong>Données de paiement</strong> — traitées par nos partenaires ; nous ne stockons pas les données de carte</li>
+</ul>
+
+<h2>3. Finalité et Base Légale</h2>
+<ul>
+  <li><strong>Fourniture du service et gestion du compte</strong> — base légale : exécution du contrat</li>
+  <li><strong>E-mails transactionnels</strong> (confirmation de compte, récupération de mot de passe) — base légale : exécution du contrat</li>
+  <li><strong>Notifications de sécurité</strong> — base légale : intérêt légitime</li>
+  <li><strong>Prévention de la fraude</strong> — base légale : intérêt légitime</li>
+  <li><strong>Respect des obligations légales</strong> — base légale : obligation légale</li>
+</ul>
+
+<h2>4. Conservation des Données</h2>
+<p>Nous conservons vos données tant que votre compte est actif. Après la fermeture, les données personnelles sont supprimées dans les <strong>90 jours</strong>, sauf obligation légale de conservation.</p>
+
+<h2>5. Partage des Données</h2>
+<p>Nous ne vendons ni ne cédons vos données à des tiers à des fins commerciales. Nous les partageons uniquement avec :</p>
+<ul>
+  <li><strong>Supabase</strong> — infrastructure d'authentification et base de données (serveurs UE)</li>
+  <li><strong>Resend</strong> — envoi d'e-mails transactionnels</li>
+  <li><strong>Partenaires de paiement</strong> — traitement sécurisé des transactions</li>
+</ul>
+
+<h2>6. Vos Droits (RGPD)</h2>
+<div class="rights-grid">
+  <div class="right-item"><i class="ti ti-eye"></i> Droit d'accès</div>
+  <div class="right-item"><i class="ti ti-edit"></i> Droit de rectification</div>
+  <div class="right-item"><i class="ti ti-trash"></i> Droit à l'effacement</div>
+  <div class="right-item"><i class="ti ti-ban"></i> Droit d'opposition</div>
+  <div class="right-item"><i class="ti ti-transfer"></i> Portabilité des données</div>
+  <div class="right-item"><i class="ti ti-flag"></i> Déposer une plainte</div>
+</div>
+<p>Pour exercer vos droits : <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>. Vous avez également le droit de déposer une plainte auprès de votre autorité nationale de protection des données.</p>
+
+<h2>7. Sécurité</h2>
+<p>Nous appliquons des mesures techniques et organisationnelles pour protéger vos données, notamment le chiffrement en transit (HTTPS/TLS) et au repos, ainsi qu'une authentification sécurisée.</p>
+
+<h2>8. Cookies</h2>
+<p>Pour des informations détaillées sur les cookies utilisés, consultez notre <a href="/cookies.html">Politique de Cookies</a>.</p>
+
+<h2>9. Transferts Internationaux</h2>
+<p>Les données sont traitées au sein de l'Union européenne. En cas de transferts vers des pays tiers, nous garantissons des protections adéquates conformément au RGPD.</p>
+
+<h2>10. Modifications</h2>
+<p>En cas de changements importants, nous notifierons les utilisateurs inscrits par e-mail. La version en vigueur est toujours disponible sur cette page.</p>
+
+<h2>11. Contact</h2>
+<p>Pour toute question de confidentialité : <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
+`},
+  es:{
+    title:'Política de Privacidad — Catch This Idea',
+    h1:'Política de Privacidad',
+    updated:'Última actualización: 27 de mayo de 2026',
+    back:'Volver',
+    copy:'© 2026 Catch This Idea',
+    terms:'Términos de uso', privacy:'Privacidad', cookies:'Cookies',
+    html:`
+<h2>1. Responsable del Tratamiento</h2>
+<p>El responsable del tratamiento de tus datos personales es <strong>Catch This Idea</strong>, contactable en <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>.</p>
+
+<h2>2. Datos Recopilados</h2>
+<p>Recopilamos los siguientes datos personales:</p>
+<ul>
+  <li><strong>Nombre completo y email</strong> — proporcionados en el registro</li>
+  <li><strong>Datos de uso</strong> — ideas publicadas, compras, interacciones en la plataforma</li>
+  <li><strong>Datos técnicos</strong> — dirección IP, tipo de navegador, sistema operativo</li>
+  <li><strong>Datos de pago</strong> — procesados por nuestros socios; no almacenamos datos de tarjeta</li>
+</ul>
+
+<h2>3. Finalidad y Base Legal</h2>
+<ul>
+  <li><strong>Prestación del servicio y gestión de la cuenta</strong> — base legal: ejecución del contrato</li>
+  <li><strong>Correos transaccionales</strong> (confirmación de cuenta, recuperación de contraseña) — base legal: ejecución del contrato</li>
+  <li><strong>Notificaciones de seguridad</strong> — base legal: interés legítimo</li>
+  <li><strong>Prevención del fraude</strong> — base legal: interés legítimo</li>
+  <li><strong>Cumplimiento de obligaciones legales</strong> — base legal: obligación legal</li>
+</ul>
+
+<h2>4. Conservación de Datos</h2>
+<p>Conservamos tus datos mientras tu cuenta esté activa. Tras el cierre de la cuenta, los datos personales se eliminan en <strong>90 días</strong>, salvo obligación legal de conservación.</p>
+
+<h2>5. Compartición de Datos</h2>
+<p>No vendemos ni cedemos tus datos a terceros con fines comerciales. Solo los compartimos con:</p>
+<ul>
+  <li><strong>Supabase</strong> — infraestructura de autenticación y base de datos (servidores en la UE)</li>
+  <li><strong>Resend</strong> — envío de correos transaccionales</li>
+  <li><strong>Socios de pago</strong> — procesamiento seguro de transacciones</li>
+</ul>
+
+<h2>6. Tus Derechos (RGPD)</h2>
+<div class="rights-grid">
+  <div class="right-item"><i class="ti ti-eye"></i> Derecho de acceso</div>
+  <div class="right-item"><i class="ti ti-edit"></i> Derecho de rectificación</div>
+  <div class="right-item"><i class="ti ti-trash"></i> Derecho de supresión</div>
+  <div class="right-item"><i class="ti ti-ban"></i> Derecho de oposición</div>
+  <div class="right-item"><i class="ti ti-transfer"></i> Portabilidad de datos</div>
+  <div class="right-item"><i class="ti ti-flag"></i> Presentar reclamación</div>
+</div>
+<p>Para ejercer tus derechos: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>. También tienes derecho a presentar una reclamación ante tu autoridad nacional de protección de datos.</p>
+
+<h2>7. Seguridad</h2>
+<p>Aplicamos medidas técnicas y organizativas para proteger tus datos, incluido el cifrado en tránsito (HTTPS/TLS) y en reposo, y la autenticación segura.</p>
+
+<h2>8. Cookies</h2>
+<p>Para información detallada sobre las cookies utilizadas, consulta nuestra <a href="/cookies.html">Política de Cookies</a>.</p>
+
+<h2>9. Transferencias Internacionales</h2>
+<p>Los datos se procesan dentro de la Unión Europea. En caso de transferencias a terceros países, garantizamos protecciones adecuadas conforme al RGPD.</p>
+
+<h2>10. Cambios</h2>
+<p>En caso de cambios significativos, notificaremos a los usuarios registrados por correo electrónico. La versión vigente siempre está disponible en esta página.</p>
+
+<h2>11. Contacto</h2>
+<p>Para preguntas de privacidad: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
+`}
+};
+
+let lang='pt';
+function setLang(l){
+  lang=l;
+  const c=C[l];
+  document.title=c.title;
+  document.documentElement.lang=l;
+  document.getElementById('page-h1').textContent=c.h1;
+  document.getElementById('updated-txt').textContent=c.updated;
+  document.getElementById('back-txt').textContent=c.back;
+  document.getElementById('content').innerHTML=c.html;
+  document.getElementById('footer-copy').textContent=c.copy;
+  document.getElementById('lnk-terms').textContent=c.terms;
+  document.getElementById('lnk-privacy').textContent=c.privacy;
+  document.getElementById('lnk-cookies').textContent=c.cookies;
+  document.querySelectorAll('.lang-pill').forEach(p=>p.classList.toggle('active',p.textContent===l.toUpperCase()));
+  localStorage.setItem('cti_lang',l);
+}
+setLang(localStorage.getItem('cti_lang')||'pt');
+</script>
+</body>
+</html>
