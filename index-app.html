@@ -171,6 +171,12 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .btn-link{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);padding:0}
 .btn-link:hover{color:var(--ink)}
+.pwd-reqs{margin-top:6px;display:flex;flex-direction:column;gap:3px}
+.pwd-req{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;transition:color .2s}
+.pwd-req::before{content:'○';font-size:9px;flex-shrink:0}
+.pwd-req.ok{color:#1e7e34}
+.pwd-req.ok::before{content:'✓'}
+body.dark .pwd-req.ok{color:#60c070}
 </style>
 </head>
 <body>
@@ -255,7 +261,10 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
       </div>
       <div style="margin-bottom:.5rem">
         <label class="form-label">Password</label>
-        <input class="form-input" id="auth-password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
+        <input class="form-input" id="auth-password" type="password" placeholder="••••••••" required autocomplete="current-password" oninput="updateAuthPwdReqs()"/>
+      </div>
+      <div id="pwd-reqs-auth" class="pwd-reqs" style="display:none;margin-bottom:.75rem">
+        <span class="pwd-req" id="req-auth-len">Mínimo 8 caracteres</span>
       </div>
       <div id="forgot-link-wrap" style="text-align:right;margin-bottom:1rem">
         <button type="button" class="btn-link" onclick="switchAuthTab('forgot')">Esqueceu a password?</button>
@@ -289,11 +298,17 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
     <form id="reset-form" onsubmit="submitReset(event)">
       <div style="margin-bottom:1rem">
         <label class="form-label">Nova password</label>
-        <input class="form-input" id="reset-pwd" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
+        <input class="form-input" id="reset-pwd" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password" oninput="updateResetReqs()"/>
+        <div class="pwd-reqs" style="margin-top:6px">
+          <span class="pwd-req" id="req-reset-len">Mínimo 8 caracteres</span>
+        </div>
       </div>
       <div style="margin-bottom:1.5rem">
         <label class="form-label">Confirmar password</label>
-        <input class="form-input" id="reset-confirm" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
+        <input class="form-input" id="reset-confirm" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password" oninput="updateResetReqs()"/>
+        <div class="pwd-reqs" style="margin-top:6px">
+          <span class="pwd-req" id="req-reset-match">As passwords coincidem</span>
+        </div>
       </div>
       <div id="reset-msg" style="display:none"></div>
       <button class="cta-main" type="submit" style="width:100%" id="reset-submit">Guardar password</button>
@@ -527,6 +542,9 @@ function switchAuthTab(mode){
   document.getElementById('auth-submit').textContent  = mode==='login' ? 'Entrar' : 'Criar conta';
   document.getElementById('field-name').style.display = mode==='register' ? 'block' : 'none';
   document.getElementById('forgot-link-wrap').style.display = mode==='login' ? 'block' : 'none';
+  const pwdReqs = document.getElementById('pwd-reqs-auth');
+  pwdReqs.style.display = mode==='register' ? 'block' : 'none';
+  if(mode !== 'register') document.getElementById('req-auth-len').classList.remove('ok');
   document.getElementById('auth-error').style.display = 'none';
   const pwd = document.getElementById('auth-password');
   if(mode === 'register'){
@@ -590,6 +608,20 @@ async function submitAuth(e){
     btn.disabled = false;
     btn.textContent = authMode === 'login' ? 'Entrar' : 'Criar conta';
   }
+}
+
+// ── Indicadores de requisitos de password ─────
+function updateAuthPwdReqs(){
+  if(authMode !== 'register') return;
+  const val = document.getElementById('auth-password').value;
+  document.getElementById('req-auth-len').classList.toggle('ok', val.length >= 8);
+}
+
+function updateResetReqs(){
+  const pwd  = document.getElementById('reset-pwd').value;
+  const conf = document.getElementById('reset-confirm').value;
+  document.getElementById('req-reset-len').classList.toggle('ok', pwd.length >= 8);
+  document.getElementById('req-reset-match').classList.toggle('ok', pwd.length > 0 && pwd === conf);
 }
 
 // ── Forgot password ───────────────────────────
