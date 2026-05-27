@@ -557,6 +557,28 @@ document.addEventListener('click', () => {
   document.getElementById('user-dd')?.classList.remove('open');
 });
 
+// Detetar callback de confirmação de email
+(function handleAuthCallback() {
+  const hash   = window.location.hash;
+  if (!hash) return;
+  const params = new URLSearchParams(hash.replace('#', ''));
+  const type   = params.get('type');
+  if (!params.get('access_token') && !type) return;
+
+  // Limpar hash do URL
+  history.replaceState(null, '', window.location.pathname);
+
+  if (type === 'signup' || params.get('access_token')) {
+    // Email confirmado — mostrar mensagem e abrir login
+    setTimeout(() => {
+      openAuth('login');
+      document.getElementById('auth-sub').textContent =
+        '✓ Email confirmado com sucesso! Entre na sua conta para continuar.';
+      document.getElementById('auth-sub').style.color = '#1e7e34';
+    }, 200);
+  }
+})();
+
 updateNavAuth();
 
 </script>
