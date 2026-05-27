@@ -33,6 +33,34 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .btn-pill:hover{background:var(--or2)}
 .btn-ghost{background:transparent;color:var(--ink);padding:7px 15px;border-radius:40px;font-size:13px;border:1px solid var(--border);cursor:pointer;font-family:var(--sans)}
 .btn-ghost:hover{background:var(--paper2)}
+/* Auth & Wallet */
+.wallet-chip{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:40px;border:1px solid var(--border);background:var(--paper);font-size:13px;font-weight:500;color:var(--or1);cursor:pointer;font-family:var(--sans)}
+.wallet-chip:hover{background:var(--or-pale)}
+.user-menu-wrap{position:relative}
+.user-btn{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:40px;border:1px solid var(--border);background:var(--paper);cursor:pointer;font-family:var(--sans)}
+.user-btn:hover{background:var(--paper2)}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:var(--or1);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.user-dd{position:absolute;top:calc(100% + 6px);right:0;background:var(--paper);border:1px solid var(--border);border-radius:6px;min-width:200px;z-index:200;display:none;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.user-dd.open{display:block}
+.user-dd-name{padding:10px 14px 2px;font-size:13px;font-weight:500}
+.user-dd-email{padding:0 14px 8px;font-size:11px;color:var(--muted)}
+.user-dd-item{padding:8px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--ink)}
+.user-dd-item:hover{background:var(--paper2)}
+.auth-tab{flex:1;padding:10px;background:none;border:none;border-bottom:2px solid transparent;font-size:14px;font-family:var(--sans);cursor:pointer;color:var(--muted)}
+.auth-tab.active{border-bottom-color:var(--or1);color:var(--or1);font-weight:500}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:5px;letter-spacing:.04em}
+.form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;font-family:var(--sans);background:#fff;color:var(--ink);outline:none}
+.form-input:focus{border-color:var(--or1)}
+.auth-error{background:#fff0ee;color:#c0392b;border:1px solid #f5c6c0;border-radius:6px;padding:9px 12px;font-size:13px;margin-bottom:1rem}
+.wallet-balance-card{background:linear-gradient(135deg,var(--or1),var(--or3));border-radius:12px;padding:1.5rem 1.8rem;color:#fff;text-align:center}
+.wallet-amount{font-family:var(--serif);font-size:2.8rem;line-height:1}
+.tx-item{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--border)}
+.tx-item:last-child{border-bottom:none}
+.tx-desc{font-size:13px;color:var(--ink)}
+.tx-date{font-size:11px;color:var(--muted);margin-top:2px}
+.tx-amount{font-size:14px;font-weight:500}
+.tx-in{color:#1e7e34}
+.tx-out{color:#c0392b}
 .hero{max-width:1100px;margin:0 auto;padding:3.5rem 2.5rem 0;display:grid;grid-template-columns:1.1fr 1fr;gap:4rem;align-items:start}
 .kicker{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--or1);margin-bottom:1.3rem}
 .kicker-line{width:24px;height:1.5px;background:var(--or1)}
@@ -154,9 +182,87 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
       </div>
     </div>
     <button class="btn-ghost" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'})" data-t="nav_explore">Explorar</button>
-    <button class="btn-pill" onclick="openSell()" data-t="nav_sell">Vender ideia</button>
+    <!-- Auth: logged out -->
+    <div id="nav-loggedout" style="display:flex;gap:8px">
+      <button class="btn-ghost" onclick="openAuth('login')">Entrar</button>
+      <button class="btn-pill" onclick="openAuth('register')">Criar conta</button>
+    </div>
+    <!-- Auth: logged in -->
+    <div id="nav-loggedin" style="display:none;align-items:center;gap:10px">
+      <button class="wallet-chip" onclick="openWallet()" title="A minha carteira">
+        <i class="ti ti-wallet" style="font-size:14px"></i>
+        <span id="nav-balance">€0,00</span>
+      </button>
+      <div class="user-menu-wrap">
+        <button class="user-btn" onclick="toggleUserMenu(event)">
+          <span class="user-avatar" id="nav-avatar">?</span>
+          <i class="ti ti-chevron-down" style="font-size:11px;color:var(--muted)"></i>
+        </button>
+        <div class="user-dd" id="user-dd">
+          <div class="user-dd-name" id="user-dd-name">—</div>
+          <div class="user-dd-email" id="user-dd-email">—</div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:6px 0">
+          <div class="user-dd-item" onclick="openWallet()"><i class="ti ti-wallet"></i> A minha carteira</div>
+          <div class="user-dd-item" onclick="openSell()"><i class="ti ti-bulb"></i> Publicar ideia</div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:6px 0">
+          <div class="user-dd-item" style="color:#c0392b" onclick="doLogout()"><i class="ti ti-logout"></i> Terminar sessão</div>
+        </div>
+      </div>
+    </div>
   </div>
 </nav>
+
+<!-- ══ MODAL AUTH ══════════════════════════════════════════════ -->
+<div class="m-overlay" id="auth-overlay" onclick="closeAuth(event)">
+  <div class="m-box" style="max-width:420px">
+    <button class="m-close" onclick="closeAuth()">×</button>
+    <!-- Tabs -->
+    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Criar conta</button>
+    </div>
+    <div class="m-h" id="auth-title">Bem-vindo de volta</div>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.4rem" id="auth-sub">Entre na sua conta para comprar e vender ideias.</p>
+
+    <form id="auth-form" onsubmit="submitAuth(event)">
+      <div id="field-name" style="display:none;margin-bottom:1rem">
+        <label class="form-label">Nome completo</label>
+        <input class="form-input" id="auth-name" type="text" placeholder="O seu nome" autocomplete="name"/>
+      </div>
+      <div style="margin-bottom:1rem">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="auth-email" type="email" placeholder="email@exemplo.com" required autocomplete="email"/>
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="auth-password" type="password" placeholder="••••••••" required autocomplete="current-password" minlength="6"/>
+      </div>
+      <div class="auth-error" id="auth-error" style="display:none"></div>
+      <button class="cta-main" type="submit" style="width:100%;justify-content:center" id="auth-submit">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══ MODAL CARTEIRA ══════════════════════════════════════════ -->
+<div class="m-overlay" id="wallet-overlay" onclick="closeWallet(event)">
+  <div class="m-box" style="max-width:480px">
+    <button class="m-close" onclick="closeWallet()">×</button>
+    <div class="m-h">A minha carteira</div>
+
+    <div class="wallet-balance-card">
+      <div style="font-size:.8rem;color:var(--muted);margin-bottom:.3rem;letter-spacing:.06em;text-transform:uppercase">Saldo disponível</div>
+      <div class="wallet-amount" id="wallet-amount">€0,00</div>
+      <div style="font-size:.75rem;color:var(--muted);margin-top:.4rem">Utilizável para compras na plataforma</div>
+    </div>
+
+    <div style="margin-top:1.5rem">
+      <div style="font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Últimos movimentos</div>
+      <div id="wallet-tx-list">
+        <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.9rem">A carregar...</div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="hero">
   <div>
     <div class="kicker"><span class="kicker-line"></span><span data-t="kicker">O mercado de ideias por realizar</span></div>
@@ -274,6 +380,179 @@ function handleBuy(){closeBuy();setTimeout(()=>alert('A redirecionar para pagame
 function openSell(){document.getElementById('sell-wrap').classList.add('open');}
 function closeSell(){document.getElementById('sell-wrap').classList.remove('open');}
 renderFeat();renderGrid();
+
+// ══════════════════════════════════════════════
+// AUTH & WALLET
+// ══════════════════════════════════════════════
+
+let session = JSON.parse(localStorage.getItem('cti_session') || 'null');
+
+function saveSession(s){ session = s; localStorage.setItem('cti_session', JSON.stringify(s)); }
+function clearSession(){ session = null; localStorage.removeItem('cti_session'); }
+
+function updateNavAuth(){
+  const out = document.getElementById('nav-loggedout');
+  const inn = document.getElementById('nav-loggedin');
+  if(session){
+    out.style.display = 'none';
+    inn.style.display = 'flex';
+    const initials = (session.user.name || session.user.email || '?').charAt(0).toUpperCase();
+    document.getElementById('nav-avatar').textContent    = initials;
+    document.getElementById('user-dd-name').textContent  = session.user.name  || '—';
+    document.getElementById('user-dd-email').textContent = session.user.email || '—';
+    loadWalletBalance();
+  } else {
+    out.style.display = 'flex';
+    inn.style.display = 'none';
+  }
+}
+
+async function loadWalletBalance(){
+  if(!session) return;
+  try {
+    const r = await fetch('/api/wallet', { headers:{ Authorization:`Bearer ${session.access_token}` }});
+    if(!r.ok) return;
+    const d = await r.json();
+    document.getElementById('nav-balance').textContent = '€' + Number(d.balance_eur).toLocaleString('pt-PT',{minimumFractionDigits:2});
+    return d;
+  } catch(e){ console.warn('wallet error', e); }
+}
+
+// ── Auth modal ────────────────────────────────
+let authMode = 'login';
+
+function openAuth(mode = 'login'){
+  authMode = mode;
+  switchAuthTab(mode);
+  document.getElementById('auth-overlay').classList.add('open');
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-form').reset();
+}
+
+function closeAuth(e){
+  if(e && e.target !== document.getElementById('auth-overlay')) return;
+  document.getElementById('auth-overlay').classList.remove('open');
+}
+
+function switchAuthTab(mode){
+  authMode = mode;
+  document.getElementById('tab-login').classList.toggle('active',    mode==='login');
+  document.getElementById('tab-register').classList.toggle('active', mode==='register');
+  document.getElementById('auth-title').textContent   = mode==='login' ? 'Bem-vindo de volta' : 'Criar conta';
+  document.getElementById('auth-sub').textContent     = mode==='login'
+    ? 'Entre na sua conta para comprar e vender ideias.'
+    : 'Junte-se ao marketplace de ideias criativas.';
+  document.getElementById('auth-submit').textContent  = mode==='login' ? 'Entrar' : 'Criar conta';
+  document.getElementById('field-name').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+async function submitAuth(e){
+  e.preventDefault();
+  const btn = document.getElementById('auth-submit');
+  const errEl = document.getElementById('auth-error');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const name     = document.getElementById('auth-name').value.trim();
+
+  try {
+    const r = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({ action: authMode, email, password, full_name: name }),
+    });
+    const d = await r.json();
+
+    if(!r.ok) throw new Error(d.error || 'Erro desconhecido');
+
+    if(authMode === 'register'){
+      errEl.style.cssText = 'display:block;background:#e8f5e9;color:#1e7e34;border-color:#a5d6a7';
+      errEl.textContent = d.message;
+      btn.disabled = false;
+      btn.textContent = 'Criar conta';
+      return;
+    }
+
+    saveSession(d);
+    document.getElementById('auth-overlay').classList.remove('open');
+    updateNavAuth();
+
+  } catch(err){
+    errEl.style.cssText = 'display:block;background:#fff0ee;color:#c0392b;border:1px solid #f5c6c0;border-radius:6px;padding:9px 12px;font-size:13px;margin-bottom:1rem';
+    errEl.textContent = err.message;
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? 'Entrar' : 'Criar conta';
+  }
+}
+
+// ── Wallet modal ──────────────────────────────
+function openWallet(){
+  document.getElementById('wallet-overlay').classList.add('open');
+  document.getElementById('user-dd').classList.remove('open');
+  refreshWalletModal();
+}
+
+function closeWallet(e){
+  if(e && e.target !== document.getElementById('wallet-overlay')) return;
+  document.getElementById('wallet-overlay').classList.remove('open');
+}
+
+async function refreshWalletModal(){
+  const listEl = document.getElementById('wallet-tx-list');
+  const amtEl  = document.getElementById('wallet-amount');
+  listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.9rem">A carregar...</div>';
+
+  const d = await loadWalletBalance();
+  if(!d){ listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted)">Erro ao carregar.</div>'; return; }
+
+  amtEl.textContent = '€' + Number(d.balance_eur).toLocaleString('pt-PT',{minimumFractionDigits:2});
+
+  if(!d.transactions || d.transactions.length === 0){
+    listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.9rem">Ainda não há movimentos.</div>';
+    return;
+  }
+
+  const typeLabels = { sale:'Venda', purchase:'Compra', commission:'Comissão', withdrawal:'Levantamento', topup:'Carregamento' };
+  listEl.innerHTML = d.transactions.map(tx => {
+    const isIn = tx.amount > 0;
+    const amt  = (Math.abs(tx.amount)/100).toLocaleString('pt-PT',{minimumFractionDigits:2});
+    const date = new Date(tx.created_at).toLocaleDateString('pt-PT');
+    return `<div class="tx-item">
+      <div>
+        <div class="tx-desc">${typeLabels[tx.type] || tx.type}${tx.description ? ' — ' + tx.description : ''}</div>
+        <div class="tx-date">${date}</div>
+      </div>
+      <div class="tx-amount ${isIn?'tx-in':'tx-out'}">${isIn?'+':'-'}€${amt}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Logout ────────────────────────────────────
+async function doLogout(){
+  if(session){
+    fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'logout'})});
+  }
+  clearSession();
+  updateNavAuth();
+  document.getElementById('user-dd').classList.remove('open');
+}
+
+// ── User menu toggle ──────────────────────────
+function toggleUserMenu(e){
+  e.stopPropagation();
+  document.getElementById('user-dd').classList.toggle('open');
+}
+
+// ── Init ──────────────────────────────────────
+document.addEventListener('click', () => {
+  document.getElementById('user-dd')?.classList.remove('open');
+});
+
+updateNavAuth();
 
 </script>
 </body>
