@@ -24,7 +24,13 @@ function isRateLimited(ip) {
 // ── Validação ────────────────────────────────────────────────
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function validateEmail(e)    { return EMAIL_RE.test(String(e).toLowerCase()); }
-function validatePassword(p) { return typeof p === 'string' && p.length >= 8; }
+function validatePassword(p) {
+  return typeof p === 'string'
+    && p.length >= 8
+    && /[A-Z]/.test(p)
+    && /[a-z]/.test(p)
+    && /[0-9]/.test(p);
+}
 
 // ── CORS ─────────────────────────────────────────────────────
 function corsHeaders(origin) {
@@ -139,7 +145,7 @@ export default async (req) => {
   if (action === 'register') {
     if (!email || !password)         return json({ error: 'email e password são obrigatórios' }, 400, origin);
     if (!validateEmail(cleanEmail))  return json({ error: 'Email inválido' }, 400, origin);
-    if (!validatePassword(password)) return json({ error: 'A password deve ter pelo menos 8 caracteres' }, 400, origin);
+    if (!validatePassword(password)) return json({ error: 'A password deve ter mínimo 8 caracteres, 1 maiúscula, 1 minúscula e 1 número.' }, 400, origin);
 
     // 1. Criar utilizador via Admin API (sem email automático)
     const createRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
@@ -247,7 +253,7 @@ export default async (req) => {
     const { new_password, access_token: resetToken } = body;
     if (!resetToken) return json({ error: 'Sessão inválida. Peça um novo link de recuperação.' }, 400, origin);
     if (!new_password || !validatePassword(new_password))
-      return json({ error: 'A password deve ter pelo menos 8 caracteres' }, 400, origin);
+      return json({ error: 'A password deve ter mínimo 8 caracteres, 1 maiúscula, 1 minúscula e 1 número.' }, 400, origin);
 
     const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       method: 'PUT',

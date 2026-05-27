@@ -265,6 +265,9 @@ body.dark .pwd-req.ok{color:#60c070}
       </div>
       <div id="pwd-reqs-auth" class="pwd-reqs" style="display:none;margin-bottom:.75rem">
         <span class="pwd-req" id="req-auth-len">Mínimo 8 caracteres</span>
+        <span class="pwd-req" id="req-auth-upper">1 letra maiúscula (A–Z)</span>
+        <span class="pwd-req" id="req-auth-lower">1 letra minúscula (a–z)</span>
+        <span class="pwd-req" id="req-auth-num">1 número (0–9)</span>
       </div>
       <div id="forgot-link-wrap" style="text-align:right;margin-bottom:1rem">
         <button type="button" class="btn-link" onclick="switchAuthTab('forgot')">Esqueceu a password?</button>
@@ -301,6 +304,9 @@ body.dark .pwd-req.ok{color:#60c070}
         <input class="form-input" id="reset-pwd" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password" oninput="updateResetReqs()"/>
         <div class="pwd-reqs" style="margin-top:6px">
           <span class="pwd-req" id="req-reset-len">Mínimo 8 caracteres</span>
+          <span class="pwd-req" id="req-reset-upper">1 letra maiúscula (A–Z)</span>
+          <span class="pwd-req" id="req-reset-lower">1 letra minúscula (a–z)</span>
+          <span class="pwd-req" id="req-reset-num">1 número (0–9)</span>
         </div>
       </div>
       <div style="margin-bottom:1.5rem">
@@ -544,7 +550,10 @@ function switchAuthTab(mode){
   document.getElementById('forgot-link-wrap').style.display = mode==='login' ? 'block' : 'none';
   const pwdReqs = document.getElementById('pwd-reqs-auth');
   pwdReqs.style.display = mode==='register' ? 'block' : 'none';
-  if(mode !== 'register') document.getElementById('req-auth-len').classList.remove('ok');
+  if(mode !== 'register'){
+    ['req-auth-len','req-auth-upper','req-auth-lower','req-auth-num']
+      .forEach(id => document.getElementById(id).classList.remove('ok'));
+  }
   document.getElementById('auth-error').style.display = 'none';
   const pwd = document.getElementById('auth-password');
   if(mode === 'register'){
@@ -569,10 +578,10 @@ async function submitAuth(e){
   const name     = document.getElementById('auth-name').value.trim();
 
   // Validação de password no registo (camada JS, além do minlength HTML)
-  if(authMode === 'register' && password.length < 8){
+  if(authMode === 'register' && !isValidPassword(password)){
     errEl.className = 'auth-error';
     errEl.style.display = 'block';
-    errEl.textContent = 'A password deve ter pelo menos 8 caracteres.';
+    errEl.textContent = 'A password não cumpre os requisitos indicados.';
     btn.disabled = false;
     btn.textContent = 'Criar conta';
     return;
@@ -611,16 +620,26 @@ async function submitAuth(e){
 }
 
 // ── Indicadores de requisitos de password ─────
+function isValidPassword(p){
+  return p.length >= 8 && /[A-Z]/.test(p) && /[a-z]/.test(p) && /[0-9]/.test(p);
+}
+
 function updateAuthPwdReqs(){
   if(authMode !== 'register') return;
-  const val = document.getElementById('auth-password').value;
-  document.getElementById('req-auth-len').classList.toggle('ok', val.length >= 8);
+  const v = document.getElementById('auth-password').value;
+  document.getElementById('req-auth-len').classList.toggle('ok',   v.length >= 8);
+  document.getElementById('req-auth-upper').classList.toggle('ok', /[A-Z]/.test(v));
+  document.getElementById('req-auth-lower').classList.toggle('ok', /[a-z]/.test(v));
+  document.getElementById('req-auth-num').classList.toggle('ok',   /[0-9]/.test(v));
 }
 
 function updateResetReqs(){
   const pwd  = document.getElementById('reset-pwd').value;
   const conf = document.getElementById('reset-confirm').value;
-  document.getElementById('req-reset-len').classList.toggle('ok', pwd.length >= 8);
+  document.getElementById('req-reset-len').classList.toggle('ok',   pwd.length >= 8);
+  document.getElementById('req-reset-upper').classList.toggle('ok', /[A-Z]/.test(pwd));
+  document.getElementById('req-reset-lower').classList.toggle('ok', /[a-z]/.test(pwd));
+  document.getElementById('req-reset-num').classList.toggle('ok',   /[0-9]/.test(pwd));
   document.getElementById('req-reset-match').classList.toggle('ok', pwd.length > 0 && pwd === conf);
 }
 
@@ -667,10 +686,10 @@ async function submitReset(e){
 
   msgEl.style.display = 'none';
 
-  if(pwd.length < 8){
+  if(!isValidPassword(pwd)){
     msgEl.className = 'auth-error';
     msgEl.style.display = 'block';
-    msgEl.textContent = 'A password deve ter pelo menos 8 caracteres.';
+    msgEl.textContent = 'A password não cumpre os requisitos indicados.';
     return;
   }
   if(pwd !== confirm){
