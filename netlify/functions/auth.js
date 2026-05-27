@@ -213,9 +213,63 @@ export default async (req) => {
     return json({ message: 'Sessão terminada' }, 200, origin);
   }
 
+  // ── FORGOT PASSWORD ──────────────────────────────────────────
+  if (action === 'forgot') {
+    // Não revelar se o email existe ou não — resposta sempre igual
+    if (!email || !validateEmail(cleanEmail)) {
+      return json({ message: buildForgotMessage(safeLang) }, 200, origin);
+    }
+
+    const linkRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`, {
+      method: 'POST',
+      headers: adminHeaders,
+      body: JSON.stringify({
+        type:        'recovery',
+        email:       cleanEmail,
+        redirect_to: SITE_URL,
+      }),
+    });
+
+    const linkData = await linkRes.json();
+    const resetUrl = linkData.action_link ?? (linkData.hashed_token
+      ? `${SUPABASE_URL}/auth/v1/verify?token=${linkData.hashed_token}&type=recovery&redirect_to=${SITE_URL}`
+      : null);
+
+    if (resetUrl) {
+      await sendRecoveryEmail(cleanEmail, safeLang, resetUrl);
+    }
+
+    return json({ message: buildForgotMessage(safeLang) }, 200, origin);
+  }
+
+  // ── RESET PASSWORD ───────────────────────────────────────────
+  if (action === 'reset') {
+    const { new_password, access_token: resetToken } = body;
+    if (!resetToken) return json({ error: 'Sessão inválida. Peça um novo link de recuperação.' }, 400, origin);
+    if (!new_password || !validatePassword(new_password))
+      return json({ error: 'A password deve ter pelo menos 8 caracteres' }, 400, origin);
+
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type':  'application/json',
+        'apikey':        SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${resetToken}`,
+      },
+      body: JSON.stringify({ password: new_password }),
+    });
+
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      return json({ error: d.error_description ?? d.message ?? 'Erro ao redefinir a password.' }, 400, origin);
+    }
+    return json({ message: buildResetSuccessMessage(safeLang) }, 200, origin);
+  }
+
   return json({ error: 'action inválida' }, 400, origin);
 };
 
+// ── Mensagens de sucesso ─────────────────────────────────────
 function buildSuccessMessage(lang) {
   const msgs = {
     pt: 'Conta criada! Verifique o seu email para confirmar o registo.',
@@ -224,4 +278,99 @@ function buildSuccessMessage(lang) {
     es: '¡Cuenta creada! Revisa tu email para confirmar tu registro.',
   };
   return msgs[lang] ?? msgs.pt;
+}
+
+function buildForgotMessage(lang) {
+  const msgs = {
+    pt: 'Se esse email estiver registado, receberá um link de recuperação em breve.',
+    en: 'If that email is registered, you will receive a recovery link shortly.',
+    fr: 'Si cet email est enregistré, vous recevrez un lien de récupération bientôt.',
+    es: 'Si ese email está registrado, recibirás un enlace de recuperación en breve.',
+  };
+  return msgs[lang] ?? msgs.pt;
+}
+
+function buildResetSuccessMessage(lang) {
+  const msgs = {
+    pt: 'Password redefinida com sucesso! Pode entrar na sua conta.',
+    en: 'Password reset successfully! You can now sign in.',
+    fr: 'Mot de passe réinitialisé ! Vous pouvez maintenant vous connecter.',
+    es: '¡Contraseña restablecida! Ya puedes iniciar sesión.',
+  };
+  return msgs[lang] ?? msgs.pt;
+}
+
+// ── Email de recuperação ─────────────────────────────────────
+const recoveryContent = {
+  pt: {
+    subject:  'Recupere a sua password — Catch This Idea',
+    greeting: (name) => name ? `Olá, ${name}!` : 'Olá!',
+    body:     'Recebemos um pedido para redefinir a password da sua conta. Clique no botão abaixo para escolher uma nova password.',
+    btn:      'Redefinir password',
+    expiry:   'Este link expira em 1 hora.',
+    footer:   'Se não pediu a recuperação de password, pode ignorar este email.',
+  },
+  en: {
+    subject:  'Reset your password — Catch This Idea',
+    greeting: (name) => name ? `Hi, ${name}!` : 'Hi!',
+    body:     'We received a request to reset your account password. Click the button below to choose a new password.',
+    btn:      'Reset password',
+    expiry:   'This link expires in 1 hour.',
+    footer:   "If you didn't request a password reset, you can ignore this email.",
+  },
+  fr: {
+    subject:  'Réinitialisez votre mot de passe — Catch This Idea',
+    greeting: (name) => name ? `Bonjour, ${name}!` : 'Bonjour!',
+    body:     'Nous avons reçu une demande de réinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe.',
+    btn:      'Réinitialiser le mot de passe',
+    expiry:   'Ce lien expire dans 1 heure.',
+    footer:   "Si vous n'avez pas demandé la réinitialisation, vous pouvez ignorer cet email.",
+  },
+  es: {
+    subject:  'Restablece tu contraseña — Catch This Idea',
+    greeting: (name) => name ? `¡Hola, ${name}!` : '¡Hola!',
+    body:     'Recibimos una solicitud para restablecer la contraseña de tu cuenta. Haz clic en el botón de abajo para elegir una nueva contraseña.',
+    btn:      'Restablecer contraseña',
+    expiry:   'Este enlace expira en 1 hora.',
+    footer:   'Si no solicitaste el restablecimiento, puedes ignorar este email.',
+  },
+};
+
+async function sendRecoveryEmail(email, lang, resetUrl) {
+  const t = recoveryContent[lang] ?? recoveryContent.pt;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:20px;background:#f5ede0;font-family:Arial,sans-serif">
+  <div style="max-width:520px;margin:0 auto;background:#fffaf4;border:1px solid #ddd0b8;border-radius:8px;overflow:hidden">
+    <div style="background:#e86000;padding:20px 32px">
+      <span style="font-family:Georgia,serif;font-size:20px;color:#fff;font-style:italic">Catch · This · Idea</span>
+    </div>
+    <div style="padding:32px">
+      <p style="font-family:Georgia,serif;font-size:22px;color:#1a0f00;margin:0 0 8px">${t.greeting(null)}</p>
+      <p style="font-size:15px;color:#7a6040;line-height:1.65;margin:0 0 28px">${t.body}</p>
+      <div style="text-align:center;margin-bottom:28px">
+        <a href="${resetUrl}"
+           style="display:inline-block;background:#e86000;color:#fff;padding:14px 36px;border-radius:40px;font-size:15px;font-weight:600;text-decoration:none">
+          ${t.btn}
+        </a>
+      </div>
+      <p style="font-size:12px;color:#b09878;margin:0 0 4px">${t.expiry}</p>
+      <p style="font-size:12px;color:#b09878;margin:0">${t.footer}</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_API_KEY}` },
+    body: JSON.stringify({
+      from:    'Catch This Idea <noreply@catchthisidea.com>',
+      to:      [email],
+      subject: t.subject,
+      html,
+    }),
+  });
+  return res.ok;
 }

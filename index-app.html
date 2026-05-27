@@ -169,6 +169,8 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
 .fg input,.fg select,.fg textarea{padding:9px 12px;border:1px solid var(--border);border-radius:3px;font-size:14px;background:var(--paper);color:var(--ink);font-family:var(--sans);outline:none}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--or1)}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.btn-link{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);padding:0}
+.btn-link:hover{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -235,7 +237,7 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
   <div class="m-box" style="max-width:420px">
     <button class="m-close" onclick="closeAuth()">×</button>
     <!-- Tabs -->
-    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem">
+    <div id="auth-tabs" style="display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem">
       <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
       <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Criar conta</button>
     </div>
@@ -251,12 +253,50 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
         <label class="form-label">Email</label>
         <input class="form-input" id="auth-email" type="email" placeholder="email@exemplo.com" required autocomplete="email"/>
       </div>
-      <div style="margin-bottom:1.5rem">
+      <div style="margin-bottom:.5rem">
         <label class="form-label">Password</label>
         <input class="form-input" id="auth-password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
       </div>
+      <div id="forgot-link-wrap" style="text-align:right;margin-bottom:1rem">
+        <button type="button" class="btn-link" onclick="switchAuthTab('forgot')">Esqueceu a password?</button>
+      </div>
       <div class="auth-error" id="auth-error" style="display:none"></div>
       <button class="cta-main" type="submit" style="width:100%;justify-content:center" id="auth-submit">Entrar</button>
+    </form>
+
+    <!-- Vista de recuperação de password -->
+    <div id="forgot-view" style="display:none">
+      <div class="m-h">Recuperar password</div>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.4rem">Introduza o seu email e enviamos-lhe um link para redefinir a password.</p>
+      <form id="forgot-form" onsubmit="submitForgot(event)">
+        <div style="margin-bottom:1.5rem">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="forgot-email" type="email" placeholder="email@exemplo.com" required autocomplete="email"/>
+        </div>
+        <div id="forgot-msg" style="display:none"></div>
+        <button class="cta-main" type="submit" style="width:100%" id="forgot-submit">Enviar link</button>
+      </form>
+      <button type="button" class="btn-link" style="margin-top:1rem" onclick="switchAuthTab('login')">← Voltar ao login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL NOVA PASSWORD (recuperação) ══════════════════════ -->
+<div class="m-overlay" id="reset-overlay">
+  <div class="m-box" style="max-width:420px">
+    <div class="m-h" style="margin-bottom:.5rem">Nova password</div>
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.4rem">Escolha uma nova password para a sua conta.</p>
+    <form id="reset-form" onsubmit="submitReset(event)">
+      <div style="margin-bottom:1rem">
+        <label class="form-label">Nova password</label>
+        <input class="form-input" id="reset-pwd" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <label class="form-label">Confirmar password</label>
+        <input class="form-input" id="reset-confirm" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
+      </div>
+      <div id="reset-msg" style="display:none"></div>
+      <button class="cta-main" type="submit" style="width:100%" id="reset-submit">Guardar password</button>
     </form>
   </div>
 </div>
@@ -454,14 +494,39 @@ function closeAuth(e){
 
 function switchAuthTab(mode){
   authMode = mode;
+  const tabs       = document.getElementById('auth-tabs');
+  const form       = document.getElementById('auth-form');
+  const forgotView = document.getElementById('forgot-view');
+  const title      = document.getElementById('auth-title');
+  const sub        = document.getElementById('auth-sub');
+
+  if(mode === 'forgot'){
+    tabs.style.display       = 'none';
+    form.style.display       = 'none';
+    title.style.display      = 'none';
+    sub.style.display        = 'none';
+    forgotView.style.display = 'block';
+    document.getElementById('auth-error').style.display = 'none';
+    return;
+  }
+
+  // login ou register
+  tabs.style.display       = '';
+  form.style.display       = '';
+  title.style.display      = '';
+  sub.style.display        = '';
+  forgotView.style.display = 'none';
+
   document.getElementById('tab-login').classList.toggle('active',    mode==='login');
   document.getElementById('tab-register').classList.toggle('active', mode==='register');
-  document.getElementById('auth-title').textContent   = mode==='login' ? 'Bem-vindo de volta' : 'Criar conta';
-  document.getElementById('auth-sub').textContent     = mode==='login'
+  title.textContent = mode==='login' ? 'Bem-vindo de volta' : 'Criar conta';
+  sub.textContent   = mode==='login'
     ? 'Entre na sua conta para comprar e vender ideias.'
     : 'Junte-se ao marketplace de ideias criativas.';
+  sub.style.color   = '';
   document.getElementById('auth-submit').textContent  = mode==='login' ? 'Entrar' : 'Criar conta';
   document.getElementById('field-name').style.display = mode==='register' ? 'block' : 'none';
+  document.getElementById('forgot-link-wrap').style.display = mode==='login' ? 'block' : 'none';
   document.getElementById('auth-error').style.display = 'none';
   const pwd = document.getElementById('auth-password');
   if(mode === 'register'){
@@ -524,6 +589,91 @@ async function submitAuth(e){
     errEl.textContent = err.message;
     btn.disabled = false;
     btn.textContent = authMode === 'login' ? 'Entrar' : 'Criar conta';
+  }
+}
+
+// ── Forgot password ───────────────────────────
+async function submitForgot(e){
+  e.preventDefault();
+  const btn   = document.getElementById('forgot-submit');
+  const msgEl = document.getElementById('forgot-msg');
+  msgEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  const email = document.getElementById('forgot-email').value.trim();
+
+  try {
+    await fetch('/api/auth', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'forgot', email, lang }),
+    });
+    // Sempre mostrar sucesso (nunca revelar se o email existe)
+    msgEl.className = 'auth-success';
+    msgEl.style.display = 'block';
+    msgEl.textContent = 'Se esse email estiver registado, receberá um link em breve.';
+    btn.textContent = 'Email enviado ✓';
+  } catch {
+    msgEl.className = 'auth-error';
+    msgEl.style.display = 'block';
+    msgEl.textContent = 'Erro ao enviar. Tente novamente.';
+    btn.disabled = false;
+    btn.textContent = 'Enviar link';
+  }
+}
+
+// ── Reset password ────────────────────────────
+let resetToken = null;
+
+async function submitReset(e){
+  e.preventDefault();
+  const btn     = document.getElementById('reset-submit');
+  const msgEl   = document.getElementById('reset-msg');
+  const pwd     = document.getElementById('reset-pwd').value;
+  const confirm = document.getElementById('reset-confirm').value;
+
+  msgEl.style.display = 'none';
+
+  if(pwd.length < 8){
+    msgEl.className = 'auth-error';
+    msgEl.style.display = 'block';
+    msgEl.textContent = 'A password deve ter pelo menos 8 caracteres.';
+    return;
+  }
+  if(pwd !== confirm){
+    msgEl.className = 'auth-error';
+    msgEl.style.display = 'block';
+    msgEl.textContent = 'As passwords não coincidem.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  try {
+    const r = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'reset', new_password: pwd, access_token: resetToken, lang }),
+    });
+    const d = await r.json();
+    if(!r.ok) throw new Error(d.error || 'Erro ao redefinir a password.');
+
+    document.getElementById('reset-overlay').classList.remove('open');
+    resetToken = null;
+    setTimeout(() => {
+      openAuth('login');
+      const sub = document.getElementById('auth-sub');
+      sub.textContent = '✓ Password redefinida! Entre na sua conta.';
+      sub.style.color = '#1e7e34';
+    }, 100);
+  } catch(err){
+    msgEl.className = 'auth-error';
+    msgEl.style.display = 'block';
+    msgEl.textContent = err.message;
+    btn.disabled = false;
+    btn.textContent = 'Guardar password';
   }
 }
 
@@ -606,18 +756,25 @@ document.addEventListener('click', () => {
   document.getElementById('user-dd')?.classList.remove('open');
 });
 
-// Detetar callback de confirmação de email
+// Detetar callback de confirmação de email e recuperação de password
 (function handleAuthCallback() {
   const hash   = window.location.hash;
   if (!hash) return;
   const params = new URLSearchParams(hash.replace('#', ''));
   const type   = params.get('type');
-  if (!params.get('access_token') && !type) return;
+  const token  = params.get('access_token');
+  if (!token && !type) return;
 
   // Limpar hash do URL
   history.replaceState(null, '', window.location.pathname);
 
-  if (type === 'signup' || params.get('access_token')) {
+  if (type === 'recovery' && token) {
+    // Link de recuperação de password clicado — abrir modal de nova password
+    resetToken = token;
+    setTimeout(() => {
+      document.getElementById('reset-overlay').classList.add('open');
+    }, 200);
+  } else if (type === 'signup' || token) {
     // Email confirmado — mostrar mensagem e abrir login
     setTimeout(() => {
       openAuth('login');
