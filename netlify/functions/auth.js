@@ -66,7 +66,8 @@ export default async (req) => {
   try { body = await req.json(); }
   catch { return json({ error: 'JSON inválido' }, 400, origin); }
 
-  const { action, email, password, full_name } = body;
+  const { action, email, password, full_name, lang = 'pt' } = body;
+  const safeLang = ['pt','en','fr','es'].includes(lang) ? lang : 'pt';
 
   if (!action) return json({ error: 'action é obrigatório' }, 400, origin);
 
@@ -84,7 +85,7 @@ export default async (req) => {
       body: JSON.stringify({
         email:    email.toLowerCase().trim(),
         password,
-        data: { full_name: sanitizedName },
+        data: { full_name: sanitizedName, lang: safeLang },
       }),
     });
 

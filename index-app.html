@@ -463,7 +463,7 @@ async function submitAuth(e){
     const r = await fetch('/api/auth', {
       method: 'POST',
       headers: { 'Content-Type':'application/json' },
-      body: JSON.stringify({ action: authMode, email, password, full_name: name }),
+      body: JSON.stringify({ action: authMode, email, password, full_name: name, lang }),
     });
     const d = await r.json();
 
