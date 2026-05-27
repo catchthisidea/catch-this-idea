@@ -7,7 +7,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;--or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;--or-border:#f5c890;--muted:#7a6040;--border:#ddd0b8;--serif:"Instrument Serif",Georgia,serif;--sans:"DM Sans",sans-serif;}
-body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--or-border:#4a3520;--muted:#9a8a70;--border:#3a3028;}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden;transition:background .25s,color .25s}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100}
 .logo{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none}
@@ -33,6 +34,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .btn-pill:hover{background:var(--or2)}
 .btn-ghost{background:transparent;color:var(--ink);padding:7px 15px;border-radius:40px;font-size:13px;border:1px solid var(--border);cursor:pointer;font-family:var(--sans)}
 .btn-ghost:hover{background:var(--paper2)}
+.dark-toggle{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--paper);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s,color .2s,border-color .2s}
+.dark-toggle:hover{background:var(--paper2);color:var(--ink)}
 /* Auth & Wallet */
 .wallet-chip{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:40px;border:1px solid var(--border);background:var(--paper);font-size:13px;font-weight:500;color:var(--or1);cursor:pointer;font-family:var(--sans)}
 .wallet-chip:hover{background:var(--or-pale)}
@@ -188,6 +191,9 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
     </div>
     <button class="btn-ghost" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'})" data-t="nav_explore">Explorar</button>
     <!-- Auth: logged out -->
+    <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" title="Mudar tema">
+      <i class="ti ti-moon" id="dark-icon"></i>
+    </button>
     <div id="nav-loggedout" style="display:flex;gap:8px">
       <button class="btn-ghost" onclick="openAuth('login')" data-t="nav_login">Entrar</button>
       <button class="btn-pill" onclick="openAuth('register')" data-t="nav_register">Criar conta</button>
@@ -551,6 +557,22 @@ function toggleUserMenu(e){
   e.stopPropagation();
   document.getElementById('user-dd').classList.toggle('open');
 }
+
+// ── Dark mode ──────────────────────────────────
+function toggleDark() {
+  const isDark = document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className = isDark ? 'ti ti-sun' : 'ti ti-moon';
+  localStorage.setItem('cti_theme', isDark ? 'dark' : 'light');
+}
+
+(function initTheme() {
+  const saved = localStorage.getItem('cti_theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.body.classList.add('dark');
+    document.getElementById('dark-icon').className = 'ti ti-sun';
+  }
+})();
 
 // ── Init ──────────────────────────────────────
 document.addEventListener('click', () => {
