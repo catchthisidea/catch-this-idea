@@ -90,7 +90,10 @@ export default async (req) => {
     });
 
     const data = await res.json();
-    if (!res.ok) return json({ error: data.msg ?? data.error_description ?? 'Erro no registo' }, 400, origin);
+    if (!res.ok) {
+      const msg = data.msg ?? data.error_description ?? data.message ?? JSON.stringify(data);
+      return json({ error: msg }, 400, origin);
+    }
 
     return json({
       message: 'Conta criada! Verifique o seu email para confirmar o registo.',
