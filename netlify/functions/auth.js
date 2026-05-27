@@ -1,6 +1,6 @@
 export const config = { path: '/api/auth' };
 
-const SUPABASE_URL      = process.env.SUPABASE_URL;
+const SUPABASE_URL      = (process.env.SUPABASE_URL ?? '').replace(/\/+$/, '');
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const ALLOWED_ORIGINS   = ['https://catchthisidea.com', 'https://catchthisidea.netlify.app'];
 
