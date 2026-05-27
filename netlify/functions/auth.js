@@ -265,10 +265,17 @@ export default async (req) => {
       body: JSON.stringify({ password: new_password }),
     });
 
+    const resetData = await res.json().catch(() => ({}));
     if (!res.ok) {
-      const d = await res.json().catch(() => ({}));
-      return json({ error: d.error_description ?? d.message ?? 'Erro ao redefinir a password.' }, 400, origin);
+      return json({ error: resetData.error_description ?? resetData.message ?? 'Erro ao redefinir a password.' }, 400, origin);
     }
+
+    // Notificar o utilizador por email
+    const userEmail = resetData.email;
+    if (userEmail) {
+      await sendPasswordChangedEmail(userEmail, safeLang).catch(() => {});
+    }
+
     return json({ message: buildResetSuccessMessage(safeLang) }, 200, origin);
   }
 
@@ -341,6 +348,73 @@ const recoveryContent = {
     footer:   'Si no solicitaste el restablecimiento, puedes ignorar este email.',
   },
 };
+
+// ── Email de confirmação de alteração de password ────────────
+const passwordChangedContent = {
+  pt: {
+    subject:  'A sua password foi alterada — Catch This Idea',
+    greeting: (name) => name ? `Olá, ${name}!` : 'Olá!',
+    body:     'A sua password foi alterada com sucesso. Se não foi você a fazer esta alteração, entre em contacto connosco imediatamente respondendo a este email.',
+    notice:   'Esta é uma mensagem de segurança automática.',
+    footer:   'Se foi você, pode ignorar este aviso.',
+  },
+  en: {
+    subject:  'Your password has been changed — Catch This Idea',
+    greeting: (name) => name ? `Hi, ${name}!` : 'Hi!',
+    body:     'Your password has been successfully changed. If you did not make this change, please contact us immediately by replying to this email.',
+    notice:   'This is an automated security notification.',
+    footer:   'If this was you, you can safely ignore this notice.',
+  },
+  fr: {
+    subject:  'Votre mot de passe a été modifié — Catch This Idea',
+    greeting: (name) => name ? `Bonjour, ${name}!` : 'Bonjour!',
+    body:     'Votre mot de passe a été modifié avec succès. Si vous n\'êtes pas à l\'origine de cette modification, contactez-nous immédiatement en répondant à cet email.',
+    notice:   'Ceci est une notification de sécurité automatique.',
+    footer:   'Si c\'était vous, vous pouvez ignorer cet avis.',
+  },
+  es: {
+    subject:  'Tu contraseña ha sido cambiada — Catch This Idea',
+    greeting: (name) => name ? `¡Hola, ${name}!` : '¡Hola!',
+    body:     'Tu contraseña ha sido cambiada con éxito. Si no fuiste tú quien realizó este cambio, contáctanos inmediatamente respondiendo a este email.',
+    notice:   'Esta es una notificación de seguridad automática.',
+    footer:   'Si fuiste tú, puedes ignorar este aviso.',
+  },
+};
+
+async function sendPasswordChangedEmail(email, lang) {
+  const t = passwordChangedContent[lang] ?? passwordChangedContent.pt;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:20px;background:#f5ede0;font-family:Arial,sans-serif">
+  <div style="max-width:520px;margin:0 auto;background:#fffaf4;border:1px solid #ddd0b8;border-radius:8px;overflow:hidden">
+    <div style="background:#e86000;padding:20px 32px">
+      <span style="font-family:Georgia,serif;font-size:20px;color:#fff;font-style:italic">Catch · This · Idea</span>
+    </div>
+    <div style="padding:32px">
+      <p style="font-family:Georgia,serif;font-size:22px;color:#1a0f00;margin:0 0 8px">${t.greeting(null)}</p>
+      <p style="font-size:15px;color:#7a6040;line-height:1.65;margin:0 0 20px">${t.body}</p>
+      <div style="background:#fff8f0;border:1px solid #f5d0a8;border-radius:6px;padding:12px 16px;margin-bottom:24px">
+        <p style="font-size:13px;color:#e86000;margin:0;font-weight:600">⚠ ${t.notice}</p>
+      </div>
+      <p style="font-size:12px;color:#b09878;margin:0">${t.footer}</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_API_KEY}` },
+    body: JSON.stringify({
+      from:    'Catch This Idea <noreply@catchthisidea.com>',
+      to:      [email],
+      subject: t.subject,
+      html,
+    }),
+  });
+  return res.ok;
+}
 
 async function sendRecoveryEmail(email, lang, resetUrl) {
   const t = recoveryContent[lang] ?? recoveryContent.pt;
