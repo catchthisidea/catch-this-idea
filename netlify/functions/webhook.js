@@ -14,6 +14,7 @@ export const config = { path: '/api/webhook' };
 
 import { createHmac, timingSafeEqual } from 'crypto';
 import { sendEmail, emailIdeaSold, emailTierUpgrade, getTierInfo } from './_email.js';
+import { createCommissionInvoice }                                  from './_moloni.js';
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const SUPABASE_URL          = (process.env.SUPABASE_URL ?? '').replace(/\/+$/, '');
@@ -161,15 +162,12 @@ async function handleCheckoutCompleted(session) {
   // 2. Incrementar sales_count da ideia
   await supabaseRpc('increment_idea_sales', { idea_uuid: idea_id });
 
-  // 3. Creditar carteira do vendedor (valor líquido = total - comissão)
-  await supabaseRpc('credit_wallet', {
-    user_uuid:   seller_id,
-    amount_cents: sellerNetCents,
-    description: `Venda: ${option_name ?? option_type}`,
-    ref_uuid:    idea_id,
-  });
+  // 3. [Stripe Connect] O split de pagamento é feito automaticamente pela Stripe:
+  //    • application_fee_amount (comissão) fica na conta da CTI
+  //    • transfer_data[destination] envia o valor líquido ao vendedor
+  //    Não é necessário creditar a carteira manualmente.
 
-  // 4. Buscar dados do vendedor para emails e tier check (em paralelo)
+  // 4. Buscar dados do vendedor para emails, tier check e Moloni (em paralelo)
   const [sellerProfileRes, sellerAuthRes] = await Promise.all([
     fetch(
       `${SUPABASE_URL}/rest/v1/profiles?id=eq.${seller_id}&select=display_name,loyalty_points&limit=1`,
@@ -214,7 +212,18 @@ async function handleCheckoutCompleted(session) {
     }
   }
 
-  console.log(`[webhook] ✓ Processado. Vendedor recebe €${sellerNetEur} | Loyalty +${pointsEarned}pts`);
+  // 8. Emitir fatura de comissão no Moloni (não bloqueante — não atrasa a resposta ao Stripe)
+  if (sellerEmail && commissionEur > 0) {
+    createCommissionInvoice({
+      sellerEmail,
+      sellerName:   sellerName ?? sellerEmail,
+      commissionEur,
+      ideaTitle:    idea_title ?? idea_id,
+      purchaseId:   session.id,
+    }).catch(e => console.warn('[webhook] Moloni invoice:', e.message));
+  }
+
+  console.log(`[webhook] ✓ Processado. Stripe transfere €${sellerNetEur} ao vendedor | comissão CTI €${commissionEur} | Loyalty +${pointsEarned}pts`);
 }
 
 // ── Endpoint principal ────────────────────────────────────────

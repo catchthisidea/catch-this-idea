@@ -803,3 +803,29 @@ grant execute on function public.enforce_data_retention() to service_role;
 -- através do Stripe Checkout (hosted page).
 -- Nível de conformidade PCI-DSS: SAQ-A (mais simples).
 -- Referência: https://stripe.com/docs/security/guide
+
+
+-- ============================================================
+-- 11. STRIPE CONNECT — contas de recebimento dos vendedores
+--
+-- Cada vendedor liga a sua própria conta Stripe Express à plataforma.
+-- O split de pagamento é feito automaticamente pela Stripe via
+-- application_fee_amount (comissão da CTI) + transfer_data[destination]
+-- (valor líquido para o vendedor).
+--
+-- Fluxo:
+--   1. Vendedor faz onboarding via /api/connect (Stripe Express KYC)
+--   2. Stripe regista a conta e activa charges_enabled + payouts_enabled
+--   3. Em cada compra, o checkout usa transfer_data[destination] +
+--      application_fee_amount para dividir o pagamento automaticamente
+--   4. O vendedor gere os seus levantamentos no Stripe Express dashboard
+-- ============================================================
+
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS stripe_account_id          TEXT,
+  ADD COLUMN IF NOT EXISTS stripe_onboarding_complete BOOLEAN NOT NULL DEFAULT FALSE;
+
+-- Índice para lookup rápido por stripe_account_id (usado em webhooks Connect)
+CREATE INDEX IF NOT EXISTS idx_profiles_stripe_account_id
+  ON public.profiles(stripe_account_id)
+  WHERE stripe_account_id IS NOT NULL;

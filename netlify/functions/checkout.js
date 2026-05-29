@@ -129,14 +129,24 @@ export default async (req) => {
   if (idea.seller_id === user.id)
     return json({ error: 'Não podes comprar a tua própria ideia' }, 400, origin);
 
-  // ── 3.5. Calcular comissão real baseada no tier de loyalty do vendedor ──
+  // ── 3.5. Carregar perfil do vendedor: loyalty tier + Stripe Connect ──
   const sellerProfileRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/profiles?id=eq.${idea.seller_id}&select=loyalty_points&limit=1`,
+    `${SUPABASE_URL}/rest/v1/profiles?id=eq.${idea.seller_id}` +
+    `&select=loyalty_points,stripe_account_id,stripe_onboarding_complete&limit=1`,
     { headers: svc() }
   );
   const sellerProfiles = sellerProfileRes.ok ? await sellerProfileRes.json() : [];
-  const loyaltyPoints  = sellerProfiles[0]?.loyalty_points ?? 0;
+  const sellerProfile  = sellerProfiles[0] ?? {};
+  const loyaltyPoints  = sellerProfile.loyalty_points ?? 0;
   const { rate: commissionRate, name: tierName } = getLoyaltyTier(loyaltyPoints);
+
+  // Verificar se o vendedor tem Stripe Connect activo
+  if (!sellerProfile.stripe_account_id || !sellerProfile.stripe_onboarding_complete) {
+    return json({
+      error:                'Este vendedor ainda não configurou o recebimento de pagamentos. Tente novamente mais tarde.',
+      seller_not_connected: true,
+    }, 400, origin);
+  }
 
   // ── 4. Determinar preço e descrição da opção ────────────────
   let amountEur, optionType, optionName;
@@ -178,8 +188,9 @@ export default async (req) => {
   if (!amountEur || amountEur <= 0 || isNaN(amountEur))
     return json({ error: 'Preço inválido' }, 400, origin);
 
-  const amountCents    = Math.round(amountEur * 100);
-  const commissionEur  = Math.round(amountEur * commissionRate * 100) / 100;
+  const amountCents      = Math.round(amountEur * 100);
+  const commissionCents  = Math.round(amountCents * commissionRate); // inteiro para Stripe
+  const commissionEur    = commissionCents / 100;
 
   // ── 5. Criar sessão Stripe Checkout ────────────────────────
   let session;
@@ -196,6 +207,12 @@ export default async (req) => {
       'customer_email':                                      user.email ?? '',
       'success_url': `${SITE_URL}/index-app.html?payment=success&session_id={CHECKOUT_SESSION_ID}`,
       'cancel_url':  `${SITE_URL}/index-app.html?payment=cancelled`,
+      // Stripe Connect: split automático
+      // A comissão (application_fee) fica na conta da CTI;
+      // o restante é transferido para a conta Express do vendedor.
+      'application_fee_amount':         String(commissionCents),
+      'transfer_data[destination]':     sellerProfile.stripe_account_id,
+
       // Metadata — usada no webhook para registar a compra
       'metadata[idea_id]':       idea_id,
       'metadata[idea_title]':    (idea.title_pt ?? '').slice(0, 200),
