@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Suporte ao utilizador
+    url: https://catchthisidea.com/help.html
+    about: Para questões de conta, pagamentos ou conteúdo, usa o formulário de suporte.
+  - name: 💡 Sugestões de produto
+    url: https://catchthisidea.com/suggestions.html
+    about: Para sugestões gerais de melhoria do marketplace.

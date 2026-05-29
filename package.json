@@ -1,0 +1,19 @@
+{
+  "name": "catch-this-idea",
+  "version": "1.0.0",
+  "description": "Marketplace de ideias criativas — vende e compra ideias que nunca realizaste",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "check": "node scripts/check-syntax.mjs",
+    "deploy": "netlify deploy --dir .",
+    "deploy:prod": "netlify deploy --prod --dir ."
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^22.0.0"
+  }
+}

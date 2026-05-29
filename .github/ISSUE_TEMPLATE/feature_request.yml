@@ -1,0 +1,66 @@
+name: ✨ Pedido de Funcionalidade
+description: Sugere uma nova funcionalidade ou melhoria
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado pela sugestão! Descreve a funcionalidade com o máximo de detalhe.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema ou necessidade
+      description: Que problema resolve esta funcionalidade? Qual a necessidade?
+      placeholder: "Enquanto [tipo de utilizador], quero [funcionalidade] para [benefício]."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução proposta
+      description: Como imaginaste que funcionaria?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Frontend / UI
+        - Backend / API
+        - Pagamentos
+        - Moderação / Admin
+        - Programa de Fidelidade
+        - Autenticação
+        - Email / Notificações
+        - Performance
+        - Outro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridade estimada
+      options:
+        - 🔴 Alta — bloqueia utilizadores ou receita
+        - 🟡 Média — melhora significativamente a experiência
+        - 🟢 Baixa — nice to have
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+      description: Existem outras formas de resolver o mesmo problema?
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto adicional
+      description: Mockups, referências de outros produtos, screenshots, etc.

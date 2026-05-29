@@ -1,0 +1,73 @@
+name: 🐛 Relatório de Bug
+description: Reporta um comportamento inesperado ou erro
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por reportares! Preenche os campos abaixo com o máximo de detalhe possível.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: O que aconteceu?
+      description: Descrição clara e concisa do bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. Abre '...'
+        2. Clica em '...'
+        3. Vê o erro '...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+      description: O que deveria ter acontecido?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome / Chromium
+        - Firefox
+        - Safari
+        - Edge
+        - Mobile Chrome
+        - Mobile Safari
+        - Outro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área afectada
+      options:
+        - Autenticação (login / registo)
+        - Marketplace (listagem de ideias)
+        - Compra / Pagamento
+        - Carteira / Saldo
+        - Perfil de utilizador
+        - Painel de administração
+        - Página de sugestões / ajuda
+        - Outro
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto adicional
+      description: Screenshots, mensagens de erro da consola, etc.

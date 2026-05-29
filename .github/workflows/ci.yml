@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  syntax-check:
+    name: Validate Netlify Functions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Check ES module syntax
+        run: node scripts/check-syntax.mjs
+
+  html-check:
+    name: Check HTML files exist and are non-empty
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify HTML files
+        run: |
+          echo "A verificar ficheiros HTML..."
+          EXIT=0
+          for f in *.html; do
+            if [ ! -s "$f" ]; then
+              echo "  ✗  $f está vazio ou não existe"
+              EXIT=1
+            else
+              echo "  ✓  $f ($(wc -c < "$f") bytes)"
+            fi
+          done
+          exit $EXIT
+
+      - name: Check for exposed secrets
+        run: |
+          echo "A verificar segredos expostos..."
+          # Detectar padrões comuns de API keys acidentalmente commitadas
+          if grep -rn \
+            -e "sk-ant-api" \
+            -e "sk_live_" \
+            -e "whsec_" \
+            -e "re_[A-Za-z0-9]" \
+            --include="*.html" \
+            --include="*.js" \
+            --include="*.json" \
+            --exclude-dir=".github" \
+            .; then
+            echo "AVISO: Possíveis chaves expostas encontradas!"
+            exit 1
+          fi
+          echo "  ✓  Nenhum segredo detectado"
