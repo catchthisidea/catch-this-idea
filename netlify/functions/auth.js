@@ -1,5 +1,7 @@
 export const config = { path: '/api/auth' };
 
+import { sendEmail as sendTransactional, emailWelcome } from './_email.js';
+
 const SUPABASE_URL      = (process.env.SUPABASE_URL      ?? '').replace(/\/+$/, '');
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SVC_KEY  = process.env.SUPABASE_SERVICE_KEY;
@@ -195,8 +197,13 @@ export default async (req) => {
 
     if (!confirmUrl) return json({ error: 'Erro ao gerar link de confirmação' }, 500, origin);
 
-    // 3. Enviar email via Resend no idioma do utilizador
+    // 3. Enviar email de confirmação (idioma do utilizador) + email de boas-vindas (PT)
     await sendConfirmEmail(cleanEmail, sanitizedName, safeLang, confirmUrl);
+
+    // Boas-vindas separado — chega logo a seguir ao de confirmação
+    const welcome = emailWelcome(sanitizedName);
+    sendTransactional(cleanEmail, welcome.subject, welcome.html)
+      .catch(e => console.warn('[auth:register] welcome email:', e.message));
 
     return json({ message: buildSuccessMessage(safeLang) }, 200, origin);
   }

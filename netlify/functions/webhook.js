@@ -13,6 +13,7 @@
 export const config = { path: '/api/webhook' };
 
 import { createHmac, timingSafeEqual } from 'crypto';
+import { sendEmail, emailIdeaSold, emailTierUpgrade, getTierInfo } from './_email.js';
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const SUPABASE_URL          = (process.env.SUPABASE_URL ?? '').replace(/\/+$/, '');
@@ -168,7 +169,33 @@ async function handleCheckoutCompleted(session) {
     ref_uuid:    idea_id,
   });
 
-  // 4. Acumular pontos de loyalty do vendedor (€10 = 1 ponto, valor bruto da venda)
+  // 4. Buscar dados do vendedor para emails e tier check (em paralelo)
+  const [sellerProfileRes, sellerAuthRes] = await Promise.all([
+    fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${seller_id}&select=display_name,loyalty_points&limit=1`,
+      { headers: svc() }
+    ),
+    fetch(`${SUPABASE_URL}/auth/v1/admin/users/${seller_id}`, { headers: svc() }),
+  ]);
+  const sellerProfiles = sellerProfileRes.ok ? await sellerProfileRes.json() : [];
+  const sellerAuth     = sellerAuthRes.ok    ? await sellerAuthRes.json()    : {};
+  const sellerEmail    = sellerAuth.email    ?? null;
+  const sellerName     = sellerProfiles[0]?.display_name ?? null;
+  const oldPoints      = sellerProfiles[0]?.loyalty_points ?? 0;
+
+  // 5. Email de confirmação ao comprador
+  const buyerEmail = session.customer_details?.email ?? session.customer_email ?? null;
+  await sendPurchaseEmail(buyerEmail, idea_title ?? idea_id, option_name ?? option_type, amountEur);
+
+  // 6. Email de venda ao vendedor
+  if (sellerEmail) {
+    const buyerName = session.customer_details?.name ?? null;
+    const em = emailIdeaSold(idea_title ?? idea_id, option_name ?? option_type, sellerNetEur, buyerName);
+    sendEmail(sellerEmail, em.subject, em.html)
+      .catch(e => console.warn('[webhook] seller email:', e.message));
+  }
+
+  // 7. Acumular pontos de loyalty do vendedor (€10 = 1 ponto, valor bruto da venda)
   const pointsEarned = Math.floor(amountEur / 10);
   if (pointsEarned > 0) {
     await supabaseRpc('add_loyalty_points', {
@@ -176,11 +203,16 @@ async function handleCheckoutCompleted(session) {
       points_to_add: pointsEarned,
     });
     console.log(`[webhook] Loyalty: +${pointsEarned} pontos → vendedor=${seller_id}`);
-  }
 
-  // 5. Email de confirmação ao comprador
-  const buyerEmail = session.customer_details?.email ?? session.customer_email ?? null;
-  await sendPurchaseEmail(buyerEmail, idea_title ?? idea_id, option_name ?? option_type, amountEur);
+    // Verificar subida de tier e notificar
+    const newPoints = oldPoints + pointsEarned;
+    if (sellerEmail && getTierInfo(oldPoints).name !== getTierInfo(newPoints).name) {
+      const em = emailTierUpgrade(sellerName, newPoints);
+      sendEmail(sellerEmail, em.subject, em.html)
+        .catch(e => console.warn('[webhook] tier email:', e.message));
+      console.log(`[webhook] Tier upgrade: ${getTierInfo(oldPoints).name} → ${getTierInfo(newPoints).name}`);
+    }
+  }
 
   console.log(`[webhook] ✓ Processado. Vendedor recebe €${sellerNetEur} | Loyalty +${pointsEarned}pts`);
 }
