@@ -306,3 +306,114 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+
+-- ============================================================
+-- 9. MIGRATIONS — colunas e tabelas adicionadas após schema inicial
+-- Idempotente: seguro correr múltiplas vezes.
+-- Correr no SQL Editor do Supabase por esta ordem.
+-- ============================================================
+
+-- ── 9a. profiles — colunas de loyalty, moderação e suspensão ─
+alter table public.profiles
+  add column if not exists loyalty_points   int         not null default 0,
+  add column if not exists rejection_count  int         not null default 0,
+  add column if not exists suspended        boolean     not null default false,
+  add column if not exists suspended_at     timestamptz,
+  add column if not exists suspension_reason text;
+
+-- ── 9b. ideas — destaque, preço base e milestone de views ────
+alter table public.ideas
+  add column if not exists price                    numeric(10,2),
+  add column if not exists featured                 boolean not null default false,
+  add column if not exists views_milestone_notified int     not null default 0;
+
+-- ── 9c. purchases — data de reembolso ─────────────────────────
+alter table public.purchases
+  add column if not exists refunded_at timestamptz;
+
+-- ── 9d. BLACKLIST — emails e telefones banidos ────────────────
+create table if not exists public.blacklist (
+  id           uuid primary key default gen_random_uuid(),
+  email        text,
+  phone        text,
+  user_id      uuid references auth.users(id) on delete set null,
+  display_name text,
+  reason       text not null,
+  banned_by    text not null,
+  created_at   timestamptz default now(),
+  constraint blacklist_email_or_phone check (email is not null or phone is not null)
+);
+
+alter table public.blacklist enable row level security;
+-- Apenas service_role pode ler/escrever na blacklist
+grant select, insert, delete on public.blacklist to service_role;
+
+-- ── 9e. REJECTION_LOG — registo de rejeições por utilizador ──
+create table if not exists public.rejection_log (
+  id           uuid primary key default gen_random_uuid(),
+  user_id      uuid not null references auth.users(id) on delete cascade,
+  idea_id      text not null,
+  idea_title   text not null default '—',
+  reason       text not null,
+  rejected_by  text not null,
+  rejected_at  timestamptz default now()
+);
+
+alter table public.rejection_log enable row level security;
+grant select, insert, delete on public.rejection_log to service_role;
+
+-- ── 9f. ADMIN_LOG — auditoria de ações administrativas ───────
+create table if not exists public.admin_log (
+  id           uuid primary key default gen_random_uuid(),
+  admin_email  text not null,
+  action       text not null,
+  target_type  text,          -- 'idea' | 'user' | 'blacklist' | 'purchase'
+  target_id    text,
+  details      text,
+  created_at   timestamptz default now()
+);
+
+alter table public.admin_log enable row level security;
+grant select, insert on public.admin_log to service_role;
+
+-- ── 9g. RPC — acumular pontos de loyalty ─────────────────────
+create or replace function public.add_loyalty_points(
+  user_uuid    uuid,
+  points_to_add int
+)
+returns void language sql security definer as $$
+  update public.profiles
+  set loyalty_points = loyalty_points + points_to_add
+  where id = user_uuid;
+$$;
+
+grant execute on function public.add_loyalty_points(uuid, int) to service_role;
+
+-- ── 9h. Índices úteis para performance ───────────────────────
+create index if not exists idx_ideas_seller_id
+  on public.ideas(seller_id);
+
+create index if not exists idx_ideas_moderation_status
+  on public.ideas(moderation_status);
+
+create index if not exists idx_ideas_featured
+  on public.ideas(featured) where featured = true;
+
+create index if not exists idx_purchases_seller_id
+  on public.purchases(seller_id);
+
+create index if not exists idx_purchases_created_at
+  on public.purchases(created_at desc);
+
+create index if not exists idx_transactions_user_type
+  on public.transactions(user_id, type, created_at desc);
+
+create index if not exists idx_rejection_log_user_id
+  on public.rejection_log(user_id);
+
+create index if not exists idx_admin_log_created_at
+  on public.admin_log(created_at desc);
+
+create index if not exists idx_blacklist_email
+  on public.blacklist(email) where email is not null;

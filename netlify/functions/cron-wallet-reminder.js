@@ -2,10 +2,14 @@
  * cron-wallet-reminder.js — Lembrete de saldo disponível para levantar
  *
  * Agenda: todas as quartas-feiras às 10:00 UTC
- * Envia: vendedores com saldo >= €5 que não levantaram nos últimos 30 dias
  *
- * Nota: usa wallet_balance_cents no perfil (em cêntimos).
- *       Mínimo €5 (500 cêntimos) para evitar notificações de valores irrisórios.
+ * Lógica:
+ *  1. Busca carteiras com saldo >= €5 (tabela `wallets`)
+ *  2. Exclui utilizadores que fizeram levantamento nos últimos 30 dias
+ *     (tabela `transactions` com type='withdrawal')
+ *  3. Envia email de lembrete a quem tiver saldo significativo parado
+ *
+ * Nota: o saldo é armazenado em cêntimos na tabela `wallets.balance`.
  */
 
 export const config = {
@@ -29,34 +33,44 @@ const svc = () => ({
 export default async () => {
   console.log('[cron-wallet-reminder] A iniciar...');
 
-  // Calcular data de corte: sem levantamento nos últimos 30 dias
-  const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // 30 dias atrás
 
-  // Buscar perfis com saldo >= mínimo
-  // Filtramos também por last_withdrawal_at (se existir) ou por created_at como proxy
-  const profilesRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/profiles` +
-    `?wallet_balance_cents=gte.${MIN_CENTS}` +
-    `&select=id,display_name,wallet_balance_cents,last_withdrawal_at` +
-    `&order=wallet_balance_cents.desc` +
+  // 1. Buscar carteiras com saldo >= mínimo
+  const walletsRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/wallets` +
+    `?balance=gte.${MIN_CENTS}` +
+    `&select=user_id,balance` +
+    `&order=balance.desc` +
     `&limit=1000`,
     { headers: svc() }
   );
 
-  if (!profilesRes.ok) {
-    console.error('[cron-wallet-reminder] Erro ao buscar perfis:', profilesRes.status);
+  if (!walletsRes.ok) {
+    console.error('[cron-wallet-reminder] Erro ao buscar carteiras:', walletsRes.status);
     return;
   }
 
-  const allProfiles = await profilesRes.json();
-  console.log(`[cron-wallet-reminder] ${allProfiles.length} perfil(is) com saldo ≥ €${(MIN_CENTS / 100).toFixed(2)}`);
+  const wallets = await walletsRes.json();
+  console.log(`[cron-wallet-reminder] ${wallets.length} carteira(s) com saldo >= €${(MIN_CENTS / 100).toFixed(2)}`);
 
-  // Filtrar: excluir quem levantou nos últimos 30 dias
-  const eligible = allProfiles.filter(p => {
-    if (!p.last_withdrawal_at) return true; // Nunca levantou → incluir
-    return new Date(p.last_withdrawal_at) < cutoff;
-  });
+  if (!wallets.length) {
+    console.log('[cron-wallet-reminder] Nenhuma carteira elegível. A terminar.');
+    return;
+  }
 
+  // 2. Buscar levantamentos recentes (últimos 30 dias) para excluir quem já levantou
+  const recentRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/transactions` +
+    `?type=eq.withdrawal` +
+    `&created_at=gte.${cutoff.toISOString()}` +
+    `&select=user_id`,
+    { headers: svc() }
+  );
+  const recentTxs       = recentRes.ok ? await recentRes.json() : [];
+  const recentWithdrawers = new Set(recentTxs.map(t => t.user_id));
+
+  // 3. Filtrar: excluir quem levantou recentemente
+  const eligible = wallets.filter(w => !recentWithdrawers.has(w.user_id));
   console.log(`[cron-wallet-reminder] ${eligible.length} elegível(is) após filtro de 30 dias`);
 
   if (!eligible.length) {
@@ -64,11 +78,13 @@ export default async () => {
     return;
   }
 
-  // Buscar emails dos utilizadores elegíveis
-  const sellerIds = eligible.map(p => p.id);
-  const userMap   = {};
+  const sellerIds = eligible.map(w => w.user_id);
 
-  // Buscar em bulk (até 1000 utilizadores de uma vez)
+  // 4. Buscar emails (auth) e nomes (profiles) em bulk
+  const userMap  = {}; // userId → email
+  const nameMap  = {}; // userId → display_name
+
+  // Auth users (até 1000 de uma vez)
   const authRes = await fetch(
     `${SUPABASE_URL}/auth/v1/admin/users?page=1&per_page=1000`,
     { headers: svc() }
@@ -80,16 +96,27 @@ export default async () => {
     }
   }
 
-  // Enviar emails
+  // Profiles (display_name)
+  const ids     = sellerIds.map(id => `"${id}"`).join(',');
+  const profRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/profiles?id=in.(${ids})&select=id,display_name`,
+    { headers: svc() }
+  );
+  if (profRes.ok) {
+    const rows = await profRes.json();
+    for (const r of rows) nameMap[r.id] = r.display_name ?? null;
+  }
+
+  // 5. Enviar emails
   let sent = 0;
   let errs = 0;
 
-  for (const profile of eligible) {
-    const sellerEmail = userMap[profile.id] ?? null;
+  for (const wallet of eligible) {
+    const sellerEmail = userMap[wallet.user_id] ?? null;
     if (!sellerEmail) continue;
 
-    const balanceEur = (profile.wallet_balance_cents / 100).toFixed(2);
-    const em = emailWalletReminder(profile.display_name, balanceEur);
+    const balanceEur = (wallet.balance / 100).toFixed(2);
+    const em = emailWalletReminder(nameMap[wallet.user_id] ?? null, balanceEur);
     const ok = await sendEmail(sellerEmail, em.subject, em.html).catch(() => false);
 
     if (ok) {
