@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administração — Catch This Idea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+/* ── Design tokens ── */
+:root{
+  --ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;
+  --or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;
+  --muted:#7a6040;--border:#ddd0b8;
+  --serif:'Instrument Serif',serif;--sans:'DM Sans',sans-serif;
+  --sidebar-w:220px;
+}
+body.dark{
+  --ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;
+  --or-pale:#2d2319;--muted:#9a8a70;--border:#3a3028;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper2);color:var(--ink);min-height:100vh;transition:background .25s,color .25s}
+
+/* ── Nav ── */
+.nav{
+  background:var(--paper);border-bottom:1px solid var(--border);
+  padding:.75rem 1.5rem;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:200;
+}
+.nav-logo{font-family:var(--serif);font-size:1.05rem;text-decoration:none;color:var(--ink);font-style:italic}
+.nav-back{display:flex;align-items:center;gap:5px;font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-back:hover{color:var(--or1)}
+.nav-right{display:flex;align-items:center;gap:.6rem}
+.nav-badge{background:#7c3aed;color:#fff;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase}
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s}
+.dark-btn:hover{background:var(--paper2)}
+
+/* ── Shell layout: sidebar + main ── */
+.shell{display:flex;min-height:calc(100vh - 53px)}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--paper);border-right:1px solid var(--border);
+  padding:1.25rem 0;position:sticky;top:53px;height:calc(100vh - 53px);overflow-y:auto;
+}
+.sidebar-item{
+  display:flex;align-items:center;gap:.65rem;
+  padding:.65rem 1.25rem;cursor:pointer;
+  font-size:.875rem;color:var(--muted);border-left:3px solid transparent;
+  transition:background .15s,color .15s,border-color .15s;user-select:none;
+}
+.sidebar-item:hover{background:var(--paper2);color:var(--ink)}
+.sidebar-item.active{
+  background:var(--or-pale);color:var(--or1);
+  border-left-color:var(--or1);font-weight:500;
+}
+.sidebar-item .ti{font-size:1.05rem}
+.sidebar-badge{
+  margin-left:auto;background:#e53935;color:#fff;
+  font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:20px;
+  min-width:20px;text-align:center;
+}
+.sidebar-badge.zero{display:none}
+
+/* ── Main content area ── */
+.main{flex:1;padding:2rem;min-width:0}
+.section-page{display:none}
+.section-page.active{display:block}
+
+/* ── Section headings ── */
+.page-hd{display:flex;align-items:center;gap:.8rem;margin-bottom:.3rem}
+.page-title{font-family:var(--serif);font-size:1.7rem}
+.page-sub{color:var(--muted);font-size:.875rem;margin-bottom:1.75rem}
+
+/* ── Stat cards (dashboard) ── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{
+  background:var(--paper);border:1.5px solid var(--border);border-radius:12px;
+  padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:.9rem;
+  cursor:pointer;transition:box-shadow .2s,border-color .2s;text-decoration:none;color:inherit;
+}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:var(--or3)}
+.stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.stat-body{flex:1;min-width:0}
+.stat-value{font-family:var(--serif);font-size:1.65rem;line-height:1;margin-bottom:.2rem}
+.stat-label{font-size:.78rem;color:var(--muted)}
+.stat-arrow{font-size:.8rem;color:var(--border);margin-top:.25rem}
+
+/* ── Section headers with subsections ── */
+.section{margin-bottom:2.5rem}
+.section-hd{
+  display:flex;align-items:center;gap:.6rem;font-size:.72rem;
+  font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;
+}
+.section-count{background:var(--border);color:var(--ink);border-radius:20px;padding:2px 8px;font-size:.68rem}
+.section-count.urgent{background:#f48fb1;color:#880e4f}
+.section-count.suspended{background:#ce93d8;color:#4a148c}
+
+/* ── Idea moderation cards (preserved) ── */
+.idea-card{background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:.85rem;transition:box-shadow .2s}
+.idea-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.idea-card.flagged{border-color:#f48fb1;background:#fce4ec}
+.idea-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.idea-card-info{flex:1;min-width:0}
+.idea-card-title{font-family:var(--serif);font-size:1.05rem;margin-bottom:.25rem}
+.idea-card-meta{font-size:.8rem;color:var(--muted);margin-bottom:.4rem}
+.idea-card-desc{font-size:.875rem;color:var(--ink);line-height:1.55;margin-bottom:.7rem;max-height:80px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.idea-card-reason{font-size:.8rem;color:#ad1457;background:#fce4ec;border:1px solid #f48fb1;border-radius:6px;padding:.4rem .7rem;margin-bottom:.7rem}
+.idea-card-actions{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.badge-status{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.badge-pending{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+.badge-flagged{background:#fce4ec;color:#ad1457;border:1px solid #f48fb1}
+.badge-active{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+.badge-hidden{background:#f5f5f5;color:#757575;border:1px solid #e0e0e0}
+
+/* ── User suspension cards (preserved) ── */
+.user-card{background:#f3e8ff;border:1.5px solid #ce93d8;border-radius:12px;padding:1.2rem 1.4rem;margin-bottom:.85rem;transition:box-shadow .2s}
+.user-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.user-card-top{display:flex;align-items:flex-start;gap:1rem;margin-bottom:.8rem}
+.user-card-avatar{width:44px;height:44px;border-radius:50%;background:#7c3aed;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--serif)}
+.user-card-info{flex:1;min-width:0}
+.user-card-name{font-family:var(--serif);font-size:1.05rem;margin-bottom:.18rem}
+.user-card-email{font-size:.8rem;color:var(--muted)}
+.user-card-meta{font-size:.8rem;color:#7c3aed;font-weight:500;margin-top:.25rem}
+.rejection-log{margin-bottom:.8rem}
+.rejection-log-hd{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem}
+.rejection-entry{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;margin-bottom:.4rem}
+.rejection-entry-title{font-size:.85rem;font-weight:500;margin-bottom:.2rem;color:var(--ink)}
+.rejection-entry-reason{font-size:.8rem;color:#ad1457}
+.rejection-entry-meta{font-size:.72rem;color:var(--muted);margin-top:.25rem}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:500;cursor:pointer;border:1.5px solid;transition:background .15s,opacity .15s;background:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+.btn-primary{background:var(--or1);border-color:var(--or1);color:#fff}.btn-primary:hover:not(:disabled){background:var(--or2);border-color:var(--or2)}
+.btn-approve{border-color:#2e7d32;color:#2e7d32}.btn-approve:hover:not(:disabled){background:#e8f5e9}
+.btn-reject{border-color:#c62828;color:#c62828}.btn-reject:hover:not(:disabled){background:#ffebee}
+.btn-ai{border-color:var(--or1);color:var(--or1)}.btn-ai:hover:not(:disabled){background:var(--or-pale)}
+.btn-profile{border-color:var(--border);color:var(--muted);font-size:.75rem}.btn-profile:hover:not(:disabled){border-color:var(--muted)}
+.btn-ban{border-color:#7c3aed;color:#7c3aed}.btn-ban:hover:not(:disabled){background:#ede9fe}
+.btn-unsuspend{border-color:#2e7d32;color:#2e7d32}.btn-unsuspend:hover:not(:disabled){background:#e8f5e9}
+.btn-danger{border-color:#c62828;color:#c62828}.btn-danger:hover:not(:disabled){background:#ffebee}
+.btn-sm{padding:.3rem .75rem;font-size:.75rem}
+.btn-reload{display:inline-flex;align-items:center;gap:6px;padding:.55rem 1.3rem;border:1.5px solid var(--border);border-radius:40px;font-size:.85rem;font-weight:500;color:var(--muted);background:var(--paper);cursor:pointer;transition:border-color .15s,color .15s}
+.btn-reload:hover{border-color:var(--or1);color:var(--or1)}
+
+/* ── Table ── */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;background:var(--paper)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead th{padding:.7rem .9rem;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+tbody td{padding:.65rem .9rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--paper2)}
+.cell-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap}
+.toolbar-search{
+  flex:1;min-width:160px;padding:.5rem .85rem;
+  border:1.5px solid var(--border);border-radius:8px;
+  font-size:.875rem;background:var(--paper);color:var(--ink);
+}
+.toolbar-search:focus{outline:none;border-color:var(--or1)}
+.toolbar-select{
+  padding:.5rem .85rem;border:1.5px solid var(--border);border-radius:8px;
+  font-size:.8rem;background:var(--paper);color:var(--ink);cursor:pointer;
+}
+.toolbar-select:focus{outline:none;border-color:var(--or1)}
+.toolbar-check{display:flex;align-items:center;gap:.35rem;font-size:.8rem;color:var(--muted);cursor:pointer}
+.toolbar-check input{cursor:pointer;accent-color:var(--or1)}
+
+/* ── Pagination ── */
+.pagination{display:flex;align-items:center;gap:.75rem;padding:1rem 0;justify-content:flex-end}
+.pagination-info{font-size:.8rem;color:var(--muted);margin-right:auto}
+.btn-page{padding:.35rem .9rem;border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;background:var(--paper);color:var(--ink);cursor:pointer;transition:border-color .15s,color .15s}
+.btn-page:hover:not(:disabled){border-color:var(--or1);color:var(--or1)}
+.btn-page:disabled{opacity:.4;cursor:default}
+
+/* ── Sub-tabs (Utilizadores / Blacklist) ── */
+.subtabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.25rem}
+.subtab{padding:.5rem 1.2rem;font-size:.85rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.subtab.active{color:var(--or1);border-bottom-color:var(--or1);font-weight:500}
+
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--paper);border-radius:16px;padding:1.75rem;width:min(460px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-title{font-family:var(--serif);font-size:1.2rem;margin-bottom:1.25rem}
+.modal-field{margin-bottom:1rem}
+.modal-label{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-bottom:.35rem}
+.modal-input{
+  width:100%;padding:.55rem .85rem;border:1.5px solid var(--border);border-radius:8px;
+  font-size:.875rem;background:var(--paper);color:var(--ink);
+}
+.modal-input:focus{outline:none;border-color:var(--or1)}
+.modal-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.25rem}
+
+/* ── Empty / Loading ── */
+.empty{text-align:center;padding:3rem;color:var(--muted);background:var(--paper);border:1px dashed var(--border);border-radius:12px}
+.loading{text-align:center;padding:3rem;color:var(--muted)}
+.spinner{display:inline-block;font-size:2rem;color:#7c3aed;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Toggle switch (destaque) ── */
+.toggle{position:relative;display:inline-flex;align-items:center;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{width:36px;height:20px;background:var(--border);border-radius:20px;transition:.2s;position:relative}
+.toggle-slider::after{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle input:checked+.toggle-slider{background:var(--or1)}
+.toggle input:checked+.toggle-slider::after{transform:translateX(16px)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(400%);padding:.85rem 1.8rem;border-radius:30px;font-size:.9rem;font-weight:500;color:#fff;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.22)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast-ok{background:#1e7e34}.toast-warn{background:#856404}.toast-err{background:#c62828}
+
+/* ── Reload bar ── */
+.reload-bar{display:flex;justify-content:center;padding:1.5rem 0 2rem;border-top:1px solid var(--border);margin-top:1rem}
+
+/* ── Dark mode overrides ── */
+body.dark .idea-card.flagged{border-color:#8b2252;background:#3d1a2a}
+body.dark .idea-card-reason{background:#3d1a2a;border-color:#8b2252;color:#f48fb1}
+body.dark .user-card{background:#2d1f42;border-color:#7c3aed}
+body.dark .rejection-entry{background:var(--paper2)}
+body.dark .toast{box-shadow:0 4px 20px rgba(0,0,0,.5)}
+body.dark .modal{background:var(--paper);color:var(--ink)}
+body.dark .toolbar-search,body.dark .toolbar-select,body.dark .modal-input{background:var(--paper2);color:var(--ink)}
+
+/* ── Mobile: sidebar → tabs ── */
+@media(max-width:720px){
+  .sidebar{
+    width:100%;height:auto;position:static;
+    display:flex;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);
+    padding:.35rem 0;flex-direction:row;gap:0;
+  }
+  .sidebar-item{flex-direction:column;gap:.2rem;padding:.5rem .8rem;font-size:.7rem;border-left:none;border-bottom:3px solid transparent;white-space:nowrap}
+  .sidebar-item.active{border-left:none;border-bottom-color:var(--or1)}
+  .shell{flex-direction:column}
+  .main{padding:1rem}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:420px){
+  .stats-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav class="nav">
+  <a href="/index-app.html" class="nav-back"><i class="ti ti-arrow-left"></i> Voltar</a>
+  <a href="/index-app.html" class="nav-logo">Catch · <em>This</em> · Idea</a>
+  <div class="nav-right">
+    <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema"><i class="ti ti-moon" id="dark-icon"></i></button>
+    <span class="nav-badge"><i class="ti ti-shield"></i> Admin</span>
+  </div>
+</nav>
+
+<!-- ── Shell ── -->
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-item active" data-section="dashboard" onclick="showSection('dashboard',this)">
+      <i class="ti ti-layout-dashboard"></i> Dashboard
+    </div>
+    <div class="sidebar-item" data-section="moderation" onclick="showSection('moderation',this)">
+      <i class="ti ti-shield-check"></i> Moderação
+      <span class="sidebar-badge zero" id="badge-moderation">0</span>
+    </div>
+    <div class="sidebar-item" data-section="ideas" onclick="showSection('ideas',this)">
+      <i class="ti ti-bulb"></i> Ideias
+    </div>
+    <div class="sidebar-item" data-section="users" onclick="showSection('users',this)">
+      <i class="ti ti-users"></i> Utilizadores
+    </div>
+    <div class="sidebar-item" data-section="transactions" onclick="showSection('transactions',this)">
+      <i class="ti ti-cash"></i> Transações
+    </div>
+    <div class="sidebar-item" data-section="logs" onclick="showSection('logs',this)">
+      <i class="ti ti-list-details"></i> Logs
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="section-page active" id="page-dashboard">
+      <div class="page-hd">
+        <i class="ti ti-layout-dashboard" style="font-size:1.5rem;color:var(--or1)"></i>
+        <div class="page-title">Dashboard</div>
+      </div>
+      <div class="page-sub">Visão geral do marketplace em tempo real.</div>
+      <div id="stats-grid" class="stats-grid">
+        <div class="loading"><i class="ti ti-loader spinner"></i></div>
+      </div>
+    </div>
+
+    <!-- ══ MODERAÇÃO ══ -->
+    <div class="section-page" id="page-moderation">
+      <div class="page-hd">
+        <i class="ti ti-shield-check" style="font-size:1.5rem;color:#7c3aed"></i>
+        <div class="page-title">Moderação</div>
+      </div>
+      <div class="page-sub">Revê, aprova ou rejeita ideias submetidas.</div>
+      <div id="mod-content" class="loading"><i class="ti ti-loader spinner"></i><br><br>A carregar...</div>
+      <div class="reload-bar" id="mod-reload" style="display:none">
+        <button class="btn-reload" onclick="loadModeration()"><i class="ti ti-refresh"></i> Recarregar</button>
+      </div>
+    </div>
+
+    <!-- ══ IDEIAS ══ -->
+    <div class="section-page" id="page-ideas">
+      <div class="page-hd">
+        <i class="ti ti-bulb" style="font-size:1.5rem;color:var(--or1)"></i>
+        <div class="page-title">Ideias</div>
+      </div>
+      <div class="page-sub">Pesquisa, filtra e gere todas as ideias publicadas.</div>
+      <div class="toolbar">
+        <input class="toolbar-search" id="ideas-q" type="search" placeholder="Pesquisar por título…" oninput="debounce(loadIdeas,400)">
+        <select class="toolbar-select" id="ideas-status" onchange="loadIdeas()">
+          <option value="">Todos os estados</option>
+          <option value="active">Ativo</option>
+          <option value="hidden">Oculto</option>
+          <option value="pending">Pendente</option>
+        </select>
+        <select class="toolbar-select" id="ideas-category" onchange="loadIdeas()">
+          <option value="">Todas as categorias</option>
+          <option value="Slogan">Slogans</option>
+          <option value="Nome">Nomes</option>
+          <option value="App">Apps</option>
+          <option value="Negócio">Negócios</option>
+          <option value="Receita">Receitas</option>
+          <option value="Design">Design</option>
+          <option value="História">Histórias</option>
+        </select>
+        <label class="toolbar-check">
+          <input type="checkbox" id="ideas-featured" onchange="loadIdeas()"> Só em destaque
+        </label>
+      </div>
+      <div id="ideas-content"><div class="loading"><i class="ti ti-loader spinner"></i></div></div>
+      <div class="pagination" id="ideas-pagination" style="display:none">
+        <span class="pagination-info" id="ideas-page-info"></span>
+        <button class="btn-page" id="ideas-prev" onclick="changeIdeasPage(-1)"><i class="ti ti-chevron-left"></i> Anterior</button>
+        <button class="btn-page" id="ideas-next" onclick="changeIdeasPage(1)">Seguinte <i class="ti ti-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- ══ UTILIZADORES ══ -->
+    <div class="section-page" id="page-users">
+      <div class="page-hd">
+        <i class="ti ti-users" style="font-size:1.5rem;color:#7c3aed"></i>
+        <div class="page-title">Utilizadores</div>
+      </div>
+      <div class="page-sub">Gere utilizadores e blacklist de acesso.</div>
+      <div class="subtabs">
+        <div class="subtab active" id="subtab-users" onclick="switchUsersTab('users')">Utilizadores</div>
+        <div class="subtab" id="subtab-blacklist" onclick="switchUsersTab('blacklist')">Blacklist</div>
+      </div>
+
+      <!-- Sub: Utilizadores -->
+      <div id="users-panel">
+        <div class="toolbar">
+          <input class="toolbar-search" id="users-q" type="search" placeholder="Pesquisar por nome…" oninput="debounce(loadUsers,400)">
+        </div>
+        <div id="users-content"><div class="loading"><i class="ti ti-loader spinner"></i></div></div>
+        <div class="pagination" id="users-pagination" style="display:none">
+          <span class="pagination-info" id="users-page-info"></span>
+          <button class="btn-page" id="users-prev" onclick="changeUsersPage(-1)"><i class="ti ti-chevron-left"></i> Anterior</button>
+          <button class="btn-page" id="users-next" onclick="changeUsersPage(1)">Seguinte <i class="ti ti-chevron-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Sub: Blacklist -->
+      <div id="blacklist-panel" style="display:none">
+        <div class="toolbar">
+          <button class="btn btn-primary btn-sm" onclick="openBlacklistModal()"><i class="ti ti-plus"></i> Adicionar à blacklist</button>
+        </div>
+        <div id="blacklist-content"><div class="loading"><i class="ti ti-loader spinner"></i></div></div>
+        <div class="pagination" id="bl-pagination" style="display:none">
+          <span class="pagination-info" id="bl-page-info"></span>
+          <button class="btn-page" id="bl-prev" onclick="changeBlPage(-1)"><i class="ti ti-chevron-left"></i> Anterior</button>
+          <button class="btn-page" id="bl-next" onclick="changeBlPage(1)">Seguinte <i class="ti ti-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TRANSAÇÕES ══ -->
+    <div class="section-page" id="page-transactions">
+      <div class="page-hd">
+        <i class="ti ti-cash" style="font-size:1.5rem;color:#2e7d32"></i>
+        <div class="page-title">Transações</div>
+      </div>
+      <div class="page-sub">Histórico de compras e reembolsos.</div>
+      <div id="tx-content"><div class="loading"><i class="ti ti-loader spinner"></i></div></div>
+      <div class="pagination" id="tx-pagination" style="display:none">
+        <span class="pagination-info" id="tx-page-info"></span>
+        <button class="btn-page" id="tx-prev" onclick="changeTxPage(-1)"><i class="ti ti-chevron-left"></i> Anterior</button>
+        <button class="btn-page" id="tx-next" onclick="changeTxPage(1)">Seguinte <i class="ti ti-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- ══ LOGS ══ -->
+    <div class="section-page" id="page-logs">
+      <div class="page-hd">
+        <i class="ti ti-list-details" style="font-size:1.5rem;color:var(--muted)"></i>
+        <div class="page-title">Logs de administração</div>
+      </div>
+      <div class="page-sub">Registo de todas as ações realizadas pelos administradores.</div>
+      <div id="logs-content"><div class="loading"><i class="ti ti-loader spinner"></i></div></div>
+      <div class="pagination" id="logs-pagination" style="display:none">
+        <span class="pagination-info" id="logs-page-info"></span>
+        <button class="btn-page" id="logs-prev" onclick="changeLogsPage(-1)"><i class="ti ti-chevron-left"></i> Anterior</button>
+        <button class="btn-page" id="logs-next" onclick="changeLogsPage(1)">Seguinte <i class="ti ti-chevron-right"></i></button>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /shell -->
+
+<!-- ── Modal: editar ideia ── -->
+<div class="modal-overlay" id="modal-idea">
+  <div class="modal">
+    <div class="modal-title">Editar ideia</div>
+    <div class="modal-field">
+      <label class="modal-label">Preço (€)</label>
+      <input class="modal-input" id="edit-price" type="number" min="0" step="0.01" placeholder="Ex: 49.90">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Categoria</label>
+      <select class="modal-input" id="edit-category">
+        <option value="">— sem alteração —</option>
+        <option value="Slogan">Slogan</option>
+        <option value="Nome">Nome</option>
+        <option value="App">App</option>
+        <option value="Negócio">Negócio</option>
+        <option value="Receita">Receita</option>
+        <option value="Design">Design</option>
+        <option value="História">História</option>
+      </select>
+    </div>
+    <input type="hidden" id="edit-idea-id">
+    <div class="modal-actions">
+      <button class="btn btn-profile btn-sm" onclick="closeModal('modal-idea')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="saveIdeaEdit()"><i class="ti ti-check"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal: adicionar blacklist ── -->
+<div class="modal-overlay" id="modal-blacklist">
+  <div class="modal">
+    <div class="modal-title">Adicionar à blacklist</div>
+    <div class="modal-field">
+      <label class="modal-label">Email (opcional)</label>
+      <input class="modal-input" id="bl-email" type="email" placeholder="utilizador@exemplo.com">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Telemóvel (opcional)</label>
+      <input class="modal-input" id="bl-phone" type="tel" placeholder="+351 9xx xxx xxx">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Motivo <span style="color:#c62828">*</span></label>
+      <input class="modal-input" id="bl-reason" type="text" placeholder="Motivo obrigatório">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-profile btn-sm" onclick="closeModal('modal-blacklist')">Cancelar</button>
+      <button class="btn btn-primary btn-sm" onclick="addToBlacklist()"><i class="ti ti-ban"></i> Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════
+   THEME
+════════════════════════════════════════════════ */
+(function(){
+  const saved = localStorage.getItem('cti_theme');
+  const dark  = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && dark)) {
+    document.body.classList.add('dark');
+    document.getElementById('dark-icon').className = 'ti ti-sun';
+  }
+})();
+
+function toggleDark() {
+  const on = document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className = on ? 'ti ti-sun' : 'ti ti-moon';
+  localStorage.setItem('cti_theme', on ? 'dark' : 'light');
+}
+
+/* ════════════════════════════════════════════════
+   SESSION / AUTH GUARD
+════════════════════════════════════════════════ */
+let _session = null;
+try { const r = localStorage.getItem('cti_session'); if (r) _session = JSON.parse(r); } catch {}
+
+(async () => {
+  if (!_session?.access_token) { location.href = '/index-app.html'; return; }
+  const res  = await fetch('/api/admin?action=check', {
+    headers: { Authorization: 'Bearer ' + _session.access_token },
+  });
+  const data = await res.json();
+  if (!data.is_admin) { location.href = '/index-app.html'; return; }
+  // Load initial sections
+  loadDashboard();
+  loadModeration();
+})();
+
+/* ════════════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════════════ */
+function authHeaders(extra = {}) {
+  return { Authorization: 'Bearer ' + _session.access_token, ...extra };
+}
+
+function apiGet(params) {
+  const qs = new URLSearchParams(params).toString();
+  return fetch('/api/admin?' + qs, { headers: authHeaders() });
+}
+
+function apiPost(body) {
+  return fetch('/api/admin', {
+    method:  'POST',
+    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    body:    JSON.stringify(body),
+  });
+}
+
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast toast-${type} show`;
+  setTimeout(() => t.classList.remove('show'), 6000);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// Debounce helper
+let _debTimer = null;
+function debounce(fn, ms) { clearTimeout(_debTimer); _debTimer = setTimeout(fn, ms); }
+
+function fmt(n) {
+  if (n === null || n === undefined) return '—';
+  if (typeof n === 'number') return n.toLocaleString('pt-PT');
+  return n;
+}
+function fmtEur(n) {
+  if (n === null || n === undefined) return '—';
+  return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(n);
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('pt-PT', { day:'numeric', month:'short', year:'numeric' });
+}
+
+/* ════════════════════════════════════════════════
+   SIDEBAR NAVIGATION
+════════════════════════════════════════════════ */
+// Track which sections have been loaded
+const _loaded = {};
+
+function showSection(name, el) {
+  // Update sidebar active state
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+
+  // Show correct page
+  document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+
+  // Lazy-load sections on first visit
+  if (!_loaded[name]) {
+    _loaded[name] = true;
+    if (name === 'ideas')        loadIdeas();
+    if (name === 'users')        { loadUsers(); loadBlacklist(); }
+    if (name === 'transactions') loadTransactions();
+    if (name === 'logs')         loadLogs();
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SECTION 1 — DASHBOARD
+════════════════════════════════════════════════ */
+async function loadDashboard() {
+  const grid = document.getElementById('stats-grid');
+  grid.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i></div>';
+
+  try {
+    const res  = await apiGet({ action: 'stats' });
+    const data = res.ok ? await res.json() : {};
+
+    const moderationCount = (data.pending_count ?? 0) + (data.flagged_count ?? 0);
+
+    // Update sidebar badge
+    const badge = document.getElementById('badge-moderation');
+    badge.textContent = moderationCount;
+    badge.classList.toggle('zero', moderationCount === 0);
+
+    grid.innerHTML = [
+      statCard('ti-shield-alert','#f48fb1','#880e4f', moderationCount, 'Fila de moderação', 'moderation'),
+      statCard('ti-user-off',    '#ce93d8','#4a148c', data.suspended_count ?? 0, 'Utilizadores suspensos', 'users'),
+      statCard('ti-bulb',        '#a5d6a7','#2e7d32', fmt(data.active_ideas ?? 0), 'Ideias ativas', 'ideas'),
+      statCard('ti-users',       '#90caf9','#1565c0', fmt(data.total_users  ?? 0), 'Total de utilizadores', 'users'),
+      statCard('ti-receipt',     '#ffe082','#e65100', fmtEur(data.total_revenue ?? 0), 'Receita total', 'transactions'),
+      statCard('ti-coin',        '#ffcc80','#bf360c', fmtEur(data.total_commission ?? 0), 'Comissões totais', 'transactions'),
+    ].join('');
+
+  } catch (e) {
+    grid.innerHTML = `<div class="empty">Erro ao carregar estatísticas: ${e.message}</div>`;
+  }
+}
+
+function statCard(icon, bg, color, value, label, target) {
+  return `<div class="stat-card" onclick="showSection('${target}',document.querySelector('[data-section=${target}]'))">
+    <div class="stat-icon" style="background:${bg}20;color:${color}"><i class="ti ${icon}"></i></div>
+    <div class="stat-body">
+      <div class="stat-value">${value}</div>
+      <div class="stat-label">${label}</div>
+    </div>
+    <div class="stat-arrow"><i class="ti ti-arrow-right"></i></div>
+  </div>`;
+}
+
+/* ════════════════════════════════════════════════
+   SECTION 2 — MODERAÇÃO (preserved logic)
+════════════════════════════════════════════════ */
+async function loadModeration() {
+  const el = document.getElementById('mod-content');
+  el.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i><br><br>A carregar...</div>';
+
+  const [flaggedRes, pendingRes, suspendedRes] = await Promise.all([
+    apiGet({ action: 'flagged'   }),
+    apiGet({ action: 'pending'   }),
+    apiGet({ action: 'suspended' }),
+  ]);
+
+  const flagged   = flaggedRes.ok   ? await flaggedRes.json()   : [];
+  const pending   = pendingRes.ok   ? await pendingRes.json()   : [];
+  const suspended = suspendedRes.ok ? await suspendedRes.json() : [];
+
+  // Update sidebar badge
+  const total = (flagged?.length ?? 0) + (pending?.length ?? 0);
+  const badge = document.getElementById('badge-moderation');
+  if (badge) { badge.textContent = total; badge.classList.toggle('zero', total === 0); }
+
+  if (!flagged.length && !pending.length && !suspended.length) {
+    el.innerHTML = `<div class="empty"><i class="ti ti-circle-check" style="font-size:2.5rem;color:#2e7d32"></i><br><br><strong>Sem ideias para rever!</strong><br><span style="font-size:.875rem">Tudo em ordem por aqui.</span></div>`;
+    document.getElementById('mod-reload').style.display = '';
+    return;
+  }
+
+  let html = '';
+
+  if (suspended.length) {
+    html += `<div class="section">
+      <div class="section-hd">
+        <i class="ti ti-user-off" style="color:#7c3aed"></i>
+        Utilizadores suspensos
+        <span class="section-count suspended">${suspended.length}</span>
+      </div>
+      ${suspended.map(u => renderUserCard(u)).join('')}
+    </div>`;
+  }
+
+  if (flagged.length) {
+    html += `<div class="section">
+      <div class="section-hd">
+        <i class="ti ti-alert-triangle" style="color:#ad1457"></i>
+        Em revisão urgente
+        <span class="section-count urgent">${flagged.length}</span>
+      </div>
+      ${flagged.map(idea => renderCard(idea, 'flagged')).join('')}
+    </div>`;
+  }
+
+  if (pending.length) {
+    html += `<div class="section">
+      <div class="section-hd">
+        <i class="ti ti-clock" style="color:var(--or1)"></i>
+        Em análise
+        <span class="section-count">${pending.length}</span>
+      </div>
+      ${pending.map(idea => renderCard(idea, 'pending')).join('')}
+    </div>`;
+  }
+
+  el.innerHTML = html;
+  document.getElementById('mod-reload').style.display = '';
+}
+
+// ── Render helpers (preserved) ──
+function renderUserCard(user) {
+  const initials = (user.display_name || user.email || '?').slice(0, 2).toUpperCase();
+  const date     = user.suspended_at
+    ? new Date(user.suspended_at).toLocaleDateString('pt-PT', { day:'numeric', month:'short', year:'numeric' })
+    : '—';
+  const count    = user.rejection_count ?? 0;
+
+  const logsHtml = (user.rejection_logs || []).map(log => {
+    const logDate = new Date(log.rejected_at).toLocaleDateString('pt-PT', { day:'numeric', month:'short', year:'numeric' });
+    const title   = (log.idea_title || '—').replace(/</g, '&lt;');
+    const reason  = (log.reason     || '—').replace(/</g, '&lt;');
+    return `<div class="rejection-entry">
+      <div class="rejection-entry-title">💡 ${title}</div>
+      <div class="rejection-entry-reason"><i class="ti ti-info-circle"></i> ${reason}</div>
+      <div class="rejection-entry-meta">${logDate} · por ${(log.rejected_by || 'admin').replace(/</g,'&lt;')}</div>
+    </div>`;
+  }).join('');
+
+  const emailSafe = (user.email || '—').replace(/</g, '&lt;');
+  const emailAttr = (user.email || '').replace(/'/g, "\\'");
+
+  return `<div class="user-card" id="ucard-${user.id}">
+    <div class="user-card-top">
+      <div class="user-card-avatar">${initials}</div>
+      <div class="user-card-info">
+        <div class="user-card-name">${(user.display_name || 'Sem nome').replace(/</g,'&lt;')}</div>
+        <div class="user-card-email">${emailSafe}</div>
+        <div class="user-card-meta"><i class="ti ti-alert-triangle"></i> ${count} ${count === 1 ? 'ideia rejeitada' : 'ideias rejeitadas'} · Suspenso em ${date}</div>
+      </div>
+    </div>
+    ${logsHtml ? `<div class="rejection-log"><div class="rejection-log-hd">Histórico de rejeições</div>${logsHtml}</div>` : ''}
+    <div class="idea-card-actions">
+      <button class="btn btn-ban" onclick="doBan('${user.id}','${emailAttr}')">
+        <i class="ti ti-ban"></i> Banir permanentemente
+      </button>
+      <button class="btn btn-unsuspend" onclick="doUnsuspend('${user.id}')">
+        <i class="ti ti-user-check"></i> Levantar suspensão
+      </button>
+    </div>
+  </div>`;
+}
+
+async function doBan(userId, userEmail) {
+  const reason = prompt(`Motivo do banimento permanente de "${userEmail || userId}" (obrigatório):`);
+  if (!reason?.trim()) return;
+  const phone  = prompt('Número de telemóvel para blacklist (opcional — deixa em branco para ignorar):');
+  const card   = document.getElementById('ucard-' + userId);
+  if (card) card.style.opacity = '.5';
+  try {
+    const res = await apiPost({ action: 'ban', user_id: userId, reason: reason.trim(), phone: phone?.trim() || null });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast('Utilizador banido permanentemente e adicionado à blacklist.', 'warn');
+    card?.remove();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+    if (card) card.style.opacity = '1';
+  }
+}
+
+async function doUnsuspend(userId) {
+  if (!confirm('Tens a certeza que queres levantar a suspensão e apagar o histórico de rejeições deste utilizador?')) return;
+  const card = document.getElementById('ucard-' + userId);
+  if (card) card.style.opacity = '.5';
+  try {
+    const res = await apiPost({ action: 'unsuspend', user_id: userId });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast('Suspensão levantada. O utilizador pode voltar a publicar.', 'ok');
+    card?.remove();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+    if (card) card.style.opacity = '1';
+  }
+}
+
+function renderCard(idea, type) {
+  const date   = new Date(idea.created_at).toLocaleDateString('pt-PT', { day:'numeric', month:'short', year:'numeric' });
+  const desc   = (idea.desc_pt || '').slice(0, 200);
+  const reason = idea.moderation_reason
+    ? `<div class="idea-card-reason"><i class="ti ti-info-circle"></i> ${idea.moderation_reason.replace(/</g,'&lt;')}</div>` : '';
+  const badge  = type === 'flagged'
+    ? `<span class="badge-status badge-flagged">⚑ Sinalizada</span>`
+    : `<span class="badge-status badge-pending">⏳ Pendente</span>`;
+
+  return `<div class="idea-card ${type === 'flagged' ? 'flagged' : ''}" id="acard-${idea.id}">
+    <div class="idea-card-top">
+      <div class="idea-card-info">
+        <div class="idea-card-title">${idea.emoji || '💡'} ${(idea.title_pt || '—').replace(/</g,'&lt;')}</div>
+        <div class="idea-card-meta">
+          ${badge}
+          <span style="margin-left:.5rem">${(idea.category || '—').replace(/</g,'&lt;')}</span>
+          <span style="margin-left:.5rem;color:var(--muted)">·</span>
+          <span style="margin-left:.5rem">${(idea.seller_name || '—').replace(/</g,'&lt;')}</span>
+          <span style="margin-left:.5rem;color:var(--muted)">·</span>
+          <span style="margin-left:.5rem">${date}</span>
+        </div>
+        ${desc ? `<div class="idea-card-desc">${desc.replace(/</g,'&lt;')}</div>` : ''}
+        ${reason}
+      </div>
+    </div>
+    <div class="idea-card-actions">
+      <button class="btn btn-approve" onclick="doAction('approve','${idea.id}',this)">
+        <i class="ti ti-check"></i> Aprovar
+      </button>
+      <button class="btn btn-reject" onclick="doReject('${idea.id}')">
+        <i class="ti ti-x"></i> Rejeitar
+      </button>
+      <button class="btn btn-ai" onclick="doAction('remoderate','${idea.id}',this)">
+        <i class="ti ti-robot"></i> Re-analisar IA
+      </button>
+      ${idea.seller_id ? `<a href="/perfil.html?id=${idea.seller_id}" target="_blank" class="btn btn-profile"><i class="ti ti-user"></i> Ver vendedor</a>` : ''}
+    </div>
+  </div>`;
+}
+
+async function doAction(action, ideaId, btn) {
+  const card = document.getElementById('acard-' + ideaId);
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader"></i> ...'; }
+  if (card) card.style.opacity = '.5';
+  try {
+    const res  = await apiPost({ action, idea_id: ideaId });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erro');
+    if (action === 'approve') {
+      showToast('Ideia aprovada e publicada!', 'ok');
+      card?.remove();
+    } else if (action === 'remoderate') {
+      const dec = data.moderation?.decision;
+      const msg = dec === 'approved'
+        ? 'IA aprovou — ideia publicada!'
+        : dec === 'flagged'
+          ? 'IA sinalizou para revisão urgente.'
+          : 'IA mantém pendente para revisão humana.';
+      showToast(msg, dec === 'approved' ? 'ok' : 'warn');
+      await loadModeration();
+    }
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+    if (btn) { btn.disabled = false; btn.innerHTML = orig; }
+    if (card) card.style.opacity = '1';
+  }
+}
+
+async function doReject(ideaId) {
+  const reason = prompt('Motivo da rejeição (obrigatório):');
+  if (!reason?.trim()) return;
+  const card = document.getElementById('acard-' + ideaId);
+  if (card) card.style.opacity = '.5';
+  try {
+    const res = await apiPost({ action: 'reject', idea_id: ideaId, reason });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast('Conteúdo rejeitado e eliminado permanentemente.', 'warn');
+    card?.remove();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+    if (card) card.style.opacity = '1';
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SECTION 3 — IDEIAS
+════════════════════════════════════════════════ */
+let _ideasPage = 1;
+const IDEAS_PER_PAGE = 20;
+
+async function loadIdeas() {
+  const el = document.getElementById('ideas-content');
+  el.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i></div>';
+
+  const params = {
+    action:   'ideas',
+    q:        document.getElementById('ideas-q').value.trim(),
+    status:   document.getElementById('ideas-status').value,
+    category: document.getElementById('ideas-category').value,
+    featured: document.getElementById('ideas-featured').checked ? '1' : '',
+    page:     _ideasPage,
+  };
+
+  try {
+    const res  = await apiGet(params);
+    const data = res.ok ? await res.json() : { ideas: [], total: 0 };
+    const { ideas = [], total = 0 } = data;
+    const totalPages = Math.max(1, Math.ceil(total / IDEAS_PER_PAGE));
+
+    if (!ideas.length) {
+      el.innerHTML = '<div class="empty"><i class="ti ti-search" style="font-size:2rem"></i><br><br>Nenhuma ideia encontrada.</div>';
+      document.getElementById('ideas-pagination').style.display = 'none';
+      return;
+    }
+
+    el.innerHTML = `<div class="tbl-wrap"><table>
+      <thead><tr>
+        <th></th><th>Título</th><th>Categoria</th><th>Preço</th>
+        <th>Estado</th><th>Destaque</th><th>Ações</th>
+      </tr></thead>
+      <tbody>
+        ${ideas.map(idea => {
+          const badge = idea.status === 'active'
+            ? `<span class="badge-status badge-active">Ativo</span>`
+            : idea.status === 'hidden'
+              ? `<span class="badge-status badge-hidden">Oculto</span>`
+              : `<span class="badge-status badge-pending">Pendente</span>`;
+          const price = idea.price != null ? fmtEur(idea.price) : '—';
+          return `<tr>
+            <td style="font-size:1.2rem">${idea.emoji || '💡'}</td>
+            <td><strong>${(idea.title_pt || '—').replace(/</g,'&lt;')}</strong></td>
+            <td><span style="font-size:.8rem;color:var(--muted)">${(idea.category || '—').replace(/</g,'&lt;')}</span></td>
+            <td>${price}</td>
+            <td>${badge}</td>
+            <td>
+              <label class="toggle" title="Toggle destaque">
+                <input type="checkbox" ${idea.featured ? 'checked' : ''} onchange="toggleFeatured('${idea.id}',this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td>
+              <div class="cell-actions">
+                <button class="btn btn-ai btn-sm" onclick="openEditIdea('${idea.id}','${(idea.price||0)}','${(idea.category||'').replace(/'/g,"\\'")}')">
+                  <i class="ti ti-edit"></i> Editar
+                </button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>`;
+
+    // Pagination
+    const pg = document.getElementById('ideas-pagination');
+    pg.style.display = 'flex';
+    document.getElementById('ideas-page-info').textContent = `Página ${_ideasPage} de ${totalPages} · ${total} ideias`;
+    document.getElementById('ideas-prev').disabled = _ideasPage <= 1;
+    document.getElementById('ideas-next').disabled = _ideasPage >= totalPages;
+
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Erro ao carregar ideias: ${e.message}</div>`;
+  }
+}
+
+function changeIdeasPage(dir) { _ideasPage = Math.max(1, _ideasPage + dir); loadIdeas(); }
+
+function openEditIdea(id, price, category) {
+  document.getElementById('edit-idea-id').value   = id;
+  document.getElementById('edit-price').value     = price || '';
+  document.getElementById('edit-category').value  = category || '';
+  openModal('modal-idea');
+}
+
+async function saveIdeaEdit() {
+  const idea_id  = document.getElementById('edit-idea-id').value;
+  const price    = document.getElementById('edit-price').value;
+  const category = document.getElementById('edit-category').value;
+  if (!idea_id) return;
+  try {
+    const body = { action: 'edit_idea', idea_id };
+    if (price)    body.price    = parseFloat(price);
+    if (category) body.category = category;
+    const res = await apiPost(body);
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast('Ideia atualizada.', 'ok');
+    closeModal('modal-idea');
+    loadIdeas();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+  }
+}
+
+async function toggleFeatured(ideaId, featured) {
+  try {
+    const res = await apiPost({ action: 'feature', idea_id: ideaId, featured });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast(featured ? 'Ideia em destaque!' : 'Destaque removido.', 'ok');
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+    loadIdeas(); // revert toggle on error
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SECTION 4 — UTILIZADORES
+════════════════════════════════════════════════ */
+let _usersPage = 1;
+let _blPage    = 1;
+let _usersTab  = 'users';
+const USERS_PER_PAGE = 20;
+
+function switchUsersTab(tab) {
+  _usersTab = tab;
+  document.getElementById('subtab-users').classList.toggle('active',     tab === 'users');
+  document.getElementById('subtab-blacklist').classList.toggle('active', tab === 'blacklist');
+  document.getElementById('users-panel').style.display     = tab === 'users'     ? '' : 'none';
+  document.getElementById('blacklist-panel').style.display = tab === 'blacklist' ? '' : 'none';
+}
+
+async function loadUsers() {
+  const el = document.getElementById('users-content');
+  el.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i></div>';
+
+  try {
+    const res  = await apiGet({ action: 'users', q: document.getElementById('users-q').value.trim(), page: _usersPage });
+    const data = res.ok ? await res.json() : { users: [], total: 0 };
+    const { users = [], total = 0 } = data;
+    const totalPages = Math.max(1, Math.ceil(total / USERS_PER_PAGE));
+
+    if (!users.length) {
+      el.innerHTML = '<div class="empty"><i class="ti ti-users" style="font-size:2rem"></i><br><br>Nenhum utilizador encontrado.</div>';
+      document.getElementById('users-pagination').style.display = 'none';
+      return;
+    }
+
+    // Loyalty tier labels
+    function tierLabel(points) {
+      if (points >= 500) return { label: 'Platina', color: '#1565c0' };
+      if (points >= 250) return { label: 'Ouro',    color: '#f57f17' };
+      if (points >= 100) return { label: 'Prata',   color: '#546e7a' };
+      if (points >= 30)  return { label: 'Bronze',  color: '#6d4c41' };
+      return { label: 'Starter', color: 'var(--muted)' };
+    }
+
+    el.innerHTML = `<div class="tbl-wrap"><table>
+      <thead><tr>
+        <th></th><th>Nome</th><th>Email</th><th>Tier</th>
+        <th>Rejeições</th><th>Estado</th><th>Ações</th>
+      </tr></thead>
+      <tbody>
+        ${users.map(u => {
+          const initials = (u.display_name || u.email || '?').slice(0, 2).toUpperCase();
+          const tier     = tierLabel(u.loyalty_points ?? 0);
+          const status   = u.suspended
+            ? `<span class="badge-status badge-flagged">Suspenso</span>`
+            : `<span class="badge-status badge-active">Ativo</span>`;
+          return `<tr id="urow-${u.id}">
+            <td><div class="user-card-avatar" style="width:32px;height:32px;font-size:.8rem">${initials}</div></td>
+            <td><strong>${(u.display_name || '—').replace(/</g,'&lt;')}</strong></td>
+            <td style="font-size:.8rem;color:var(--muted)">${(u.email || '—').replace(/</g,'&lt;')}</td>
+            <td><span style="font-size:.75rem;color:${tier.color};font-weight:600">${tier.label}</span></td>
+            <td style="text-align:center">${u.rejection_count ?? 0}</td>
+            <td>${status}</td>
+            <td>
+              <div class="cell-actions">
+                <a href="/perfil.html?id=${u.id}" target="_blank" class="btn btn-profile btn-sm"><i class="ti ti-user"></i> Perfil</a>
+                ${u.suspended
+                  ? `<button class="btn btn-unsuspend btn-sm" onclick="doUnsuspend('${u.id}');document.getElementById('urow-${u.id}')?.remove()"><i class="ti ti-user-check"></i></button>`
+                  : `<button class="btn btn-ban btn-sm" onclick="doBan('${u.id}','${(u.email||'').replace(/'/g,"\\'")}')"><i class="ti ti-ban"></i></button>`}
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>`;
+
+    const pg = document.getElementById('users-pagination');
+    pg.style.display = 'flex';
+    document.getElementById('users-page-info').textContent = `Página ${_usersPage} de ${totalPages} · ${total} utilizadores`;
+    document.getElementById('users-prev').disabled = _usersPage <= 1;
+    document.getElementById('users-next').disabled = _usersPage >= totalPages;
+
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Erro ao carregar utilizadores: ${e.message}</div>`;
+  }
+}
+
+function changeUsersPage(dir) { _usersPage = Math.max(1, _usersPage + dir); loadUsers(); }
+
+async function loadBlacklist() {
+  const el = document.getElementById('blacklist-content');
+  el.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i></div>';
+
+  try {
+    const res  = await apiGet({ action: 'blacklist', page: _blPage });
+    const data = res.ok ? await res.json() : { entries: [], total: 0 };
+    const { entries = [], total = 0 } = data;
+    const totalPages = Math.max(1, Math.ceil(total / 20));
+
+    if (!entries.length) {
+      el.innerHTML = '<div class="empty"><i class="ti ti-shield-check" style="font-size:2rem;color:#2e7d32"></i><br><br>Blacklist vazia.</div>';
+      document.getElementById('bl-pagination').style.display = 'none';
+      return;
+    }
+
+    el.innerHTML = `<div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Email</th><th>Telemóvel</th><th>Motivo</th>
+        <th>Adicionado por</th><th>Data</th><th>Ações</th>
+      </tr></thead>
+      <tbody>
+        ${entries.map(e => `<tr id="blrow-${e.id}">
+          <td style="font-size:.8rem">${(e.email || '—').replace(/</g,'&lt;')}</td>
+          <td style="font-size:.8rem">${(e.phone || '—').replace(/</g,'&lt;')}</td>
+          <td style="font-size:.8rem;max-width:200px">${(e.reason || '—').replace(/</g,'&lt;')}</td>
+          <td style="font-size:.75rem;color:var(--muted)">${(e.banned_by || '—').replace(/</g,'&lt;')}</td>
+          <td style="font-size:.75rem;color:var(--muted);white-space:nowrap">${fmtDate(e.created_at)}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="removeFromBlacklist('${e.id}')">
+              <i class="ti ti-trash"></i> Remover
+            </button>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+
+    const pg = document.getElementById('bl-pagination');
+    pg.style.display = 'flex';
+    document.getElementById('bl-page-info').textContent = `Página ${_blPage} de ${totalPages} · ${total} entradas`;
+    document.getElementById('bl-prev').disabled = _blPage <= 1;
+    document.getElementById('bl-next').disabled = _blPage >= totalPages;
+
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Erro ao carregar blacklist: ${e.message}</div>`;
+  }
+}
+
+function changeBlPage(dir) { _blPage = Math.max(1, _blPage + dir); loadBlacklist(); }
+
+function openBlacklistModal() {
+  document.getElementById('bl-email').value  = '';
+  document.getElementById('bl-phone').value  = '';
+  document.getElementById('bl-reason').value = '';
+  openModal('modal-blacklist');
+}
+
+async function addToBlacklist() {
+  const email  = document.getElementById('bl-email').value.trim();
+  const phone  = document.getElementById('bl-phone').value.trim();
+  const reason = document.getElementById('bl-reason').value.trim();
+  if (!reason) { showToast('O motivo é obrigatório.', 'warn'); return; }
+  if (!email && !phone) { showToast('Email ou telemóvel são obrigatórios.', 'warn'); return; }
+  try {
+    const res = await apiPost({ action: 'blacklist_add', email: email || null, phone: phone || null, reason });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast('Entrada adicionada à blacklist.', 'ok');
+    closeModal('modal-blacklist');
+    _blPage = 1;
+    loadBlacklist();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+  }
+}
+
+async function removeFromBlacklist(id) {
+  if (!confirm('Remover esta entrada da blacklist?')) return;
+  try {
+    const res = await apiPost({ action: 'blacklist_remove', id });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+    showToast('Entrada removida da blacklist.', 'ok');
+    document.getElementById('blrow-' + id)?.remove();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SECTION 5 — TRANSAÇÕES
+════════════════════════════════════════════════ */
+let _txPage = 1;
+const TX_PER_PAGE = 20;
+
+async function loadTransactions() {
+  const el = document.getElementById('tx-content');
+  el.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i></div>';
+
+  try {
+    const res  = await apiGet({ action: 'transactions', page: _txPage });
+    const data = res.ok ? await res.json() : { transactions: [], total: 0 };
+    const { transactions = [], total = 0 } = data;
+    const totalPages = Math.max(1, Math.ceil(total / TX_PER_PAGE));
+
+    if (!transactions.length) {
+      el.innerHTML = '<div class="empty"><i class="ti ti-cash" style="font-size:2rem"></i><br><br>Sem transações registadas.</div>';
+      document.getElementById('tx-pagination').style.display = 'none';
+      return;
+    }
+
+    el.innerHTML = `<div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Data</th><th>Ideia</th><th>Comprador</th><th>Vendedor</th>
+        <th>Valor</th><th>Comissão</th><th>Tipo</th><th>Estado</th><th>Ações</th>
+      </tr></thead>
+      <tbody>
+        ${transactions.map(tx => {
+          const statusBadge = tx.status === 'completed'
+            ? `<span class="badge-status badge-active">Concluída</span>`
+            : tx.status === 'refunded'
+              ? `<span class="badge-status badge-hidden">Reembolsada</span>`
+              : `<span class="badge-status badge-pending">Pendente</span>`;
+          return `<tr>
+            <td style="white-space:nowrap;font-size:.8rem">${fmtDate(tx.created_at)}</td>
+            <td style="font-size:.8rem;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(tx.idea_title || tx.idea_id || '—').replace(/</g,'&lt;')}</td>
+            <td style="font-size:.8rem">${(tx.buyer_name || tx.buyer_id || '—').replace(/</g,'&lt;')}</td>
+            <td style="font-size:.8rem">${(tx.seller_name || tx.seller_id || '—').replace(/</g,'&lt;')}</td>
+            <td style="font-weight:600">${fmtEur(tx.amount_eur)}</td>
+            <td style="color:var(--or1)">${fmtEur(tx.commission_eur)}</td>
+            <td style="font-size:.78rem;color:var(--muted)">${(tx.purchase_type || '—').replace(/</g,'&lt;')}</td>
+            <td>${statusBadge}</td>
+            <td>
+              ${tx.status === 'completed'
+                ? `<button class="btn btn-danger btn-sm" onclick="doRefund('${tx.id}','${tx.stripe_session_id||''}')">
+                     <i class="ti ti-receipt-refund"></i> Reembolsar
+                   </button>`
+                : ''}
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table></div>`;
+
+    const pg = document.getElementById('tx-pagination');
+    pg.style.display = 'flex';
+    document.getElementById('tx-page-info').textContent = `Página ${_txPage} de ${totalPages} · ${total} transações`;
+    document.getElementById('tx-prev').disabled = _txPage <= 1;
+    document.getElementById('tx-next').disabled = _txPage >= totalPages;
+
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Erro ao carregar transações: ${e.message}</div>`;
+  }
+}
+
+function changeTxPage(dir) { _txPage = Math.max(1, _txPage + dir); loadTransactions(); }
+
+async function doRefund(purchaseId, stripeSessionId) {
+  const reason = prompt('Motivo do reembolso (obrigatório):');
+  if (!reason?.trim()) return;
+  if (!confirm(`Confirmas o reembolso da compra #${purchaseId}?`)) return;
+  try {
+    const res = await apiPost({ action: 'refund', purchase_id: purchaseId, stripe_session_id: stripeSessionId, reason: reason.trim() });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erro');
+    showToast('Reembolso processado com sucesso.', 'ok');
+    loadTransactions();
+  } catch (e) {
+    showToast('Erro: ' + e.message, 'err');
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SECTION 6 — LOGS
+════════════════════════════════════════════════ */
+let _logsPage = 1;
+const LOGS_PER_PAGE = 30;
+
+async function loadLogs() {
+  const el = document.getElementById('logs-content');
+  el.innerHTML = '<div class="loading"><i class="ti ti-loader spinner"></i></div>';
+
+  try {
+    const res  = await apiGet({ action: 'logs', page: _logsPage });
+    const data = res.ok ? await res.json() : { logs: [], total: 0 };
+    const { logs = [], total = 0 } = data;
+    const totalPages = Math.max(1, Math.ceil(total / LOGS_PER_PAGE));
+
+    if (!logs.length) {
+      el.innerHTML = '<div class="empty"><i class="ti ti-list-details" style="font-size:2rem"></i><br><br>Sem logs registados.</div>';
+      document.getElementById('logs-pagination').style.display = 'none';
+      return;
+    }
+
+    el.innerHTML = `<div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Data</th><th>Admin</th><th>Ação</th>
+        <th>Tipo</th><th>ID</th><th>Detalhes</th>
+      </tr></thead>
+      <tbody>
+        ${logs.map(log => `<tr>
+          <td style="white-space:nowrap;font-size:.8rem">${fmtDate(log.created_at)}</td>
+          <td style="font-size:.8rem">${(log.admin_email || '—').replace(/</g,'&lt;')}</td>
+          <td><span class="badge-status" style="background:var(--or-pale);color:var(--or1);border:1px solid var(--or3)">${(log.action || '—').replace(/</g,'&lt;')}</span></td>
+          <td style="font-size:.78rem;color:var(--muted)">${(log.target_type || '—').replace(/</g,'&lt;')}</td>
+          <td style="font-size:.75rem;color:var(--muted);font-family:monospace">${(log.target_id || '—').replace(/</g,'&lt;').slice(0,16)}</td>
+          <td style="font-size:.8rem;max-width:200px">${(log.details || '—').replace(/</g,'&lt;')}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+
+    const pg = document.getElementById('logs-pagination');
+    pg.style.display = 'flex';
+    document.getElementById('logs-page-info').textContent = `Página ${_logsPage} de ${totalPages} · ${total} entradas`;
+    document.getElementById('logs-prev').disabled = _logsPage <= 1;
+    document.getElementById('logs-next').disabled = _logsPage >= totalPages;
+
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Erro ao carregar logs: ${e.message}</div>`;
+  }
+}
+
+function changeLogsPage(dir) { _logsPage = Math.max(1, _logsPage + dir); loadLogs(); }
+</script>
+</body>
+</html>

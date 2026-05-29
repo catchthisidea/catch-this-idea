@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programa de Fidelidade — Catch This Idea</title>
+<link rel="icon" type="image/x-icon" href="/logotipo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;--or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;--or-border:#f5c890;--muted:#7a6040;--border:#ddd0b8;--serif:"Instrument Serif",Georgia,serif;--sans:"DM Sans",sans-serif}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--or-border:#4a3520;--muted:#9a8a70;--border:#3a3028}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;transition:background .25s,color .25s}
+nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-icon{width:40px;height:40px;object-fit:contain;flex-shrink:0}
+.logo-type{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.05}
+.logo-type em{font-style:italic}
+.logo-type .sep{color:var(--or1);margin:0 1px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-wrap{display:flex;gap:5px}
+.lang-pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:background .15s,color .15s,border-color .15s}
+.lang-pill.active{background:var(--or1);color:#fff;border-color:var(--or1)}
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s}
+.dark-btn:hover{background:var(--paper2)}
+/* Hero */
+.loy-hero{background:var(--paper2);border-bottom:1px solid var(--border);padding:4rem 2.5rem 3.5rem}
+.loy-hero-inner{max-width:860px;margin:0 auto}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:2rem;transition:color .15s}
+.back-link:hover{color:var(--ink)}
+.loy-ey{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--or1);margin-bottom:.8rem}
+.loy-hero h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;margin-bottom:1rem}
+.loy-hero p{font-size:16px;color:var(--muted);max-width:560px;line-height:1.7}
+/* Tiers grid */
+.loy-body{max-width:860px;margin:0 auto;padding:3.5rem 2.5rem 5rem}
+.tiers-section h2{font-family:var(--serif);font-size:1.5rem;font-weight:400;margin-bottom:.5rem}
+.tiers-section .sub{font-size:14px;color:var(--muted);margin-bottom:2rem}
+.tiers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:3rem}
+.tier-card{background:var(--paper2);border:1px solid var(--border);border-radius:14px;padding:1.6rem 1.4rem;position:relative;transition:transform .2s,box-shadow .2s}
+.tier-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.tier-card.is-top{border-color:var(--or1);background:var(--or-pale)}
+.tier-card.is-top::after{content:'Melhor taxa';position:absolute;top:-1px;right:14px;background:var(--or1);color:#fff;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:0 0 6px 6px}
+.tc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.tc-icon{width:42px;height:42px;border-radius:10px;background:var(--or-pale);display:flex;align-items:center;justify-content:center;color:var(--or1);font-size:1.3rem;border:1px solid var(--or-border)}
+.tier-card.is-top .tc-icon{background:#fff;border-color:var(--or1)}
+.tc-pct{font-family:var(--serif);font-size:2.4rem;color:var(--ink);line-height:1}
+.tier-card.is-top .tc-pct{color:var(--or1)}
+.tc-name{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.tc-range{font-size:13px;color:var(--muted);line-height:1.8}
+.tc-range strong{color:var(--ink);font-weight:500;display:block;font-size:14px}
+/* How it works */
+.how-section{margin-top:3rem}
+.how-section h2{font-family:var(--serif);font-size:1.5rem;font-weight:400;margin-bottom:.5rem}
+.how-section .sub{font-size:14px;color:var(--muted);margin-bottom:2rem}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:2.5rem}
+.how-step{background:var(--paper2);border:1px solid var(--border);border-radius:12px;padding:1.4rem 1.2rem}
+.hs-num{font-family:var(--serif);font-size:2rem;color:var(--or2);line-height:1;margin-bottom:.6rem}
+.hs-t{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:.4rem}
+.hs-d{font-size:13px;color:var(--muted);line-height:1.65}
+/* FAQ */
+.faq-section{margin-top:3rem}
+.faq-section h2{font-family:var(--serif);font-size:1.5rem;font-weight:400;margin-bottom:1.5rem}
+.faq-item{border-bottom:1px solid var(--border);padding:1.1rem 0}
+.faq-q{font-size:14.5px;font-weight:500;color:var(--ink);margin-bottom:.4rem}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7}
+/* CTA */
+.loy-cta{background:var(--or1);color:#fff;padding:3rem 2.5rem;text-align:center}
+.loy-cta h2{font-family:var(--serif);font-size:2rem;font-weight:400;margin-bottom:.6rem}
+.loy-cta p{font-size:15px;opacity:.85;margin-bottom:1.5rem}
+.loy-cta-btn{display:inline-block;background:#fff;color:var(--or1);font-weight:600;font-size:14px;padding:.8rem 2rem;border-radius:8px;text-decoration:none;transition:opacity .2s}
+.loy-cta-btn:hover{opacity:.9}
+/* Footer */
+.legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
+.legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
+.legal-footer-links a:hover{color:var(--ink)}
+.back-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--or1);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(232,96,0,.35);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s,background .15s;z-index:500;pointer-events:none}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.back-top:hover{background:var(--or2)}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:900px){
+  .tiers-grid{grid-template-columns:repeat(2,1fr)}
+  .how-steps{grid-template-columns:1fr}
+  .loy-hero{padding:3rem 1.5rem 2.5rem}
+  .loy-body{padding:2.5rem 1.5rem 4rem}
+}
+@media(max-width:600px){
+  nav{padding:.65rem 1rem}
+  .logo-icon{width:36px;height:36px}
+  .logo-type{font-size:1.1rem}
+  .lang-wrap{gap:4px}
+  .lang-pill{padding:4px 8px;font-size:11px}
+  .loy-hero{padding:2rem 1rem 2rem}
+  .loy-hero h1{font-size:2rem}
+  .loy-body{padding:2rem 1rem 3rem}
+  .tiers-grid{grid-template-columns:1fr 1fr;gap:.8rem}
+  .loy-cta{padding:2.5rem 1rem}
+  .loy-cta h2{font-size:1.6rem}
+  .legal-footer{padding:1rem;flex-direction:column;gap:.6rem}
+  .legal-footer-links a{margin-left:.8rem}
+  .back-top{width:40px;height:40px;font-size:16px;right:1rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index-app.html">
+    <img class="logo-icon" src="/logotipo.png" alt="Catch This Idea">
+    <div class="logo-type">Catch<span class="sep">·</span><em>This</em><span class="sep">·</span>Idea</div>
+  </a>
+  <div class="nav-right">
+    <div class="lang-wrap">
+      <button class="lang-pill active" onclick="setLang('pt')">PT</button>
+      <button class="lang-pill" onclick="setLang('en')">EN</button>
+      <button class="lang-pill" onclick="setLang('fr')">FR</button>
+      <button class="lang-pill" onclick="setLang('es')">ES</button>
+    </div>
+    <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema">
+      <i class="ti ti-moon" id="dark-icon"></i>
+    </button>
+  </div>
+</nav>
+
+<div class="loy-hero">
+  <div class="loy-hero-inner">
+    <a class="back-link" href="/index-app.html"><i class="ti ti-arrow-left"></i><span id="back-txt">Voltar ao marketplace</span></a>
+    <div class="loy-ey" id="loy-ey">Programa de fidelidade</div>
+    <h1 id="loy-h">Quanto mais vendes,<br><em>menos pagas.</em></h1>
+    <p id="loy-sub">Cada €10 faturados vale 1 ponto. Os pontos acumulam para sempre — nunca expiram — e reduzem a tua comissão progressivamente, até ao mínimo de 5%.</p>
+  </div>
+</div>
+
+<div class="loy-body">
+
+  <div class="tiers-section">
+    <h2 id="tiers-h">Os 6 níveis</h2>
+    <p class="sub" id="tiers-sub">Sobe de nível à medida que as tuas vendas crescem. Cada nível é permanente — nunca desces.</p>
+    <div class="tiers-grid" id="tiers-grid">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <div class="how-section">
+    <h2 id="how-h">Como funciona</h2>
+    <p class="sub" id="how-sub">Simples, transparente e automático.</p>
+    <div class="how-steps" id="how-steps">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <h2 id="faq-h">Perguntas frequentes</h2>
+    <div id="faq-list"><!-- rendered by JS --></div>
+  </div>
+
+</div>
+
+<div class="loy-cta">
+  <h2 id="cta-h">Começa a vender hoje.</h2>
+  <p id="cta-sub">Publica a tua primeira ideia gratuitamente e começa a acumular pontos.</p>
+  <a class="loy-cta-btn" href="/index-app.html" id="cta-btn">Publicar uma ideia →</a>
+</div>
+
+<div class="legal-footer">
+  <span id="f-copy">© 2026 Catch This Idea · Todos os direitos reservados</span>
+  <div class="legal-footer-links">
+    <a href="/terms.html" id="f-terms">Termos</a>
+    <a href="/privacy.html" id="f-privacy">Privacidade</a>
+    <a href="/cookies.html" id="f-cookies">Cookies</a>
+  </div>
+</div>
+
+<script>
+const C = {
+  pt: {
+    back: 'Voltar ao marketplace',
+    loy_ey: 'Programa de fidelidade',
+    loy_h: 'Quanto mais vendes,<br><em>menos pagas.</em>',
+    loy_sub: 'Cada €10 faturados vale 1 ponto. Os pontos acumulam para sempre — nunca expiram — e reduzem a tua comissão progressivamente, até ao mínimo de 5%.',
+    tiers_h: 'Os 6 níveis',
+    tiers_sub: 'Sobe de nível à medida que as tuas vendas crescem. Cada nível é permanente — nunca desces.',
+    how_h: 'Como funciona',
+    how_sub: 'Simples, transparente e automático.',
+    faq_h: 'Perguntas frequentes',
+    cta_h: 'Começa a vender hoje.',
+    cta_sub: 'Publica a tua primeira ideia gratuitamente e começa a acumular pontos.',
+    cta_btn: 'Publicar uma ideia →',
+    f_copy: '© 2026 Catch This Idea · Todos os direitos reservados',
+    f_terms: 'Termos', f_privacy: 'Privacidade', f_cookies: 'Cookies',
+    top_badge: 'Melhor taxa',
+    tier_names: ['Faísca','Artesão','Criador','Autor','Especialista','Mestre'],
+    tier_pts_label: 'pontos',
+    how_steps: [
+      { n:'1', t:'Publica e vende', d:'Cada venda concluída gera pontos automaticamente — €10 faturados = 1 ponto.' },
+      { n:'2', t:'Pontos acumulam', d:'Os pontos são vitalícios. Não há reset anual, não há prazo de validade.' },
+      { n:'3', t:'Comissão baixa', d:'Ao atingires um novo nível, a comissão é ajustada automaticamente em todas as vendas seguintes.' }
+    ],
+    faqs: [
+      { q: 'Os pontos expiram?', a: 'Não. Os pontos acumulam para sempre, independentemente do tempo que passa entre vendas.' },
+      { q: 'A comissão baixa automaticamente?', a: 'Sim. Assim que atinges o número de pontos necessário para subir de nível, a nova comissão é aplicada automaticamente nas vendas seguintes. Não é necessário fazer nada.' },
+      { q: 'O que conta para os pontos — o preço da ideia ou o valor que recebo?', a: 'Os pontos são calculados sobre o valor bruto da venda (o preço que o comprador paga), antes da comissão.' },
+      { q: 'Posso descer de nível?', a: 'Não. Os níveis são permanentes. Uma vez atingido um nível, nunca perdes esse estatuto.' },
+      { q: 'O programa aplica-se a todas as modalidades de venda?', a: 'Sim — licença de uso, exclusividade e encomenda personalizada contam todas para os pontos.' }
+    ]
+  },
+  en: {
+    back: 'Back to marketplace',
+    loy_ey: 'Loyalty programme',
+    loy_h: 'The more you sell,<br><em>the less you pay.</em>',
+    loy_sub: 'Every €10 earned equals 1 point. Points accumulate forever — they never expire — and progressively reduce your commission down to a minimum of 5%.',
+    tiers_h: 'The 6 levels',
+    tiers_sub: 'Level up as your sales grow. Each level is permanent — you never go back down.',
+    how_h: 'How it works',
+    how_sub: 'Simple, transparent and automatic.',
+    faq_h: 'Frequently asked questions',
+    cta_h: 'Start selling today.',
+    cta_sub: 'Publish your first idea for free and start earning points.',
+    cta_btn: 'Post an idea →',
+    f_copy: '© 2026 Catch This Idea · All rights reserved',
+    f_terms: 'Terms', f_privacy: 'Privacy', f_cookies: 'Cookies',
+    top_badge: 'Best rate',
+    tier_names: ['Spark','Artisan','Creator','Author','Expert','Master'],
+    tier_pts_label: 'pts',
+    how_steps: [
+      { n:'1', t:'Sell your ideas', d:'Every completed sale generates points automatically — every €10 earned = 1 point.' },
+      { n:'2', t:'Points accumulate', d:'Points are lifetime. No annual reset, no expiry date.' },
+      { n:'3', t:'Commission drops', d:'When you reach a new level, your commission is automatically adjusted on all subsequent sales.' }
+    ],
+    faqs: [
+      { q: 'Do points expire?', a: 'No. Points accumulate forever, regardless of how much time passes between sales.' },
+      { q: 'Does the commission drop automatically?', a: 'Yes. As soon as you reach the points threshold for a new level, the new commission rate applies automatically to all subsequent sales. No action required.' },
+      { q: 'Are points based on the sale price or what I receive?', a: 'Points are calculated on the gross sale value (the price the buyer pays), before commission.' },
+      { q: 'Can I go down a level?', a: 'No. Levels are permanent. Once you reach a level, you keep that status forever.' },
+      { q: 'Does the programme apply to all sale types?', a: 'Yes — licence, exclusivity and custom orders all count towards your points.' }
+    ]
+  },
+  fr: {
+    back: 'Retour au marketplace',
+    loy_ey: 'Programme de fidélité',
+    loy_h: 'Plus vous vendez,<br><em>moins vous payez.</em>',
+    loy_sub: "Chaque €10 facturés vaut 1 point. Les points s'accumulent à vie — ils n'expirent jamais — et réduisent progressivement votre commission jusqu'à un minimum de 5%.",
+    tiers_h: 'Les 6 niveaux',
+    tiers_sub: 'Montez de niveau au fur et à mesure que vos ventes augmentent. Chaque niveau est permanent — vous ne régressez jamais.',
+    how_h: 'Comment ça marche',
+    how_sub: 'Simple, transparent et automatique.',
+    faq_h: 'Questions fréquentes',
+    cta_h: 'Commencez à vendre aujourd\'hui.',
+    cta_sub: 'Publiez votre première idée gratuitement et commencez à accumuler des points.',
+    cta_btn: 'Publier une idée →',
+    f_copy: '© 2026 Catch This Idea · Tous droits réservés',
+    f_terms: 'Conditions', f_privacy: 'Confidentialité', f_cookies: 'Cookies',
+    top_badge: 'Meilleur taux',
+    tier_names: ['Étincelle','Artisan','Créateur','Auteur','Expert','Maître'],
+    tier_pts_label: 'pts',
+    how_steps: [
+      { n:'1', t:'Vendez vos idées', d:"Chaque vente conclue génère des points automatiquement — chaque €10 facturés = 1 point." },
+      { n:'2', t:'Les points s\'accumulent', d:"Les points sont à vie. Pas de remise à zéro annuelle, pas de date d'expiration." },
+      { n:'3', t:'La commission baisse', d:"Lorsque vous atteignez un nouveau niveau, votre commission est automatiquement ajustée sur toutes les ventes suivantes." }
+    ],
+    faqs: [
+      { q: 'Les points expirent-ils ?', a: "Non. Les points s'accumulent pour toujours, quelle que soit la durée entre les ventes." },
+      { q: 'La commission baisse-t-elle automatiquement ?', a: "Oui. Dès que vous atteignez le seuil de points pour un nouveau niveau, le nouveau taux s'applique automatiquement. Aucune action requise." },
+      { q: 'Les points sont-ils basés sur le prix de vente ou ce que je reçois ?', a: "Les points sont calculés sur la valeur brute de la vente (le prix payé par l'acheteur), avant commission." },
+      { q: 'Puis-je descendre de niveau ?', a: "Non. Les niveaux sont permanents. Une fois un niveau atteint, vous conservez ce statut pour toujours." },
+      { q: 'Le programme s\'applique-t-il à tous les types de vente ?', a: "Oui — licence, exclusivité et commandes personnalisées comptent toutes pour vos points." }
+    ]
+  },
+  es: {
+    back: 'Volver al marketplace',
+    loy_ey: 'Programa de fidelidad',
+    loy_h: 'Cuanto más vendes,<br><em>menos pagas.</em>',
+    loy_sub: 'Cada €10 facturados vale 1 punto. Los puntos se acumulan de por vida — nunca caducan — y reducen progresivamente tu comisión hasta un mínimo del 5%.',
+    tiers_h: 'Los 6 niveles',
+    tiers_sub: 'Sube de nivel a medida que crecen tus ventas. Cada nivel es permanente — nunca retrocedes.',
+    how_h: 'Cómo funciona',
+    how_sub: 'Simple, transparente y automático.',
+    faq_h: 'Preguntas frecuentes',
+    cta_h: 'Empieza a vender hoy.',
+    cta_sub: 'Publica tu primera idea gratis y empieza a acumular puntos.',
+    cta_btn: 'Publicar una idea →',
+    f_copy: '© 2026 Catch This Idea · Todos los derechos reservados',
+    f_terms: 'Términos', f_privacy: 'Privacidad', f_cookies: 'Cookies',
+    top_badge: 'Mejor tarifa',
+    tier_names: ['Chispa','Artesano','Creador','Autor','Experto','Maestro'],
+    tier_pts_label: 'pts',
+    how_steps: [
+      { n:'1', t:'Vende tus ideas', d:'Cada venta completada genera puntos automáticamente — cada €10 facturados = 1 punto.' },
+      { n:'2', t:'Los puntos se acumulan', d:'Los puntos son vitalicios. Sin reinicio anual, sin fecha de caducidad.' },
+      { n:'3', t:'La comisión baja', d:'Al alcanzar un nuevo nivel, tu comisión se ajusta automáticamente en todas las ventas siguientes.' }
+    ],
+    faqs: [
+      { q: '¿Los puntos caducan?', a: 'No. Los puntos se acumulan para siempre, independientemente del tiempo que pase entre ventas.' },
+      { q: '¿La comisión baja automáticamente?', a: 'Sí. En cuanto alcanzas el umbral de puntos para un nuevo nivel, la nueva comisión se aplica automáticamente a todas las ventas siguientes. No necesitas hacer nada.' },
+      { q: '¿Los puntos se basan en el precio de venta o en lo que recibo?', a: 'Los puntos se calculan sobre el valor bruto de la venta (el precio que paga el comprador), antes de la comisión.' },
+      { q: '¿Puedo bajar de nivel?', a: 'No. Los niveles son permanentes. Una vez alcanzado un nivel, conservas ese estatus para siempre.' },
+      { q: '¿El programa se aplica a todos los tipos de venta?', a: 'Sí — licencia, exclusividad y pedidos personalizados cuentan todos para tus puntos.' }
+    ]
+  }
+};
+
+const tiers = [
+  { pct:'10%', pts:'0–9',   rev:'€0–€99',        icon:'ti-bolt' },
+  { pct:'9%',  pts:'10–29', rev:'€100–€299',      icon:'ti-hammer' },
+  { pct:'8%',  pts:'30–99', rev:'€300–€999',      icon:'ti-palette' },
+  { pct:'7%',  pts:'100–249',rev:'€1.000–€2.499', icon:'ti-feather' },
+  { pct:'6%',  pts:'250–499',rev:'€2.500–€4.999', icon:'ti-award' },
+  { pct:'5%',  pts:'500+',  rev:'€5.000+',        icon:'ti-crown', top:true }
+];
+
+let lang = localStorage.getItem('cti_lang') || 'pt';
+
+function render() {
+  const L = C[lang];
+  document.getElementById('back-txt').textContent = L.back;
+  document.getElementById('loy-ey').textContent = L.loy_ey;
+  document.getElementById('loy-h').innerHTML = L.loy_h;
+  document.getElementById('loy-sub').textContent = L.loy_sub;
+  document.getElementById('tiers-h').textContent = L.tiers_h;
+  document.getElementById('tiers-sub').textContent = L.tiers_sub;
+  document.getElementById('how-h').textContent = L.how_h;
+  document.getElementById('how-sub').textContent = L.how_sub;
+  document.getElementById('faq-h').textContent = L.faq_h;
+  document.getElementById('cta-h').textContent = L.cta_h;
+  document.getElementById('cta-sub').textContent = L.cta_sub;
+  document.getElementById('cta-btn').textContent = L.cta_btn;
+  document.getElementById('f-copy').textContent = L.f_copy;
+  document.getElementById('f-terms').textContent = L.f_terms;
+  document.getElementById('f-privacy').textContent = L.f_privacy;
+  document.getElementById('f-cookies').textContent = L.f_cookies;
+  document.title = L.loy_ey + ' — Catch This Idea';
+
+  // Tiers
+  const g = document.getElementById('tiers-grid');
+  g.innerHTML = tiers.map((t,i) => `
+    <div class="tier-card${t.top?' is-top':''}">
+      ${t.top?`<style>.tier-card.is-top::after{content:'${L.top_badge}'}</style>`:''}
+      <div class="tc-head">
+        <div class="tc-icon"><i class="ti ${t.icon}"></i></div>
+        <div class="tc-pct">${t.pct}</div>
+      </div>
+      <div class="tc-name">${L.tier_names[i]}</div>
+      <div class="tc-range">
+        <strong>${t.pts} ${L.tier_pts_label}</strong>
+        ${t.rev}
+      </div>
+    </div>`).join('');
+
+  // How steps
+  document.getElementById('how-steps').innerHTML = L.how_steps.map(s => `
+    <div class="how-step">
+      <div class="hs-num">${s.n}</div>
+      <div class="hs-t">${s.t}</div>
+      <div class="hs-d">${s.d}</div>
+    </div>`).join('');
+
+  // FAQ
+  document.getElementById('faq-list').innerHTML = L.faqs.map(f => `
+    <div class="faq-item">
+      <div class="faq-q">${f.q}</div>
+      <div class="faq-a">${f.a}</div>
+    </div>`).join('');
+
+  // Lang pills
+  document.querySelectorAll('.lang-pill').forEach(b =>
+    b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('cti_lang', l);
+  render();
+}
+
+(function(){
+  const saved=localStorage.getItem('cti_theme');
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+})();
+function toggleDark() {
+  const d = document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className = d ? 'ti ti-sun' : 'ti ti-moon';
+  localStorage.setItem('cti_theme', d ? 'dark' : 'light');
+}
+render();
+function updateBackTop(){const btn=document.getElementById('back-top');if(!btn)return;const footer=document.querySelector('footer,.legal-footer');if(footer){const ft=footer.getBoundingClientRect().top;const vh=window.innerHeight;btn.style.bottom=ft<vh?(vh-ft+14)+'px':''}btn.classList.toggle('show',window.scrollY>350);}
+window.addEventListener('scroll',updateBackTop);
+</script>
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo"><i class="ti ti-arrow-up"></i></button>
+</body>
+</html>

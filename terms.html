@@ -39,6 +39,21 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
 .legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
 .legal-footer-links a:hover{color:var(--ink)}
+.back-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--or1);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(232,96,0,.35);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s,background .15s;z-index:500;pointer-events:none}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.back-top:hover{background:var(--or2)}
+@media(max-width:600px){
+  nav{padding:.65rem 1rem}
+  .logo-icon{width:36px;height:36px}
+  .logo-type{font-size:1.1rem}
+  .lang-wrap{gap:4px}
+  .lang-pill{padding:4px 8px;font-size:11px}
+  .legal-wrap{padding:2rem 1rem 4rem}
+  .legal-wrap h1{font-size:1.8rem}
+  .legal-footer{padding:1rem;flex-direction:column;gap:.6rem}
+  .legal-footer-links a{margin-left:.8rem}
+  .back-top{width:40px;height:40px;font-size:16px;right:1rem}
+}
 </style>
 </head>
 <body>
@@ -113,53 +128,74 @@ const C={
   <li>É proibido partilhar ou ceder a conta a terceiros.</li>
 </ul>
 
-<h2>4. Vendedores — Publicação de Ideias</h2>
+<h2>4. Vendedores — Publicação de Ideias e Responsabilidade</h2>
+<p><strong>Ao publicar uma ideia, o utilizador declara e garante expressamente que:</strong></p>
 <ul>
-  <li>O vendedor declara ser o autor original da ideia publicada ou deter os direitos para a vender.</li>
-  <li>A ideia não pode violar propriedade intelectual de terceiros.</li>
-  <li>O Catch This Idea pode remover conteúdo que viole estas condições, sem aviso prévio.</li>
-  <li>O vendedor define o preço e a modalidade (licença, exclusividade ou encomenda personalizada).</li>
+  <li>É o <strong>autor original</strong> da ideia publicada ou detém os direitos legais necessários para a comercializar.</li>
+  <li>A ideia não imita, reproduz nem plagia, total ou parcialmente, obras, conceitos ou propriedade intelectual de terceiros.</li>
+  <li>Tem conhecimento de que <strong>ideias podem ser objeto de registo de patente, marca ou direitos de autor por parte de terceiros</strong>, e que a plataforma não realiza pesquisas de anterioridade nem valida a registabilidade das ideias publicadas.</li>
+  <li>A responsabilidade por qualquer conflito resultante de violação de direitos de propriedade intelectual recai <strong>exclusivamente sobre o vendedor</strong>, eximindo o Catch This Idea de toda e qualquer responsabilidade.</li>
+  <li>O vendedor é o único responsável pela veracidade, originalidade e legalidade do conteúdo publicado. O Catch This Idea não assume qualquer obrigação de verificação ou garantia de originalidade.</li>
 </ul>
+<p>O Catch This Idea pode remover, sem aviso prévio e sem direito a indemnização, qualquer conteúdo que viole estas condições ou que seja objeto de reclamação fundamentada por terceiros.</p>
 
 <h2>5. Compradores — Aquisição de Ideias</h2>
 <ul>
-  <li>O comprador adquire os direitos conforme a modalidade escolhida.</li>
+  <li>O comprador adquire os direitos conforme a modalidade escolhida (licença, exclusividade ou encomenda personalizada).</li>
   <li>O acesso à ideia completa só é concedido após confirmação de pagamento.</li>
+  <li>O comprador reconhece que a plataforma não garante que a ideia adquirida está livre de registo de patente, marca ou outro direito de terceiro preexistente. É da responsabilidade do comprador realizar as devidas diligências legais antes de comercializar a ideia.</li>
   <li>Não são aceites devoluções após a entrega da ideia, exceto em caso de fraude comprovada.</li>
 </ul>
 
 <h2>6. Comissões e Pagamentos</h2>
 <ul>
-  <li>Cobramos uma comissão de <strong>15%</strong> sobre o valor de cada venda concluída.</li>
+  <li>Cobramos uma comissão sobre o valor de cada venda concluída, conforme o programa de fidelidade em vigor (entre 5% e 10%).</li>
   <li>Os pagamentos são processados de forma segura através dos nossos parceiros.</li>
   <li>Todos os preços são apresentados em euros (€) e incluem IVA quando aplicável.</li>
 </ul>
 
-<h2>7. Propriedade Intelectual</h2>
+<h2>7. Propriedade Intelectual e Patentes</h2>
 <p>As ideias publicadas pertencem aos respetivos criadores, não ao Catch This Idea. A marca, logótipo, design e tecnologia da plataforma são propriedade exclusiva do Catch This Idea e não podem ser reproduzidos sem autorização escrita.</p>
+<p><strong>Aviso importante sobre patentes:</strong> O Catch This Idea não verifica se as ideias publicadas são patenteáveis, se já foram registadas por terceiros, nem se existem registos de marca, direito de autor ou outra proteção de propriedade intelectual que possa afetar a sua utilização comercial. Tanto vendedores como compradores são aconselhados a consultar um advogado especializado em propriedade intelectual antes de qualquer transação comercialmente significativa.</p>
 
-<h2>8. Conteúdo Proibido</h2>
-<p>É proibido publicar ideias que:</p>
+<h2>8. Conteúdo Proibido e Ilegal</h2>
+<p><strong>É estritamente proibido publicar, partilhar ou comercializar ideias ou conteúdos que:</strong></p>
 <ul>
-  <li>Violem direitos de propriedade intelectual de terceiros</li>
-  <li>Contenham conteúdo ilegal, ofensivo, discriminatório ou prejudicial</li>
-  <li>Sejam enganosas ou fraudulentas</li>
-  <li>Promovam atividades ilegais ou prejudiciais</li>
+  <li>Violem direitos de propriedade intelectual, marcas registadas, patentes ou direitos de autor de terceiros</li>
+  <li>Sejam ilegais ou promovam atividades criminosas de qualquer natureza</li>
+  <li>Incitem à violência, ao ódio racial, étnico, religioso, de género ou qualquer outra forma de discriminação</li>
+  <li>Constituam ou promovam fraude, burla, branqueamento de capitais ou evasão fiscal</li>
+  <li>Envolvam pornografia, exploração sexual ou qualquer conteúdo com menores</li>
+  <li>Violem segredos comerciais, acordos de confidencialidade ou dados pessoais de terceiros</li>
+  <li>Promovam substâncias ilegais, armas ou atividades terroristas</li>
+  <li>Sejam enganosos, difamatórios ou constituam assédio</li>
 </ul>
+<p><strong>Consequências:</strong> A publicação de conteúdo ilegal resultará no bloqueio imediato e permanente da conta, sem direito a reembolso de qualquer valor. O Catch This Idea reserva-se o direito de <strong>reportar às autoridades competentes</strong> qualquer atividade ou conteúdo que configure crime, incluindo a partilha de dados do utilizador com as autoridades judiciais ou policiais quando legalmente exigido ou justificado.</p>
 
-<h2>9. Responsabilidade</h2>
-<p>O Catch This Idea não garante a originalidade absoluta das ideias publicadas nem se responsabiliza por disputas entre utilizadores. A nossa responsabilidade máxima é limitada ao valor das comissões recebidas na transação em causa.</p>
+<h2>9. Revisão e Moderação de Conteúdo</h2>
+<p>Todo o conteúdo publicado na plataforma <strong>está sujeito a revisão</strong> pela equipa do Catch This Idea antes de ser disponibilizado publicamente. Reservamo-nos o direito de:</p>
+<ul>
+  <li><strong>Aceitar</strong> ideias que cumpram os presentes Termos de Uso;</li>
+  <li><strong>Recusar</strong> ideias que violem estas condições, com ou sem justificação ao utilizador;</li>
+  <li><strong>Solicitar alterações</strong> antes da publicação;</li>
+  <li><strong>Remover a qualquer momento</strong> conteúdo que, após publicação, seja identificado como estando em violação.</li>
+</ul>
+<p>A submissão de uma ideia não garante a sua publicação. O prazo de revisão pode variar entre 24 e 72 horas úteis. O Catch This Idea não é responsável por qualquer perda resultante do atraso ou recusa de publicação.</p>
 
-<h2>10. Rescisão</h2>
-<p>Podemos suspender ou encerrar contas que violem estes Termos, sem aviso prévio em casos graves de fraude ou abuso.</p>
+<h2>10. Responsabilidade e Isenção</h2>
+<p>O Catch This Idea atua exclusivamente como intermediário técnico. Não garante a originalidade, a legalidade, a patenteabilidade nem a viabilidade comercial das ideias publicadas. A responsabilidade pelo conteúdo publicado recai <strong>integralmente sobre o utilizador que o publica</strong>.</p>
+<p>A nossa responsabilidade máxima perante qualquer utilizador, em qualquer circunstância, é limitada ao valor das comissões efetivamente recebidas na transação específica em causa, nunca excedendo esse montante.</p>
 
-<h2>11. Alterações</h2>
+<h2>11. Rescisão</h2>
+<p>Podemos suspender ou encerrar contas que violem estes Termos, sem aviso prévio em casos graves de fraude, abuso ou conteúdo ilegal.</p>
+
+<h2>12. Alterações</h2>
 <p>Reservamo-nos o direito de atualizar estes Termos a qualquer momento. Notificaremos os utilizadores registados em caso de alterações significativas, por email.</p>
 
-<h2>12. Lei Aplicável</h2>
+<h2>13. Lei Aplicável</h2>
 <p>Estes Termos são regidos pela lei portuguesa. Para resolução de litígios, é competente o Tribunal da Comarca de Lisboa.</p>
 
-<h2>13. Contacto</h2>
+<h2>14. Contacto</h2>
 <p>Para questões relacionadas com estes Termos: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
 `},
   en:{
@@ -185,53 +221,74 @@ const C={
   <li>Sharing or transferring your account to third parties is prohibited.</li>
 </ul>
 
-<h2>4. Sellers — Publishing Ideas</h2>
+<h2>4. Sellers — Publishing Ideas and Liability</h2>
+<p><strong>By publishing an idea, you expressly declare and warrant that:</strong></p>
 <ul>
-  <li>The seller declares they are the original author or hold the rights to sell the idea.</li>
-  <li>The idea must not infringe third-party intellectual property rights.</li>
-  <li>Catch This Idea may remove content that violates these conditions without prior notice.</li>
-  <li>The seller sets the price and modality (licence, exclusivity or custom order).</li>
+  <li>You are the <strong>original author</strong> of the published idea, or you hold the legal rights required to commercialise it.</li>
+  <li>The idea does not imitate, reproduce or plagiarise, in whole or in part, any works, concepts or intellectual property belonging to third parties.</li>
+  <li>You acknowledge that <strong>ideas may be subject to patent, trademark or copyright registration by third parties</strong>, and that the platform does not carry out prior-art searches or validate whether published ideas are registrable.</li>
+  <li>Sole liability for any dispute arising from infringement of intellectual property rights rests <strong>exclusively with the seller</strong>, and Catch This Idea is fully exempt from any such liability.</li>
+  <li>You are solely responsible for the accuracy, originality and legality of the content you publish. Catch This Idea assumes no obligation to verify or guarantee originality.</li>
 </ul>
+<p>Catch This Idea may remove, without prior notice and without compensation, any content that violates these conditions or is the subject of a substantiated third-party complaint.</p>
 
 <h2>5. Buyers — Purchasing Ideas</h2>
 <ul>
-  <li>The buyer acquires rights according to the chosen modality.</li>
+  <li>The buyer acquires rights according to the chosen modality (licence, exclusivity or custom order).</li>
   <li>Access to the full idea is only granted after payment confirmation.</li>
+  <li>The buyer acknowledges that the platform does not guarantee that any purchased idea is free from pre-existing patents, trademarks or other third-party rights. It is the buyer's responsibility to carry out appropriate legal due diligence before commercialising any idea.</li>
   <li>No refunds are accepted after the idea has been delivered, except in cases of proven fraud.</li>
 </ul>
 
 <h2>6. Commission and Payments</h2>
 <ul>
-  <li>We charge a commission of <strong>15%</strong> on the value of each completed sale.</li>
+  <li>We charge a commission on each completed sale, in line with the loyalty programme in force (between 5% and 10%).</li>
   <li>Payments are processed securely through our partners.</li>
   <li>All prices are shown in euros (€) and include VAT where applicable.</li>
 </ul>
 
-<h2>7. Intellectual Property</h2>
+<h2>7. Intellectual Property and Patents</h2>
 <p>Published ideas belong to their respective creators, not to Catch This Idea. The platform's brand, logo, design and technology are the exclusive property of Catch This Idea and may not be reproduced without written authorisation.</p>
+<p><strong>Important notice regarding patents:</strong> Catch This Idea does not verify whether published ideas are patentable, whether they have already been registered by third parties, or whether any trademark, copyright or other intellectual property right exists that could affect their commercial use. Both sellers and buyers are advised to consult a specialist intellectual property lawyer before any commercially significant transaction.</p>
 
-<h2>8. Prohibited Content</h2>
-<p>It is prohibited to publish ideas that:</p>
+<h2>8. Prohibited and Illegal Content</h2>
+<p><strong>It is strictly prohibited to publish, share or sell ideas or content that:</strong></p>
 <ul>
-  <li>Infringe third-party intellectual property rights</li>
-  <li>Contain illegal, offensive, discriminatory or harmful content</li>
-  <li>Are misleading or fraudulent</li>
-  <li>Promote illegal or harmful activities</li>
+  <li>Infringe third-party intellectual property rights, registered trademarks, patents or copyright</li>
+  <li>Are illegal or promote criminal activity of any kind</li>
+  <li>Incite violence or hatred based on race, ethnicity, religion, gender or any other characteristic</li>
+  <li>Constitute or promote fraud, money laundering or tax evasion</li>
+  <li>Involve pornography, sexual exploitation or any content involving minors</li>
+  <li>Breach trade secrets, confidentiality agreements or third-party personal data</li>
+  <li>Promote illegal substances, weapons or terrorist activities</li>
+  <li>Are defamatory, misleading or constitute harassment</li>
 </ul>
+<p><strong>Consequences:</strong> Publishing illegal content will result in immediate and permanent account suspension, with no right to a refund. Catch This Idea reserves the right to <strong>report to the relevant authorities</strong> any activity or content that constitutes a criminal offence, including sharing user data with judicial or law-enforcement authorities when legally required or justified.</p>
 
-<h2>9. Liability</h2>
-<p>Catch This Idea does not guarantee the absolute originality of published ideas and is not liable for disputes between users. Our maximum liability is limited to the commissions received in the transaction in question.</p>
+<h2>9. Content Review and Moderation</h2>
+<p>All content published on the platform <strong>is subject to review</strong> by the Catch This Idea team before being made publicly available. We reserve the right to:</p>
+<ul>
+  <li><strong>Accept</strong> ideas that comply with these Terms of Use;</li>
+  <li><strong>Reject</strong> ideas that violate these conditions, with or without explanation;</li>
+  <li><strong>Request changes</strong> prior to publication;</li>
+  <li><strong>Remove at any time</strong> content that, after publication, is identified as being in violation.</li>
+</ul>
+<p>Submitting an idea does not guarantee its publication. The review period may vary between 24 and 72 business hours. Catch This Idea is not liable for any loss resulting from a delay or rejection of publication.</p>
 
-<h2>10. Termination</h2>
-<p>We may suspend or close accounts that violate these Terms, without prior notice in serious cases of fraud or abuse.</p>
+<h2>10. Liability and Disclaimer</h2>
+<p>Catch This Idea acts solely as a technical intermediary. It does not guarantee the originality, legality, patentability or commercial viability of published ideas. Liability for published content rests <strong>entirely with the user who publishes it</strong>.</p>
+<p>Our maximum liability to any user, under any circumstances, is limited to the commissions actually received in the specific transaction in question, and shall never exceed that amount.</p>
 
-<h2>11. Changes</h2>
+<h2>11. Termination</h2>
+<p>We may suspend or close accounts that violate these Terms, without prior notice in serious cases of fraud, abuse or illegal content.</p>
+
+<h2>12. Changes</h2>
 <p>We reserve the right to update these Terms at any time. We will notify registered users of significant changes by email.</p>
 
-<h2>12. Governing Law</h2>
+<h2>13. Governing Law</h2>
 <p>These Terms are governed by Portuguese law. The Lisbon Court has jurisdiction for dispute resolution.</p>
 
-<h2>13. Contact</h2>
+<h2>14. Contact</h2>
 <p>For questions related to these Terms: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
 `},
   fr:{
@@ -257,54 +314,66 @@ const C={
   <li>Il est interdit de partager ou de céder son compte à des tiers.</li>
 </ul>
 
-<h2>4. Vendeurs — Publication d'Idées</h2>
+<h2>4. Vendeurs — Publication d'Idées et Responsabilité</h2>
+<p><strong>En publiant une idée, vous déclarez et garantissez expressément que :</strong></p>
 <ul>
-  <li>Le vendeur déclare être l'auteur original de l'idée ou détenir les droits pour la vendre.</li>
-  <li>L'idée ne doit pas violer la propriété intellectuelle de tiers.</li>
-  <li>Catch This Idea peut supprimer du contenu violant ces conditions sans préavis.</li>
-  <li>Le vendeur fixe le prix et la modalité (licence, exclusivité ou commande personnalisée).</li>
+  <li>Vous êtes l'<strong>auteur original</strong> de l'idée publiée ou vous détenez les droits légaux nécessaires pour la commercialiser.</li>
+  <li>L'idée n'imite, ne reproduit ni ne plagie, en tout ou en partie, des œuvres, concepts ou propriété intellectuelle appartenant à des tiers.</li>
+  <li>Vous reconnaissez que <strong>les idées peuvent faire l'objet d'un brevet, d'une marque ou d'un droit d'auteur de la part de tiers</strong>, et que la plateforme n'effectue aucune recherche d'antériorité ni ne valide la brevetabilité des idées publiées.</li>
+  <li>La responsabilité de tout litige découlant d'une violation de droits de propriété intellectuelle incombe <strong>exclusivement au vendeur</strong>, Catch This Idea étant entièrement exonéré.</li>
+  <li>Vous êtes le seul responsable de l'exactitude, de l'originalité et de la légalité du contenu publié.</li>
 </ul>
 
 <h2>5. Acheteurs — Acquisition d'Idées</h2>
 <ul>
-  <li>L'acheteur acquiert les droits selon la modalité choisie.</li>
+  <li>L'acheteur acquiert les droits selon la modalité choisie (licence, exclusivité ou commande personnalisée).</li>
   <li>L'accès à l'idée complète n'est accordé qu'après confirmation du paiement.</li>
+  <li>L'acheteur reconnaît que la plateforme ne garantit pas qu'une idée achetée est exempte de brevets, marques ou autres droits de tiers préexistants. Il appartient à l'acheteur d'effectuer les vérifications juridiques appropriées.</li>
   <li>Aucun remboursement n'est accepté après la livraison de l'idée, sauf fraude avérée.</li>
 </ul>
 
 <h2>6. Commissions et Paiements</h2>
 <ul>
-  <li>Nous prélevons une commission de <strong>15 %</strong> sur le montant de chaque vente conclue.</li>
+  <li>Nous prélevons une commission sur chaque vente conclue, selon le programme de fidélité en vigueur (entre 5 % et 10 %).</li>
   <li>Les paiements sont traités de manière sécurisée par nos partenaires.</li>
   <li>Tous les prix sont affichés en euros (€) et incluent la TVA le cas échéant.</li>
 </ul>
 
-<h2>7. Propriété Intellectuelle</h2>
-<p>Les idées publiées appartiennent à leurs créateurs respectifs, pas à Catch This Idea. La marque, le logo, le design et la technologie de la plateforme sont la propriété exclusive de Catch This Idea et ne peuvent être reproduits sans autorisation écrite.</p>
+<h2>7. Propriété Intellectuelle et Brevets</h2>
+<p>Les idées publiées appartiennent à leurs créateurs respectifs, pas à Catch This Idea. La marque, le logo, le design et la technologie de la plateforme sont la propriété exclusive de Catch This Idea.</p>
+<p><strong>Avis important concernant les brevets :</strong> Catch This Idea ne vérifie pas si les idées publiées sont brevetables, si elles ont déjà été enregistrées par des tiers, ni si un droit de propriété intellectuelle préexistant pourrait affecter leur utilisation commerciale. Il est conseillé de consulter un avocat spécialisé avant toute transaction commercialement significative.</p>
 
-<h2>8. Contenu Interdit</h2>
-<p>Il est interdit de publier des idées qui :</p>
+<h2>8. Contenu Interdit et Illégal</h2>
+<p><strong>Il est strictement interdit de publier, partager ou commercialiser des idées ou contenus qui :</strong></p>
 <ul>
-  <li>Violent les droits de propriété intellectuelle de tiers</li>
-  <li>Contiennent du contenu illégal, offensant, discriminatoire ou nuisible</li>
-  <li>Sont trompeuses ou frauduleuses</li>
-  <li>Font la promotion d'activités illégales ou nuisibles</li>
+  <li>Violent des droits de propriété intellectuelle, marques, brevets ou droits d'auteur de tiers</li>
+  <li>Sont illégaux ou font la promotion d'activités criminelles</li>
+  <li>Incitent à la violence ou à la haine raciale, ethnique, religieuse ou autre</li>
+  <li>Constituent ou favorisent la fraude, le blanchiment d'argent ou l'évasion fiscale</li>
+  <li>Impliquent de la pornographie, de l'exploitation sexuelle ou tout contenu impliquant des mineurs</li>
+  <li>Violent des secrets commerciaux, des accords de confidentialité ou des données personnelles de tiers</li>
+  <li>Font la promotion de substances illicites, d'armes ou d'activités terroristes</li>
+  <li>Sont diffamatoires, trompeurs ou constituent du harcèlement</li>
 </ul>
+<p><strong>Conséquences :</strong> La publication de contenu illégal entraînera la suspension immédiate et permanente du compte. Catch This Idea se réserve le droit de <strong>signaler aux autorités compétentes</strong> toute activité ou contenu constituant une infraction pénale, y compris en transmettant les données de l'utilisateur aux autorités judiciaires ou policières lorsque la loi l'exige.</p>
 
-<h2>9. Responsabilité</h2>
-<p>Catch This Idea ne garantit pas l'originalité absolue des idées publiées et n'est pas responsable des litiges entre utilisateurs. Notre responsabilité maximale est limitée aux commissions perçues dans la transaction concernée.</p>
+<h2>9. Révision et Modération du Contenu</h2>
+<p>Tout contenu publié sur la plateforme <strong>est soumis à révision</strong> par l'équipe de Catch This Idea avant d'être rendu public. Nous nous réservons le droit d'<strong>accepter</strong>, de <strong>refuser</strong> ou de <strong>demander des modifications</strong> avant publication, et de <strong>retirer à tout moment</strong> du contenu en violation. La soumission d'une idée ne garantit pas sa publication. Le délai de révision peut varier de 24 à 72 heures ouvrables.</p>
 
-<h2>10. Résiliation</h2>
-<p>Nous pouvons suspendre ou fermer des comptes violant ces Conditions, sans préavis dans les cas graves de fraude ou d'abus.</p>
+<h2>10. Responsabilité et Exonération</h2>
+<p>Catch This Idea agit uniquement en tant qu'intermédiaire technique. La responsabilité du contenu publié incombe <strong>entièrement à l'utilisateur qui le publie</strong>. Notre responsabilité maximale est limitée aux commissions effectivement perçues dans la transaction spécifique concernée.</p>
 
-<h2>11. Modifications</h2>
+<h2>11. Résiliation</h2>
+<p>Nous pouvons suspendre ou fermer des comptes violant ces Conditions, sans préavis dans les cas graves de fraude, d'abus ou de contenu illégal.</p>
+
+<h2>12. Modifications</h2>
 <p>Nous nous réservons le droit de mettre à jour ces Conditions à tout moment. Les utilisateurs inscrits seront notifiés des changements importants par e-mail.</p>
 
-<h2>12. Droit Applicable</h2>
+<h2>13. Droit Applicable</h2>
 <p>Ces Conditions sont régies par le droit portugais. Le Tribunal de Lisbonne est compétent pour la résolution des litiges.</p>
 
-<h2>13. Contact</h2>
-<p>Pour toute question relative à ces Conditions : <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
+<h2>14. Contact</h2>
+<p>Pour toute question : <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
 `},
   es:{
     title:'Términos de Uso — Catch This Idea',
@@ -329,54 +398,66 @@ const C={
   <li>Está prohibido compartir o ceder la cuenta a terceros.</li>
 </ul>
 
-<h2>4. Vendedores — Publicación de Ideas</h2>
+<h2>4. Vendedores — Publicación de Ideas y Responsabilidad</h2>
+<p><strong>Al publicar una idea, declaras y garantizas expresamente que:</strong></p>
 <ul>
-  <li>El vendedor declara ser el autor original de la idea o tener los derechos para venderla.</li>
-  <li>La idea no puede infringir la propiedad intelectual de terceros.</li>
-  <li>Catch This Idea puede eliminar contenido que viole estas condiciones sin previo aviso.</li>
-  <li>El vendedor fija el precio y la modalidad (licencia, exclusividad o encargo personalizado).</li>
+  <li>Eres el <strong>autor original</strong> de la idea publicada o posees los derechos legales necesarios para comercializarla.</li>
+  <li>La idea no imita, reproduce ni plagia, total o parcialmente, obras, conceptos o propiedad intelectual de terceros.</li>
+  <li>Reconoces que <strong>las ideas pueden ser objeto de patente, marca o derechos de autor por parte de terceros</strong>, y que la plataforma no realiza búsquedas de anterioridad ni valida la registrabilidad de las ideas publicadas.</li>
+  <li>La responsabilidad por cualquier conflicto derivado de la infracción de derechos de propiedad intelectual recae <strong>exclusivamente en el vendedor</strong>, quedando Catch This Idea completamente exonerado.</li>
+  <li>Eres el único responsable de la veracidad, originalidad y legalidad del contenido publicado.</li>
 </ul>
 
 <h2>5. Compradores — Adquisición de Ideas</h2>
 <ul>
-  <li>El comprador adquiere los derechos según la modalidad elegida.</li>
+  <li>El comprador adquiere los derechos según la modalidad elegida (licencia, exclusividad o encargo personalizado).</li>
   <li>El acceso a la idea completa solo se concede tras la confirmación del pago.</li>
+  <li>El comprador reconoce que la plataforma no garantiza que la idea adquirida esté libre de patentes, marcas u otros derechos de terceros preexistentes. Es responsabilidad del comprador realizar las debidas diligencias legales antes de comercializar cualquier idea.</li>
   <li>No se aceptan devoluciones tras la entrega de la idea, salvo fraude comprobado.</li>
 </ul>
 
 <h2>6. Comisiones y Pagos</h2>
 <ul>
-  <li>Cobramos una comisión del <strong>15 %</strong> sobre el valor de cada venta concluida.</li>
+  <li>Cobramos una comisión sobre cada venta concluida, según el programa de fidelidad vigente (entre el 5 % y el 10 %).</li>
   <li>Los pagos se procesan de forma segura a través de nuestros socios.</li>
   <li>Todos los precios se muestran en euros (€) e incluyen IVA cuando corresponde.</li>
 </ul>
 
-<h2>7. Propiedad Intelectual</h2>
-<p>Las ideas publicadas pertenecen a sus respectivos creadores, no a Catch This Idea. La marca, logotipo, diseño y tecnología de la plataforma son propiedad exclusiva de Catch This Idea y no pueden reproducirse sin autorización escrita.</p>
+<h2>7. Propiedad Intelectual y Patentes</h2>
+<p>Las ideas publicadas pertenecen a sus respectivos creadores, no a Catch This Idea. La marca, logotipo, diseño y tecnología de la plataforma son propiedad exclusiva de Catch This Idea.</p>
+<p><strong>Aviso importante sobre patentes:</strong> Catch This Idea no verifica si las ideas publicadas son patentables, si ya han sido registradas por terceros, ni si existe algún derecho de propiedad intelectual preexistente que pueda afectar su uso comercial. Se recomienda consultar a un abogado especializado en propiedad intelectual antes de cualquier transacción comercialmente significativa.</p>
 
-<h2>8. Contenido Prohibido</h2>
-<p>Está prohibido publicar ideas que:</p>
+<h2>8. Contenido Prohibido e Ilegal</h2>
+<p><strong>Está estrictamente prohibido publicar, compartir o comercializar ideas o contenidos que:</strong></p>
 <ul>
-  <li>Infrinjan derechos de propiedad intelectual de terceros</li>
-  <li>Contengan contenido ilegal, ofensivo, discriminatorio o dañino</li>
-  <li>Sean engañosas o fraudulentas</li>
-  <li>Promuevan actividades ilegales o perjudiciales</li>
+  <li>Infrinjan derechos de propiedad intelectual, marcas registradas, patentes o derechos de autor de terceros</li>
+  <li>Sean ilegales o promuevan actividades criminales de cualquier tipo</li>
+  <li>Inciten a la violencia o al odio racial, étnico, religioso, de género u otro</li>
+  <li>Constituyan o promuevan fraude, blanqueo de capitales o evasión fiscal</li>
+  <li>Impliquen pornografía, explotación sexual o cualquier contenido con menores</li>
+  <li>Vulneren secretos comerciales, acuerdos de confidencialidad o datos personales de terceros</li>
+  <li>Promuevan sustancias ilegales, armas o actividades terroristas</li>
+  <li>Sean difamatorios, engañosos o constituyan acoso</li>
 </ul>
+<p><strong>Consecuencias:</strong> La publicación de contenido ilegal resultará en la suspensión inmediata y permanente de la cuenta. Catch This Idea se reserva el derecho de <strong>reportar a las autoridades competentes</strong> cualquier actividad o contenido que constituya un delito, incluida la transmisión de datos del usuario a las autoridades judiciales o policiales cuando así lo exija la ley.</p>
 
-<h2>9. Responsabilidad</h2>
-<p>Catch This Idea no garantiza la originalidad absoluta de las ideas publicadas ni se responsabiliza de los conflictos entre usuarios. Nuestra responsabilidad máxima se limita a las comisiones recibidas en la transacción en cuestión.</p>
+<h2>9. Revisión y Moderación de Contenido</h2>
+<p>Todo el contenido publicado en la plataforma <strong>está sujeto a revisión</strong> por el equipo de Catch This Idea antes de ser publicado. Nos reservamos el derecho de <strong>aceptar</strong>, <strong>rechazar</strong> o <strong>solicitar cambios</strong> antes de la publicación, y de <strong>retirar en cualquier momento</strong> contenido en infracción. El plazo de revisión puede oscilar entre 24 y 72 horas hábiles.</p>
 
-<h2>10. Rescisión</h2>
-<p>Podemos suspender o cerrar cuentas que violen estos Términos, sin previo aviso en casos graves de fraude o abuso.</p>
+<h2>10. Responsabilidad y Exención</h2>
+<p>Catch This Idea actúa únicamente como intermediario técnico. La responsabilidad del contenido publicado recae <strong>íntegramente en el usuario que lo publica</strong>. Nuestra responsabilidad máxima se limita a las comisiones efectivamente percibidas en la transacción específica en cuestión.</p>
 
-<h2>11. Cambios</h2>
+<h2>11. Rescisión</h2>
+<p>Podemos suspender o cerrar cuentas que violen estos Términos, sin previo aviso en casos graves de fraude, abuso o contenido ilegal.</p>
+
+<h2>12. Cambios</h2>
 <p>Nos reservamos el derecho de actualizar estos Términos en cualquier momento. Notificaremos a los usuarios registrados de cambios significativos por correo electrónico.</p>
 
-<h2>12. Ley Aplicable</h2>
+<h2>13. Ley Aplicable</h2>
 <p>Estos Términos se rigen por la ley portuguesa. El Tribunal de Lisboa es competente para la resolución de conflictos.</p>
 
-<h2>13. Contacto</h2>
-<p>Para preguntas relacionadas con estos Términos: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
+<h2>14. Contacto</h2>
+<p>Para preguntas: <a href="mailto:legal@catchthisidea.com">legal@catchthisidea.com</a></p>
 `}
 };
 
@@ -398,6 +479,9 @@ function setLang(l){
   localStorage.setItem('cti_lang',l);
 }
 setLang(localStorage.getItem('cti_lang')||'pt');
+function updateBackTop(){const btn=document.getElementById('back-top');if(!btn)return;const footer=document.querySelector('footer,.legal-footer');if(footer){const ft=footer.getBoundingClientRect().top;const vh=window.innerHeight;btn.style.bottom=ft<vh?(vh-ft+14)+'px':''}btn.classList.toggle('show',window.scrollY>350);}
+window.addEventListener('scroll',updateBackTop);
 </script>
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo"><i class="ti ti-arrow-up"></i></button>
 </body>
 </html>

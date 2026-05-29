@@ -4,7 +4,7 @@ const SUPABASE_URL      = (process.env.SUPABASE_URL      ?? '').replace(/\/+$/, 
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SVC_KEY  = process.env.SUPABASE_SERVICE_KEY;
 const RESEND_API_KEY    = process.env.RESEND_API_KEY;
-const SITE_URL          = 'https://catchthisidea.netlify.app/index-app.html';
+const SITE_URL          = ((process.env.SITE_URL ?? 'https://catchthisidea.com').replace(/\/+$/, '')) + '/index-app.html';
 const ALLOWED_ORIGINS   = ['https://catchthisidea.com', 'https://catchthisidea.netlify.app'];
 
 const supaHeaders = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY };
@@ -147,6 +147,18 @@ export default async (req) => {
     if (!validateEmail(cleanEmail))  return json({ error: 'Email inválido' }, 400, origin);
     if (!validatePassword(password)) return json({ error: 'A password deve ter mínimo 8 caracteres, 1 maiúscula, 1 minúscula e 1 número.' }, 400, origin);
 
+    // 0. Verificar blacklist antes de criar conta
+    const blRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/blacklist?email=eq.${encodeURIComponent(cleanEmail)}&select=id&limit=1`,
+      { headers: adminHeaders }
+    ).catch(() => null);
+    if (blRes?.ok) {
+      const blRows = await blRes.json().catch(() => []);
+      if (blRows.length) {
+        return json({ error: 'Não é possível criar uma conta com este email. Se acreditas que se trata de um erro, contacta o suporte.' }, 403, origin);
+      }
+    }
+
     // 1. Criar utilizador via Admin API (sem email automático)
     const createRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
       method: 'POST',
@@ -201,6 +213,47 @@ export default async (req) => {
     });
     const data = await res.json();
     if (!res.ok) return json({ error: 'Email ou password incorretos' }, 401, origin);
+
+    // Verificar se a conta está suspensa antes de devolver o token
+    const userId = data.user?.id;
+    if (userId) {
+      const suspRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=suspended,suspension_reason&limit=1`,
+        { headers: adminHeaders }
+      ).catch(() => null);
+      if (suspRes?.ok) {
+        const suspProfiles = await suspRes.json().catch(() => []);
+        if (suspProfiles[0]?.suspended) {
+          const isBanned = String(suspProfiles[0].suspension_reason ?? '').startsWith('BANIDO:');
+          return json({
+            error: isBanned
+              ? 'Esta conta foi banida permanentemente. Contacta o suporte se acreditas que se trata de um erro.'
+              : 'A tua conta está temporariamente suspensa para revisão. Contacta o suporte para mais informações.',
+            suspended: true,
+          }, 403, origin);
+        }
+      }
+    }
+
+    return json({
+      access_token:  data.access_token,
+      refresh_token: data.refresh_token,
+      user: { id: data.user?.id, email: data.user?.email, name: data.user?.user_metadata?.full_name ?? '' },
+    }, 200, origin);
+  }
+
+  // ── REFRESH TOKEN ────────────────────────────────────────
+  if (action === 'refresh') {
+    const { refresh_token } = body;
+    if (!refresh_token) return json({ error: 'refresh_token é obrigatório' }, 400, origin);
+
+    const res  = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: supaHeaders,
+      body: JSON.stringify({ refresh_token }),
+    });
+    const data = await res.json();
+    if (!res.ok) return json({ error: 'Sessão expirada. Por favor, inicie sessão novamente.' }, 401, origin);
 
     return json({
       access_token:  data.access_token,

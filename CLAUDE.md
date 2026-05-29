@@ -132,8 +132,21 @@ ANTHROPIC_API_KEY=sk-ant-...   ← API key da Anthropic (definida no painel Netl
 ## Contexto de negócio
 
 ### Modelo de receita
-- Plataforma cobra **15% de comissão** sobre cada venda concluída
+- Plataforma cobra **10% de comissão** sobre cada venda concluída (vendedor fica com 90%)
 - Pagamento protegido: ideia só entregue após confirmação de pagamento
+
+### Programa de fidelidade (Loyalty)
+- Cada **€10 faturados = 1 ponto** (acumulação vitalícia)
+- Pontos reduzem a comissão progressivamente:
+
+| Pontos | Faturado total | Comissão |
+|--------|---------------|----------|
+| 0 – 9  | €0 – €99      | 10%      |
+| 10 – 29 | €100 – €299  | 9%       |
+| 30 – 99 | €300 – €999  | 8%       |
+| 100 – 249 | €1.000 – €2.499 | 7%  |
+| 250 – 499 | €2.500 – €4.999 | 6%  |
+| 500+   | €5.000+       | 5% (teto mínimo) |
 
 ### Modalidades de venda disponíveis
 1. **Licença de uso** — comprador usa a ideia, vendedor pode vender a outros

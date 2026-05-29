@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sugestões — Catch This Idea</title>
+<link rel="icon" type="image/x-icon" href="/logotipo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;--or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;--or-border:#f5c890;--muted:#7a6040;--border:#ddd0b8;--serif:"Instrument Serif",Georgia,serif;--sans:"DM Sans",sans-serif}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--or-border:#4a3520;--muted:#9a8a70;--border:#3a3028}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.6;transition:background .25s,color .25s;min-height:100vh;display:flex;flex-direction:column}
+nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;border-bottom:1px solid var(--border);background:var(--paper);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-icon{width:40px;height:40px;object-fit:contain;flex-shrink:0}
+.logo-type{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.05}
+.logo-type em{font-style:italic}
+.logo-type .sep{color:var(--or1);margin:0 1px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.lang-wrap{display:flex;gap:5px}
+.lang-pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:background .15s,color .15s,border-color .15s}
+.lang-pill.active{background:var(--or1);color:#fff;border-color:var(--or1)}
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s}
+.dark-btn:hover{background:var(--paper2)}
+/* Page */
+.page-wrap{max-width:620px;margin:0 auto;padding:3.5rem 2rem 5rem;flex:1}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:2rem;transition:color .15s}
+.back-link:hover{color:var(--ink)}
+.page-ey{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--or1);margin-bottom:.8rem}
+.page-h{font-family:var(--serif);font-size:2.4rem;font-weight:400;line-height:1.15;margin-bottom:.7rem}
+.page-sub{font-size:15px;color:var(--muted);margin-bottom:2.5rem;line-height:1.7}
+/* Form */
+.form-card{background:var(--paper2);border:1px solid var(--border);border-radius:16px;padding:2rem}
+.fg{margin-bottom:1.2rem}
+.fg label{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em}
+.fg input,.fg textarea{width:100%;padding:.7rem .9rem;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .2s}
+.fg input:focus,.fg textarea:focus{border-color:var(--or1)}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.fg textarea{resize:vertical;min-height:130px;line-height:1.6}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg-hint{font-size:12px;color:var(--muted);margin-top:.35rem}
+.required-star{color:var(--or1)}
+.btn-submit{width:100%;padding:.85rem;background:var(--or1);color:#fff;border:none;border-radius:8px;font-family:var(--sans);font-size:15px;font-weight:500;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.5rem}
+.btn-submit:hover{background:var(--or2)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+/* Feedback states */
+.form-feedback{display:none;padding:1rem 1.2rem;border-radius:8px;font-size:14px;margin-top:1rem;align-items:center;gap:.7rem}
+.form-feedback.show{display:flex}
+.form-feedback.success{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+.form-feedback.error{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+/* Footer */
+.splash-section{position:relative;height:200px;margin-top:-3rem;overflow:hidden;pointer-events:none}
+.splash-section img{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:900px;height:auto;opacity:.95;filter:drop-shadow(0 0 40px rgba(232,96,0,.4))}
+body.dark .splash-section img{opacity:.85}
+.legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
+.legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
+.legal-footer-links a:hover{color:var(--ink)}
+.back-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--or1);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(232,96,0,.35);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s,background .15s;z-index:500;pointer-events:none}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.back-top:hover{background:var(--or2)}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:600px){
+  nav{padding:.65rem 1rem}
+  .logo-icon{width:36px;height:36px}
+  .logo-type{font-size:1.1rem}
+  .lang-wrap{gap:4px}
+  .lang-pill{padding:4px 8px;font-size:11px}
+  .page-wrap{padding:2rem 1rem 4rem}
+  .page-h{font-size:1.9rem}
+  .form-card{padding:1.4rem 1.2rem}
+  .fg-row{grid-template-columns:1fr}
+  .splash-section{height:140px;margin-top:-2rem}
+  .splash-section img{width:600px}
+  .legal-footer{padding:1rem;flex-direction:column;gap:.6rem}
+  .legal-footer-links a{margin-left:.8rem}
+  .back-top{width:40px;height:40px;font-size:16px;right:1rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/index-app.html">
+    <img class="logo-icon" src="/logotipo.png" alt="Catch This Idea">
+    <div class="logo-type">Catch<span class="sep">·</span><em>This</em><span class="sep">·</span>Idea</div>
+  </a>
+  <div class="nav-right">
+    <div class="lang-wrap">
+      <button class="lang-pill active" onclick="setLang('pt')">PT</button>
+      <button class="lang-pill" onclick="setLang('en')">EN</button>
+      <button class="lang-pill" onclick="setLang('fr')">FR</button>
+      <button class="lang-pill" onclick="setLang('es')">ES</button>
+    </div>
+    <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema">
+      <i class="ti ti-moon" id="dark-icon"></i>
+    </button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <a class="back-link" href="/index-app.html"><i class="ti ti-arrow-left"></i><span id="back-txt">Voltar ao marketplace</span></a>
+  <div class="page-ey" id="page-ey">Dá-nos a tua opinião</div>
+  <h1 class="page-h" id="page-h">Tens uma ideia<br>para <em>melhorar</em> isto?</h1>
+  <p class="page-sub" id="page-sub">Queremos saber o que pensas — uma funcionalidade que falta, algo que poderíamos fazer melhor, ou qualquer outra sugestão. Lemos tudo.</p>
+
+  <div class="form-card">
+    <div class="fg-row">
+      <div class="fg">
+        <label id="lbl-name">Nome <span style="font-weight:300;opacity:.6" id="lbl-optional">(opcional)</span></label>
+        <input type="text" id="f-name" autocomplete="name" id="lbl-name-ph">
+      </div>
+      <div class="fg">
+        <label id="lbl-email">Email <span style="font-weight:300;opacity:.6" id="lbl-optional2">(opcional)</span></label>
+        <input type="email" id="f-email" autocomplete="email">
+        <div class="fg-hint" id="lbl-email-hint">Para podermos responder à tua sugestão.</div>
+      </div>
+    </div>
+    <div class="fg">
+      <label id="lbl-title">Título <span class="required-star">*</span></label>
+      <input type="text" id="f-title" maxlength="120">
+    </div>
+    <div class="fg">
+      <label id="lbl-message">Mensagem <span class="required-star">*</span></label>
+      <textarea id="f-message" maxlength="2000"></textarea>
+    </div>
+    <button class="btn-submit" id="btn-submit" onclick="submitSuggest()">
+      <i class="ti ti-send"></i><span id="btn-txt">Enviar sugestão</span>
+    </button>
+    <div class="form-feedback success" id="fb-success">
+      <i class="ti ti-circle-check" style="font-size:20px;flex-shrink:0"></i>
+      <span id="fb-success-txt">Sugestão enviada! Obrigado pelo teu contributo.</span>
+    </div>
+    <div class="form-feedback error" id="fb-error">
+      <i class="ti ti-alert-circle" style="font-size:20px;flex-shrink:0"></i>
+      <span id="fb-error-txt">Ocorreu um erro. Tenta novamente.</span>
+    </div>
+  </div>
+</div>
+
+<div class="splash-section"><img src="/logotipo3.png" alt=""></div>
+<div class="legal-footer">
+  <span id="f-copy">© 2026 Catch This Idea · Todos os direitos reservados</span>
+  <div class="legal-footer-links">
+    <a href="/terms.html" id="f-terms">Termos</a>
+    <a href="/privacy.html" id="f-privacy">Privacidade</a>
+    <a href="/cookies.html" id="f-cookies">Cookies</a>
+  </div>
+</div>
+
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo"><i class="ti ti-arrow-up"></i></button>
+
+<script>
+const C = {
+  pt: {
+    back:'Voltar ao marketplace', page_ey:'Dá-nos a tua opinião',
+    page_h:'Tens uma ideia<br>para <em>melhorar</em> isto?',
+    page_sub:'Queremos saber o que pensas — uma funcionalidade que falta, algo que poderíamos fazer melhor, ou qualquer outra sugestão. Lemos tudo.',
+    lbl_name:'Nome', lbl_optional:'(opcional)',
+    lbl_email:'Email', lbl_email_hint:'Para podermos responder à tua sugestão.',
+    lbl_title:'Título', lbl_message:'Mensagem',
+    ph_name:'O teu nome', ph_email:'o.teu@email.com',
+    ph_title:'Ex: Filtro por preço no marketplace',
+    ph_message:'Descreve a tua sugestão com o máximo de detalhe que quiseres...',
+    btn:'Enviar sugestão', btn_sending:'A enviar...',
+    fb_success:'Sugestão enviada! Obrigado pelo teu contributo.',
+    fb_error_empty_title:'O título é obrigatório.',
+    fb_error_empty_msg:'A mensagem é obrigatória.',
+    fb_error_send:'Ocorreu um erro ao enviar. Tenta novamente.',
+    f_copy:'© 2026 Catch This Idea · Todos os direitos reservados',
+    f_terms:'Termos', f_privacy:'Privacidade', f_cookies:'Cookies',
+  },
+  en: {
+    back:'Back to marketplace', page_ey:'Share your feedback',
+    page_h:'Got an idea to<br><em>improve</em> this?',
+    page_sub:"We want to know what you think — a missing feature, something we could do better, or any other suggestion. We read everything.",
+    lbl_name:'Name', lbl_optional:'(optional)',
+    lbl_email:'Email', lbl_email_hint:'So we can reply to your suggestion.',
+    lbl_title:'Title', lbl_message:'Message',
+    ph_name:'Your name', ph_email:'your@email.com',
+    ph_title:'E.g. Price filter in the marketplace',
+    ph_message:'Describe your suggestion in as much detail as you like...',
+    btn:'Send suggestion', btn_sending:'Sending...',
+    fb_success:'Suggestion sent! Thank you for your contribution.',
+    fb_error_empty_title:'Title is required.',
+    fb_error_empty_msg:'Message is required.',
+    fb_error_send:'An error occurred while sending. Please try again.',
+    f_copy:'© 2026 Catch This Idea · All rights reserved',
+    f_terms:'Terms', f_privacy:'Privacy', f_cookies:'Cookies',
+  },
+  fr: {
+    back:'Retour au marketplace', page_ey:'Partagez votre avis',
+    page_h:'Vous avez une idée pour<br><em>améliorer</em> ceci ?',
+    page_sub:"Dites-nous ce que vous pensez — une fonctionnalité manquante, quelque chose que nous pourrions améliorer, ou toute autre suggestion. Nous lisons tout.",
+    lbl_name:'Nom', lbl_optional:'(facultatif)',
+    lbl_email:'Email', lbl_email_hint:'Pour pouvoir répondre à votre suggestion.',
+    lbl_title:'Titre', lbl_message:'Message',
+    ph_name:'Votre nom', ph_email:'votre@email.com',
+    ph_title:'Ex : Filtre par prix dans le marketplace',
+    ph_message:'Décrivez votre suggestion avec autant de détails que vous souhaitez...',
+    btn:'Envoyer la suggestion', btn_sending:'Envoi en cours...',
+    fb_success:'Suggestion envoyée ! Merci pour votre contribution.',
+    fb_error_empty_title:'Le titre est obligatoire.',
+    fb_error_empty_msg:'Le message est obligatoire.',
+    fb_error_send:"Une erreur s'est produite lors de l'envoi. Veuillez réessayer.",
+    f_copy:'© 2026 Catch This Idea · Tous droits réservés',
+    f_terms:'Conditions', f_privacy:'Confidentialité', f_cookies:'Cookies',
+  },
+  es: {
+    back:'Volver al marketplace', page_ey:'Comparte tu opinión',
+    page_h:'¿Tienes una idea para<br><em>mejorar</em> esto?',
+    page_sub:'Queremos saber qué piensas — una funcionalidad que falta, algo que podríamos hacer mejor, o cualquier otra sugerencia. Lo leemos todo.',
+    lbl_name:'Nombre', lbl_optional:'(opcional)',
+    lbl_email:'Email', lbl_email_hint:'Para poder responder a tu sugerencia.',
+    lbl_title:'Título', lbl_message:'Mensaje',
+    ph_name:'Tu nombre', ph_email:'tu@email.com',
+    ph_title:'Ej: Filtro por precio en el marketplace',
+    ph_message:'Describe tu sugerencia con el detalle que quieras...',
+    btn:'Enviar sugerencia', btn_sending:'Enviando...',
+    fb_success:'¡Sugerencia enviada! Gracias por tu contribución.',
+    fb_error_empty_title:'El título es obligatorio.',
+    fb_error_empty_msg:'El mensaje es obligatorio.',
+    fb_error_send:'Se produjo un error al enviar. Inténtalo de nuevo.',
+    f_copy:'© 2026 Catch This Idea · Todos los derechos reservados',
+    f_terms:'Términos', f_privacy:'Privacidad', f_cookies:'Cookies',
+  },
+};
+
+let lang = localStorage.getItem('cti_lang') || 'pt';
+
+function render() {
+  const L = C[lang];
+  document.getElementById('back-txt').textContent       = L.back;
+  document.getElementById('page-ey').textContent        = L.page_ey;
+  document.getElementById('page-h').innerHTML           = L.page_h;
+  document.getElementById('page-sub').textContent       = L.page_sub;
+  document.getElementById('lbl-name').innerHTML         = L.lbl_name + ' <span style="font-weight:300;opacity:.6">'+L.lbl_optional+'</span>';
+  document.getElementById('lbl-email').innerHTML        = L.lbl_email + ' <span style="font-weight:300;opacity:.6">'+L.lbl_optional+'</span>';
+  document.getElementById('lbl-email-hint').textContent = L.lbl_email_hint;
+  document.getElementById('lbl-title').innerHTML        = L.lbl_title + ' <span class="required-star">*</span>';
+  document.getElementById('lbl-message').innerHTML      = L.lbl_message + ' <span class="required-star">*</span>';
+  document.getElementById('f-name').placeholder         = L.ph_name;
+  document.getElementById('f-email').placeholder        = L.ph_email;
+  document.getElementById('f-title').placeholder        = L.ph_title;
+  document.getElementById('f-message').placeholder      = L.ph_message;
+  document.getElementById('btn-txt').textContent        = L.btn;
+  document.getElementById('fb-success-txt').textContent = L.fb_success;
+  document.getElementById('f-copy').textContent         = L.f_copy;
+  document.getElementById('f-terms').textContent        = L.f_terms;
+  document.getElementById('f-privacy').textContent      = L.f_privacy;
+  document.getElementById('f-cookies').textContent      = L.f_cookies;
+  document.title = L.page_ey + ' — Catch This Idea';
+  document.querySelectorAll('.lang-pill').forEach(b =>
+    b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+}
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('cti_lang', l);
+  render();
+}
+
+function showFeedback(type, msg) {
+  ['success','error'].forEach(t => {
+    const el = document.getElementById('fb-'+t);
+    el.classList.remove('show');
+  });
+  if (type) {
+    const el = document.getElementById('fb-'+type);
+    if (msg) el.querySelector('span').textContent = msg;
+    el.classList.add('show');
+    el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+async function submitSuggest() {
+  const L      = C[lang];
+  const title   = document.getElementById('f-title').value.trim();
+  const message = document.getElementById('f-message').value.trim();
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const btn     = document.getElementById('btn-submit');
+  const btnTxt  = document.getElementById('btn-txt');
+
+  showFeedback(null);
+  if (!title)   { showFeedback('error', L.fb_error_empty_title); return; }
+  if (!message) { showFeedback('error', L.fb_error_empty_msg);   return; }
+
+  btn.disabled  = true;
+  btnTxt.textContent = L.btn_sending;
+
+  try {
+    const res = await fetch('/api/suggest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, lang, title, message }),
+    });
+    const data = await res.json();
+    if (res.ok && data.ok) {
+      showFeedback('success', L.fb_success);
+      document.getElementById('f-title').value   = '';
+      document.getElementById('f-message').value = '';
+      document.getElementById('f-name').value    = '';
+      document.getElementById('f-email').value   = '';
+    } else {
+      showFeedback('error', data.error || L.fb_error_send);
+    }
+  } catch {
+    showFeedback('error', L.fb_error_send);
+  } finally {
+    btn.disabled = false;
+    btnTxt.textContent = L.btn;
+  }
+}
+
+(function(){
+  const saved=localStorage.getItem('cti_theme');
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+})();
+function toggleDark() {
+  const d = document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className = d ? 'ti ti-sun' : 'ti ti-moon';
+  localStorage.setItem('cti_theme', d ? 'dark' : 'light');
+}
+function updateBackTop(){const btn=document.getElementById('back-top');if(!btn)return;const footer=document.querySelector('footer,.legal-footer');if(footer){const ft=footer.getBoundingClientRect().top;const vh=window.innerHeight;btn.style.bottom=ft<vh?(vh-ft+14)+'px':''}btn.classList.toggle('show',window.scrollY>350);}
+window.addEventListener('scroll',updateBackTop);
+render();
+</script>
+</body>
+</html>

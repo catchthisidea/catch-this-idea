@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Perfil — Catch This Idea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root{
+  --ink:#1a0f00;--paper:#fffaf4;--paper2:#f5ede0;
+  --or1:#e86000;--or2:#f07800;--or3:#fab030;--or-pale:#fff0e0;
+  --muted:#7a6040;--border:#ddd0b8;--serif:'Instrument Serif',serif;--sans:'DM Sans',sans-serif;
+}
+body.dark{--ink:#f0ece4;--paper:#1e1b18;--paper2:#252220;--or-pale:#2d2319;--muted:#9a8a70;--border:#3a3028}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height:100vh;transition:background .25s,color .25s}
+
+/* NAV */
+.nav{background:var(--paper);border-bottom:1px solid var(--border);padding:.85rem 2.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:var(--serif);font-size:1.15rem;text-decoration:none;color:var(--ink);font-style:italic}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:.875rem;color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-back:hover{color:var(--or1)}
+
+/* PROFILE HEADER */
+.profile-wrap{max-width:860px;margin:0 auto;padding:2.5rem 2rem}
+.profile-header{display:flex;gap:2rem;align-items:flex-start;margin-bottom:2rem;flex-wrap:wrap}
+.profile-avatar{width:96px;height:96px;border-radius:50%;background:var(--or1);color:#fff;font-family:var(--serif);font-size:2.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-info{flex:1;min-width:200px}
+.profile-name{font-family:var(--serif);font-size:1.8rem;font-weight:400;margin-bottom:.4rem}
+.profile-bio{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:500px}
+.profile-edit-btn{margin-top:.8rem;display:inline-flex;align-items:center;gap:6px;font-size:.8rem;padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;color:var(--muted);transition:border-color .15s,color .15s}
+.profile-edit-btn:hover{border-color:var(--or1);color:var(--or1)}
+
+/* STATS */
+.stats-bar{display:flex;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:2.5rem;background:var(--paper)}
+.stat{flex:1;padding:1.1rem 1.2rem;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-v{font-family:var(--serif);font-size:1.6rem;color:var(--or1)}
+.stat-l{font-size:.75rem;color:var(--muted);margin-top:2px;letter-spacing:.04em}
+
+/* IDEAS GRID */
+.section-hd{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:2.5rem}
+.idea-card{background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1rem;cursor:pointer;transition:border-color .2s,box-shadow .2s;text-decoration:none;color:inherit;display:block}
+.idea-card:hover{border-color:var(--or2);box-shadow:0 4px 16px rgba(232,96,0,.1)}
+.idea-em{font-size:1.4rem;margin-bottom:.4rem}
+.idea-cat{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.idea-title{font-family:var(--serif);font-size:.95rem;line-height:1.3;margin-bottom:.5rem}
+.idea-foot{display:flex;justify-content:space-between;align-items:center;font-size:.8rem}
+.idea-price{color:var(--or1);font-weight:500}
+.idea-views{color:var(--muted);display:flex;align-items:center;gap:3px}
+.empty-state{text-align:center;padding:3rem;color:var(--muted);background:var(--paper2);border-radius:12px;border:1px dashed var(--border)}
+
+/* REVIEWS */
+.reviews-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem}
+.review-card{background:var(--paper2);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+.review-stars{color:var(--or3);font-size:.9rem}
+.review-buyer{font-size:.8rem;font-weight:500}
+.review-date{font-size:.75rem;color:var(--muted)}
+.review-comment{font-size:.875rem;color:var(--muted);line-height:1.5}
+
+/* LOADING */
+.loading{text-align:center;padding:4rem;color:var(--muted)}
+.error-state{text-align:center;padding:4rem;color:#c62828}
+
+/* EDIT MODAL */
+.edit-overlay{position:fixed;inset:0;background:rgba(26,15,0,.45);z-index:200;display:none;align-items:center;justify-content:center}
+.edit-overlay.open{display:flex}
+.edit-box{background:var(--paper);border-radius:16px;padding:2rem;width:90%;max-width:440px;position:relative}
+.edit-title{font-family:var(--serif);font-size:1.3rem;margin-bottom:1.2rem}
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:.8rem;font-weight:500;margin-bottom:.3rem;color:var(--muted)}
+.fg input,.fg textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;font-family:var(--sans);font-size:.9rem;background:var(--paper);color:var(--ink);transition:border-color .15s}
+.fg input:focus,.fg textarea:focus{outline:none;border-color:var(--or1)}
+.fg textarea{resize:vertical;min-height:80px}
+.edit-actions{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.2rem}
+.btn-cancel{padding:.55rem 1.2rem;border:1px solid var(--border);border-radius:8px;background:transparent;cursor:pointer;font-size:.875rem}
+.btn-save{padding:.55rem 1.4rem;border:none;border-radius:8px;background:var(--or1);color:#fff;font-size:.875rem;font-weight:500;cursor:pointer;transition:background .15s}
+.btn-save:hover{background:var(--or2)}
+.btn-save:disabled{opacity:.6;cursor:default}
+.edit-close{position:absolute;top:.8rem;right:.8rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)}
+.edit-error{font-size:.8rem;color:#c62828;margin-top:.5rem;display:none}
+
+.dark-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:17px;transition:background .2s;flex-shrink:0}
+.dark-btn:hover{background:var(--paper2)}
+body.dark .edit-overlay{background:rgba(0,0,0,.65)}
+body.dark .fg input,body.dark .fg textarea{background:var(--paper2);border-color:var(--border)}
+
+@media(max-width:600px){
+  .nav{padding:.85rem 1rem}
+  .profile-wrap{padding:1.5rem 1rem}
+  .stats-bar{flex-wrap:wrap}
+  .stat{min-width:50%}
+  .ideas-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/index-app.html" class="nav-back"><i class="ti ti-arrow-left"></i> Voltar</a>
+  <a href="/index-app.html" class="nav-logo">Catch · <em>This</em> · Idea</a>
+  <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema"><i class="ti ti-moon" id="dark-icon"></i></button>
+</nav>
+
+<div class="profile-wrap" id="profile-wrap">
+  <div class="loading"><i class="ti ti-loader" style="font-size:2rem;color:var(--or1)"></i><br><br>A carregar perfil...</div>
+</div>
+
+<!-- Edit modal (only shown if own profile) -->
+<div class="edit-overlay" id="edit-overlay" onclick="if(event.target===this)closeEdit()">
+  <div class="edit-box">
+    <button class="edit-close" onclick="closeEdit()">×</button>
+    <div class="edit-title">Editar perfil</div>
+    <div class="fg">
+      <label>Nome de apresentação</label>
+      <input type="text" id="edit-name" maxlength="100" placeholder="O teu nome">
+    </div>
+    <div class="fg">
+      <label>Bio <span style="color:var(--muted);font-weight:400">(opcional · máx. 500 caracteres)</span></label>
+      <textarea id="edit-bio" maxlength="500" rows="3" placeholder="Descreve-te em poucas palavras..."></textarea>
+    </div>
+    <div class="edit-error" id="edit-error"></div>
+    <div class="edit-actions">
+      <button class="btn-cancel" onclick="closeEdit()">Cancelar</button>
+      <button class="btn-save" id="edit-save-btn" onclick="saveProfile()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const saved=localStorage.getItem('cti_theme');
+  const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+})();
+function toggleDark(){
+  const on=document.body.classList.toggle('dark');
+  document.getElementById('dark-icon').className=on?'ti ti-sun':'ti ti-moon';
+  localStorage.setItem('cti_theme',on?'dark':'light');
+}
+
+const params   = new URLSearchParams(location.search);
+const userId   = params.get('id');
+let _profile   = null;
+let _session   = null;
+let _isOwnProfile = false;
+
+// Load saved session
+try {
+  const raw = localStorage.getItem('cti_session');
+  if (raw) _session = JSON.parse(raw);
+} catch {}
+
+async function loadProfile() {
+  const wrap = document.getElementById('profile-wrap');
+  if (!userId) {
+    wrap.innerHTML = '<div class="error-state"><i class="ti ti-alert-circle" style="font-size:2rem"></i><br><br>Perfil não encontrado.</div>';
+    return;
+  }
+
+  try {
+    const res  = await fetch('/api/profile?user_id=' + userId);
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+    _profile   = data;
+    _isOwnProfile = _session?.user?.id === userId;
+    renderProfile(data);
+  } catch {
+    wrap.innerHTML = '<div class="error-state"><i class="ti ti-alert-circle" style="font-size:2rem"></i><br><br>Não foi possível carregar este perfil.</div>';
+  }
+}
+
+function renderProfile(p) {
+  const wrap   = document.getElementById('profile-wrap');
+  const initials = (p.display_name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const avatarHtml = p.avatar_url
+    ? `<img src="${p.avatar_url}" alt="${p.display_name}">`
+    : initials;
+  const editBtn = _isOwnProfile
+    ? `<button class="profile-edit-btn" onclick="openEdit()"><i class="ti ti-pencil"></i> Editar perfil</button>`
+    : '';
+  const bioHtml = p.bio
+    ? `<div class="profile-bio">${p.bio.replace(/</g,'&lt;')}</div>`
+    : (_isOwnProfile ? `<div class="profile-bio" style="font-style:italic;opacity:.6">Adiciona uma bio para te apresentares aos compradores.</div>` : '');
+
+  const stats = p.stats;
+  const starsDisplay = stats.avg_rating > 0
+    ? `★ ${stats.avg_rating.toFixed(1)}`
+    : '—';
+
+  // Ideas grid
+  const ideasHtml = p.ideas.length
+    ? p.ideas.map(idea => {
+        const price = idea.has_phases
+          ? '<span style="font-size:.75rem;color:#2e7d32;font-weight:500">Inclui resumo grátis</span>'
+          : `<span class="idea-price">${idea.price_display || ''}</span>`;
+        return `<div class="idea-card" onclick="window.location='/index-app.html?idea=${idea.id}'">
+          <div class="idea-em">${idea.emoji || '💡'}</div>
+          <div class="idea-cat">${idea.category}</div>
+          <div class="idea-title">${idea.title_pt}</div>
+          <div class="idea-foot">
+            ${price}
+            <span class="idea-views"><i class="ti ti-eye" style="font-size:11px"></i>${idea.views_count || 0}</span>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="empty-state"><i class="ti ti-bulb" style="font-size:2rem"></i><br><br>Ainda sem ideias publicadas.</div>';
+
+  // Reviews
+  const reviewsHtml = p.reviews.length
+    ? p.reviews.map(r => {
+        const stars = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
+        const date  = new Date(r.created_at).toLocaleDateString('pt-PT', { year:'numeric', month:'short', day:'numeric' });
+        const comment = r.comment ? `<div class="review-comment">${r.comment.replace(/</g,'&lt;')}</div>` : '';
+        return `<div class="review-card">
+          <div class="review-header">
+            <div>
+              <span class="review-stars">${stars}</span>
+              <span class="review-buyer" style="margin-left:.5rem">${(r.buyer_name||'Comprador').replace(/</g,'&lt;')}</span>
+            </div>
+            <span class="review-date">${date}</span>
+          </div>
+          ${comment}
+        </div>`;
+      }).join('')
+    : '<div class="empty-state" style="padding:1.5rem">Ainda sem avaliações.</div>';
+
+  wrap.innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar">${avatarHtml}</div>
+      <div class="profile-info">
+        <div class="profile-name">${(p.display_name || 'Utilizador').replace(/</g,'&lt;')}</div>
+        ${bioHtml}
+        ${editBtn}
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-v">${stats.ideas_active}</div><div class="stat-l">Ideias ativas</div></div>
+      <div class="stat"><div class="stat-v">${stats.total_sales}</div><div class="stat-l">Vendas totais</div></div>
+      <div class="stat"><div class="stat-v">${starsDisplay}</div><div class="stat-l">Avaliação média</div></div>
+      <div class="stat"><div class="stat-v">${stats.review_count}</div><div class="stat-l">Avaliações</div></div>
+    </div>
+
+    <div class="section-hd">Ideias disponíveis</div>
+    <div class="ideas-grid">${ideasHtml}</div>
+
+    <div class="section-hd">Avaliações de compradores</div>
+    <div class="reviews-list">${reviewsHtml}</div>
+  `;
+}
+
+// ── Edit modal ───────────────────────────────────────────────
+function openEdit() {
+  if (!_profile) return;
+  document.getElementById('edit-name').value = _profile.display_name || '';
+  document.getElementById('edit-bio').value  = _profile.bio || '';
+  document.getElementById('edit-error').style.display = 'none';
+  document.getElementById('edit-overlay').classList.add('open');
+}
+function closeEdit() {
+  document.getElementById('edit-overlay').classList.remove('open');
+}
+async function saveProfile() {
+  if (!_session?.access_token) return;
+  const btn  = document.getElementById('edit-save-btn');
+  const errEl = document.getElementById('edit-error');
+  const name = document.getElementById('edit-name').value.trim();
+  const bio  = document.getElementById('edit-bio').value.trim();
+
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'A guardar...';
+
+  try {
+    const res = await fetch('/api/profile', {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _session.access_token },
+      body:    JSON.stringify({ display_name: name, bio }),
+    });
+    if (!res.ok) throw new Error((await res.json()).error || 'Erro ao guardar');
+    closeEdit();
+    await loadProfile();
+  } catch (e) {
+    errEl.textContent    = e.message;
+    errEl.style.display  = 'block';
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Guardar';
+  }
+}
+
+loadProfile();
+</script>
+</body>
+</html>

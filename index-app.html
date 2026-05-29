@@ -2,6 +2,7 @@
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Catch This Idea</title>
 <link rel="icon" type="image/x-icon" href="/logotipo.ico">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
@@ -18,7 +19,16 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .logo-type{font-family:var(--serif);font-size:1.45rem;line-height:1.05;color:var(--ink)}
 .logo-type em{font-style:italic}
 .logo-type .sep{color:var(--or1);margin:0 1px}
-.nav-center{display:flex;gap:1.5rem}
+.nav-center{display:flex;align-items:center;gap:1.5rem}
+.search-wrap{position:relative;display:flex;align-items:center}
+.search-icon{position:absolute;left:9px;color:var(--muted);font-size:15px;pointer-events:none}
+.search-input{width:210px;padding:6px 28px 6px 30px;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:13px;outline:none;transition:border-color .2s,width .25s}
+.search-input:focus{border-color:var(--or1);width:270px}
+.search-input::placeholder{color:var(--muted)}
+.search-clear{position:absolute;right:7px;color:var(--muted);font-size:14px;cursor:pointer;background:none;border:none;padding:2px;display:none;align-items:center;line-height:1;font-family:var(--sans)}
+.search-clear.on{display:flex}
+.search-clear:hover{color:var(--ink)}
+.no-results{padding:3rem;text-align:center;color:var(--muted);font-size:14px;grid-column:1/-1}
 .nav-lk{font-size:13px;color:var(--muted);text-decoration:none}
 .nav-lk:hover{color:var(--ink)}
 .nav-right{display:flex;align-items:center;gap:10px}
@@ -30,7 +40,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .lang-opt{display:flex;align-items:center;gap:9px;padding:8px 13px;font-size:13px;cursor:pointer;color:var(--ink)}
 .lang-opt:hover{background:var(--paper2)}
 .lang-opt.active{color:var(--or1);font-weight:500}
-.lang-opt .lf{font-size:15px}
+.lang-opt .lf{width:20px;height:15px;object-fit:cover;border-radius:2px;flex-shrink:0}
+.cur-flag{width:20px;height:15px;object-fit:cover;border-radius:2px;vertical-align:middle}
 .lang-opt .lc{font-size:11px;color:var(--muted);margin-left:auto}
 .btn-pill{background:var(--or1);color:#fff;padding:7px 18px;border-radius:40px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:var(--sans)}
 .btn-pill:hover{background:var(--or2)}
@@ -47,7 +58,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .user-avatar{width:26px;height:26px;border-radius:50%;background:var(--or1);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
 .user-dd{position:absolute;top:calc(100% + 6px);right:0;background:var(--paper);border:1px solid var(--border);border-radius:6px;min-width:200px;z-index:200;display:none;box-shadow:0 4px 16px rgba(0,0,0,.08)}
 .user-dd.open{display:block}
-.user-dd-name{padding:10px 14px 2px;font-size:13px;font-weight:500}
+.user-dd-name{padding:10px 14px 2px;font-size:13px;font-weight:500;border-radius:4px 4px 0 0;transition:color .15s}
+.user-dd-name:hover{color:var(--or1)}
 .user-dd-email{padding:0 14px 8px;font-size:11px;color:var(--muted)}
 .user-dd-item{padding:8px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--ink)}
 .user-dd-item:hover{background:var(--paper2)}
@@ -62,6 +74,16 @@ body.dark .auth-error{background:#3a1a18;color:#f08878;border-color:#5a2a26}
 body.dark .auth-success{background:#0e2e14;color:#60c070;border-color:#1e5c26}
 .wallet-balance-card{background:linear-gradient(135deg,var(--or1),var(--or3));border-radius:12px;padding:1.5rem 1.8rem;color:#fff;text-align:center}
 .wallet-amount{font-family:var(--serif);font-size:2.8rem;line-height:1}
+.wallet-tier-card{background:var(--paper2);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;margin-top:.9rem}
+.wallet-tier-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.wallet-tier-badge{display:flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;color:var(--ink)}
+.wallet-tier-badge i{color:var(--or1);font-size:15px}
+.wallet-tier-rate-label{font-size:.8rem;color:var(--muted)}
+.wallet-tier-rate-label strong{color:var(--or1)}
+.wallet-tier-pts-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem}
+.wallet-tier-pts{font-size:.78rem;color:var(--muted)}
+.wallet-tier-bar-wrap{background:var(--border);border-radius:20px;height:5px;overflow:hidden}
+.wallet-tier-bar-fill{height:100%;background:linear-gradient(90deg,var(--or1),var(--or3));border-radius:20px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 .tx-item{display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--border)}
 .tx-item:last-child{border-bottom:none}
 .tx-desc{font-size:13px;color:var(--ink)}
@@ -84,6 +106,13 @@ body.dark .auth-success{background:#0e2e14;color:#60c070;border-color:#1e5c26}
 .hnum{padding:1rem 1.1rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .hnum-v{font-family:var(--serif);font-size:1.7rem;line-height:1}
 .hnum-l{font-size:11px;color:var(--muted);margin-top:3px}
+.back-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--or1);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(232,96,0,.35);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s,background .15s;z-index:500;pointer-events:none}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.back-top:hover{background:var(--or2)}
+.hnum-loyalty{font-size:11px;color:var(--or1);text-decoration:none;margin-top:5px;display:inline-block;font-weight:500;transition:opacity .15s}
+.hnum-loyalty:hover{opacity:.75;text-decoration:underline}
+.hnum-flags{display:flex;gap:5px;margin-top:7px}
+.hnum-flags img{width:22px;height:16px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
 .hero-right{padding-top:.5rem}
 .feat-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem}
 .fcard{border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px;cursor:pointer;transition:transform .15s;background:var(--paper)}
@@ -104,7 +133,9 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
 .fcard-seller{font-size:11px;color:var(--muted)}
 .divider{max-width:1100px;margin:2.5rem auto 0;padding:0 2.5rem}
 .divider hr{border:none;border-top:1px solid var(--border)}
+.market-section{background:var(--paper2);border-bottom:1px solid var(--border)}
 .market{max-width:1100px;margin:0 auto;padding:2.5rem 2.5rem}
+#listings,#main-grid,.how,.loyalty{scroll-margin-top:90px}
 .market-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:.8rem}
 .market-title{font-family:var(--serif);font-size:1.7rem;font-weight:400}
 .cats{display:flex;gap:7px;flex-wrap:wrap}
@@ -122,18 +153,19 @@ body.dark .b-new{background:#0e2e14;color:#60c070}
 .card-price{font-size:13px;font-weight:500;color:var(--or1)}
 .card-opts{font-size:11px;color:var(--muted)}
 .corner-tri{position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 26px 26px 0;border-color:transparent var(--or1) transparent transparent}
-.how{background:#111111;color:#fffaf4;padding:3.5rem 2.5rem}
-body.dark .how{background:#0a0a0a;color:#f0ece4}
+.how{background:#1c1000;color:#fffaf4;padding:3.5rem 2.5rem}
+body.dark .how{background:#110900;color:#f0ece4}
 .how-inner{max-width:1100px;margin:0 auto}
 .how-ey{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--or2);margin-bottom:1rem}
 .how h2{font-family:var(--serif);font-size:2.3rem;font-weight:400;margin-bottom:2.5rem;line-height:1.15}
 .how h2 em{font-style:italic;color:var(--or3)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid rgba(255,255,255,.12)}
-.step{padding:1.4rem;border-right:1px solid rgba(255,255,255,.12)}
-.step-n{font-family:var(--serif);color:var(--or2);font-size:1rem;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem}
-.step-emoji{font-size:1.25rem;color:var(--or3);line-height:1}
-.step-t{font-size:.9rem;font-weight:500;margin-bottom:.45rem}
-.step-d{font-size:12.5px;color:rgba(255,255,255,.68);line-height:1.65}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.step{background:rgba(255,255,255,.04);border:1px solid rgba(250,176,48,.18);border-radius:16px;padding:2rem 1.8rem;position:relative;transition:transform .22s,box-shadow .22s,border-color .22s}
+.step:hover{transform:translateY(-5px);box-shadow:0 14px 44px rgba(232,96,0,.18);border-color:rgba(250,176,48,.45)}
+.step-badge{position:absolute;top:1.1rem;right:1.3rem;font-size:11px;font-weight:600;letter-spacing:.07em;color:var(--or3);background:rgba(250,176,48,.1);border:1px solid rgba(250,176,48,.22);padding:2px 9px;border-radius:999px;font-family:var(--sans)}
+.step-icon{width:54px;height:54px;background:linear-gradient(135deg,var(--or1),var(--or3));border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.55rem;color:#fff;margin-bottom:1.3rem;box-shadow:0 4px 16px rgba(232,96,0,.35)}
+.step-t{font-size:1rem;font-weight:500;color:#f0ece4;margin-bottom:.5rem;font-family:var(--sans)}
+.step-d{font-size:13px;color:rgba(255,255,255,.52);line-height:1.72}
 .sell{max-width:1100px;margin:0 auto;padding:2.5rem 2.5rem}
 .sell-box{background:var(--paper2);border:1px solid var(--border);border-radius:3px;padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem}
 .sell-box h3{font-family:var(--serif);font-size:1.35rem;font-weight:400;margin-bottom:.3rem}
@@ -218,6 +250,321 @@ footer{background:var(--paper2);border-top:1px solid var(--border);padding:3rem 
 .splash img{width:100%;height:auto;opacity:.75;filter:drop-shadow(0 0 24px rgba(232,96,0,.25))}
 body.dark .splash img{opacity:.55}
 @media(max-width:1280px){.splash{display:none}}
+/* Loyalty section */
+.loyalty{background:var(--paper2);padding:4rem 2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.loyalty-inner{max-width:1100px;margin:0 auto}
+.loyalty-ey{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--or1);margin-bottom:.8rem}
+.loyalty-h{font-family:var(--serif);font-size:2.2rem;color:var(--ink);margin-bottom:.6rem;line-height:1.15}
+.loyalty-sub{font-size:15px;color:var(--muted);max-width:540px;margin-bottom:2.5rem;line-height:1.65}
+.loyalty-tiers{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-bottom:1.5rem}
+.loyalty-tier{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1rem;text-align:center;transition:transform .2s,box-shadow .2s}
+.loyalty-tier:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+.loyalty-tier.top{border-color:var(--or1);background:var(--or-pale)}
+.tier-icon{font-size:1.4rem;color:var(--or2);margin-bottom:.4rem;line-height:1}
+.tier-pct{font-family:var(--serif);font-size:1.9rem;color:var(--ink);line-height:1;margin-bottom:.25rem}
+.loyalty-tier.top .tier-pct{color:var(--or1)}
+.tier-name{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.tier-pts{font-size:11.5px;color:var(--muted);line-height:1.5}
+.tier-pts strong{color:var(--ink);font-weight:500}
+.loyalty-note{font-size:13px;color:var(--muted);text-align:center;margin-top:.5rem}
+.loyalty-note a{color:var(--or1);text-decoration:none;font-weight:500}
+.loyalty-note a:hover{text-decoration:underline}
+/* Sell modal loyalty hint */
+.m-loyalty-hint{background:var(--or-pale);border:1px solid #fad0a0;border-radius:8px;padding:.75rem 1rem;margin-top:1rem;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:.6rem;line-height:1.5}
+.m-loyalty-hint i{color:var(--or1);font-size:17px;flex-shrink:0}
+.m-loyalty-hint a{color:var(--or1);font-weight:500;text-decoration:none}
+.m-loyalty-hint a:hover{text-decoration:underline}
+
+/* ═══════════════════════════════════════════════════
+   PHASED IDEAS
+═══════════════════════════════════════════════════ */
+.m-phases-hd{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--or1);margin-bottom:1rem}
+.ph-row{display:flex;align-items:flex-start;gap:.85rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.ph-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.ph-icon.ph-free{background:#e8f5e9;color:#2e7d32}
+.ph-icon.ph-paid{background:var(--or-pale);color:var(--or1)}
+body.dark .ph-icon.ph-free{background:#0e2e14;color:#60c070}
+.ph-body{flex:1;min-width:0}
+.ph-label{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+.ph-label.ph-free-lbl{color:#2e7d32}
+body.dark .ph-label.ph-free-lbl{color:#60c070}
+.ph-name{font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:.22rem;line-height:1.3}
+.ph-desc{font-size:12px;color:var(--muted);line-height:1.55}
+.ph-right{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;flex-shrink:0;padding-left:.5rem}
+.ph-price{font-family:var(--serif);font-size:1.05rem;color:var(--ink);line-height:1;white-space:nowrap}
+.ph-price-free{font-size:.78rem;font-family:var(--sans);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2e7d32;white-space:nowrap}
+body.dark .ph-price-free{color:#60c070}
+.ph-btn{padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;border:1px solid;transition:background .15s,color .15s,border-color .15s}
+.ph-btn-free{background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7}
+.ph-btn-free:hover{background:#c8e6c9;border-color:#81c784}
+body.dark .ph-btn-free{background:#0e2e14;color:#60c070;border-color:#1e5c26}
+.ph-btn-pay{background:var(--or1);color:#fff;border-color:var(--or1)}
+.ph-btn-pay:hover{background:var(--or2);border-color:var(--or2)}
+.ph-pack{background:linear-gradient(135deg,var(--or1) 0%,var(--or2) 55%,var(--or3) 100%);border-radius:10px;padding:1.1rem 1.1rem .9rem;margin-top:.9rem;position:relative;overflow:hidden}
+.ph-pack::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .15s;pointer-events:none}
+.ph-pack:hover::after{background:rgba(255,255,255,.06)}
+.ph-pack-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}
+.ph-pack-badge{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:rgba(255,255,255,.22);padding:2px 9px;border-radius:999px;color:#fff}
+.ph-pack-price{font-family:var(--serif);font-size:1.5rem;color:#fff;line-height:1}
+.ph-pack-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:.2rem}
+.ph-pack-sub{font-size:11.5px;color:rgba(255,255,255,.78)}
+.ph-pack-cta{width:100%;margin-top:.85rem;padding:9px;background:#fff;color:var(--or1);border:none;border-radius:8px;font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.ph-pack-cta:hover{opacity:.9}
+/* Card badge */
+.badge-phase{font-size:10px;padding:2px 7px;border-radius:2px;font-weight:600;background:#e8f5e9;color:#2e7d32;letter-spacing:.04em}
+body.dark .badge-phase{background:#0e2e14;color:#60c070}
+/* Sell modal phase fields */
+.phase-toggle-row{display:flex;align-items:center;gap:9px;cursor:pointer;padding:.5rem 0;margin-bottom:.2rem}
+.phase-toggle-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--or1);cursor:pointer;flex-shrink:0}
+.phase-toggle-label{font-size:13.5px;font-weight:500;color:var(--ink)}
+.phase-toggle-hint{font-size:11px;color:var(--muted)}
+.sell-phases-box{background:var(--paper2);border:1px solid var(--border);border-radius:8px;padding:1rem 1rem .6rem;margin-top:.2rem}
+.sell-phases-hd{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.85rem}
+.ph-sep{border:none;border-top:1px solid var(--border);margin:.4rem 0 .8rem}
+.pack-hint{font-size:12px;color:#2e7d32;margin-top:.3rem;font-weight:500}
+body.dark .pack-hint{color:#60c070}
+
+/* ═══════════════════════════════════════════════════
+   SELL MODAL — LEGAL DISCLAIMER
+═══════════════════════════════════════════════════ */
+.sell-legal-box{background:#fff8f0;border:1px solid #f5c890;border-radius:8px;padding:.85rem 1rem;margin-bottom:.8rem;font-size:12.5px}
+body.dark .sell-legal-box{background:#2a1a08;border-color:#4a3520}
+.sell-legal-title{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#c25000;display:flex;align-items:center;gap:6px;margin-bottom:.5rem}
+body.dark .sell-legal-title{color:#f09050}
+.sell-legal-list{color:var(--muted);line-height:1.75;padding-left:1.3rem;margin:.3rem 0 .6rem}
+.sell-legal-list li{margin-bottom:.1rem}
+.sell-legal-note{font-size:11.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--or-border);padding-top:.55rem;margin-top:.4rem}
+body.dark .sell-legal-note{border-color:#4a3520}
+.sell-legal-note a{color:var(--or1);text-decoration:none}
+.sell-legal-note a:hover{text-decoration:underline}
+.sell-confirm-row{display:flex;align-items:flex-start;gap:9px;padding:.6rem 0 .8rem;font-size:12.5px;color:var(--ink);line-height:1.55}
+.sell-confirm-row input[type=checkbox]{width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--or1);cursor:pointer}
+.sell-confirm-row a{color:var(--or1);text-decoration:none}
+.sell-confirm-row a:hover{text-decoration:underline}
+.btn-cta:disabled{opacity:.45;cursor:not-allowed}
+
+/* ═══════════════════════════════════════════════════
+   CAROUSEL — MAIS VISUALIZADAS
+═══════════════════════════════════════════════════ */
+.carousel-section{max-width:1100px;margin:0 auto;padding:2rem 2.5rem 0}
+.carousel-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.carousel-hl{display:flex;align-items:baseline;gap:.65rem}
+.carousel-ey{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--or1)}
+.carousel-htxt{font-family:var(--serif);font-size:1.2rem;font-weight:400}
+.carousel-arrows{display:flex;gap:6px}
+.carousel-arrow{width:32px;height:32px;border-radius:50%;background:var(--paper);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--muted);transition:background .15s,border-color .15s,color .15s}
+.carousel-arrow:hover{background:var(--or-pale);border-color:var(--or-border);color:var(--or1)}
+.carousel-track{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px}
+.carousel-track::-webkit-scrollbar{display:none}
+.csl-card{min-width:230px;max-width:230px;background:var(--paper);border:1.5px solid var(--border);border-radius:12px;padding:1rem 1rem .85rem;cursor:pointer;transition:border-color .2s,box-shadow .2s;scroll-snap-align:start;flex-shrink:0}
+.csl-card:hover{border-color:var(--or-border);box-shadow:0 4px 16px rgba(232,96,0,.1)}
+.csl-em{font-size:1.5rem;line-height:1;margin-bottom:.5rem}
+.csl-cat{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:.2rem}
+.csl-title{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.4;margin-bottom:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.csl-foot{display:flex;align-items:center;justify-content:space-between;font-size:11.5px}
+.csl-views{color:var(--muted);display:flex;align-items:center;gap:3px}
+.csl-price{font-family:var(--serif);font-size:.95rem;color:var(--or1)}
+.csl-stars{color:var(--or3);letter-spacing:.5px;font-size:12px}
+@media(max-width:600px){.carousel-section{padding:1.5rem 1rem 0}.csl-card{min-width:195px;max-width:195px}}
+
+/* ═══════════════════════════════════════════════════
+   DASHBOARD TABS
+═══════════════════════════════════════════════════ */
+.ud-tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:1.2rem;overflow-x:auto;scrollbar-width:none}
+.ud-tabs::-webkit-scrollbar{display:none}
+.ud-tab{flex:0 0 auto;padding:9px 10px;background:none;border:none;border-bottom:2.5px solid transparent;font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:-1.5px;transition:color .15s,border-color .15s;white-space:nowrap}
+.ud-tab.active{border-bottom-color:var(--or1);color:var(--or1);font-weight:500}
+.ud-panel{display:none}
+.ud-panel.active{display:block}
+.ideas-tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:.4rem}
+.ideas-tbl th{text-align:left;padding:5px 7px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--border);white-space:nowrap}
+.ideas-tbl td{padding:8px 7px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ideas-tbl tr:last-child td{border-bottom:none}
+.idea-status{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.s-active{background:#e8f5e9;color:#2e7d32}
+.s-hidden{background:var(--paper2);color:var(--muted);border:1px solid var(--border)}
+.s-invalidated{background:#fce4e4;color:#c62828}
+.s-pending{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+.s-flagged{background:#fce4ec;color:#ad1457;border:1px solid #f48fb1}
+body.dark .s-active{background:#0e2e14;color:#60c070}
+body.dark .s-invalidated{background:#3a1a18;color:#f08878}
+body.dark .s-pending{background:#2d1a08;color:#ff9a4a;border-color:#5a3a16}
+body.dark .s-flagged{background:#2a0a14;color:#ff6090;border-color:#5a1830}
+.ia-btn{padding:3px 9px;border-radius:999px;border:1px solid;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:background .15s;white-space:nowrap}
+.ia-hide{border-color:var(--border);color:var(--muted);background:transparent}.ia-hide:hover{background:var(--paper2)}
+.ia-show{border-color:#81c784;color:#2e7d32;background:#e8f5e9}.ia-show:hover{background:#c8e6c9}
+.ia-inv{border-color:#ef9a9a;color:#c62828;background:transparent;margin-left:3px}.ia-inv:hover{background:#fce4e4}
+.ud-empty{text-align:center;padding:2.5rem;color:var(--muted);font-size:13px}
+.ud-tab-admin{color:#7c3aed!important;flex:0 0 auto;padding:9px 12px}
+.ud-tab-admin.active{border-bottom-color:#7c3aed!important;color:#7c3aed!important}
+.admin-section-hd{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:1rem 0 .5rem}
+.admin-section-hd:first-child{margin-top:0}
+.admin-card{border:1px solid var(--border);border-radius:8px;padding:.85rem 1rem;margin-bottom:.6rem;background:var(--paper)}
+.admin-card-flagged{border-color:#f48fb1;background:#fce4ec}
+body.dark .admin-card-flagged{background:#2a0a14;border-color:#5a1830}
+.admin-card-title{font-weight:600;font-size:13.5px;margin-bottom:2px}
+.admin-card-meta{font-size:11px;color:var(--muted);margin-bottom:.5rem}
+.admin-card-desc{font-size:12.5px;color:var(--ink);line-height:1.55;margin-bottom:.65rem;max-height:60px;overflow:hidden}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+.admin-btn{padding:4px 12px;border-radius:999px;border:1.5px solid;font-size:11.5px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:background .15s}
+.admin-btn-approve{border-color:#2e7d32;color:#2e7d32;background:transparent}.admin-btn-approve:hover{background:#e8f5e9}
+.admin-btn-reject{border-color:#c62828;color:#c62828;background:transparent}.admin-btn-reject:hover{background:#fce4e4}
+.admin-btn-ai{border-color:var(--or1);color:var(--or1);background:transparent}.admin-btn-ai:hover{background:var(--or-pale)}
+.admin-empty{text-align:center;padding:1.5rem;color:var(--muted);font-size:13px;background:var(--paper2);border-radius:8px}
+.ud-sell-hint{background:var(--or-pale);border:1px solid var(--or-border);border-radius:8px;padding:.75rem 1rem;font-size:12.5px;color:var(--or1);margin-top:1rem;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ud-sell-hint:hover{background:#fde8c8}
+
+/* ═══════════════════════════════════════════════════
+   SELL MODAL — IMAGE UPLOAD
+═══════════════════════════════════════════════════ */
+.sell-img-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:1.1rem;border:2px dashed var(--border);border-radius:8px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;color:var(--muted)}
+.sell-img-drop:hover{border-color:var(--or1);background:var(--or-pale)}
+.sell-img-drop i{font-size:1.8rem;color:var(--muted)}
+.sell-img-drop .img-drop-txt{font-size:13px;color:var(--ink)}
+.sell-img-types{font-size:10.5px;color:var(--muted)}
+.sell-img-preview{position:relative;display:inline-block;border-radius:8px;overflow:hidden;border:1px solid var(--border);max-width:100%}
+.sell-img-preview img{max-width:100%;max-height:140px;object-fit:cover;display:block}
+.sell-img-remove{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.65);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;font-family:var(--sans)}
+.sell-img-status{font-size:12px;margin-top:5px;padding:5px 9px;border-radius:6px;display:inline-block}
+.sell-img-status.loading{color:var(--muted)}
+.sell-img-status.error{background:#fff0ee;color:#c0392b;border:1px solid #f5c6c0}
+.sell-img-status.ok{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+.opt-lbl{font-weight:400;color:var(--muted);font-size:10px;letter-spacing:0;text-transform:none;margin-left:3px}
+.sell-doc-drop i{color:#e63946}
+.sell-doc-preview{display:flex;align-items:center;gap:10px;padding:.7rem .9rem;border:1px solid var(--border);border-radius:8px;background:var(--paper2)}
+/* ── Toast de regresso Stripe ── */
+.stripe-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);padding:.85rem 1.4rem;border-radius:10px;font-size:14px;font-weight:500;max-width:90vw;text-align:center;z-index:9999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.stripe-toast.show{transform:translateX(-50%) translateY(0)}
+.stripe-toast-ok{background:#1e7e34;color:#fff}
+.stripe-toast-warn{background:#856404;color:#fff}
+body.dark .stripe-toast-ok{background:#155724}
+body.dark .stripe-toast-warn{background:#533f03}
+
+/* ═══════════════════════════════════════════════════
+   STAR RATING MODAL
+═══════════════════════════════════════════════════ */
+.star-row{display:flex;justify-content:center;gap:8px;margin:.5rem 0 1.1rem;cursor:pointer}
+.star-row .star{font-size:2rem;color:var(--border);transition:color .1s;line-height:1;user-select:none}
+.star-row .star.on,.star-row .star.hover{color:var(--or3)}
+.rate-comment{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);background:var(--paper);color:var(--ink);resize:none;outline:none;margin-bottom:.9rem;transition:border-color .2s}
+.rate-comment:focus{border-color:var(--or1)}
+.rate-success{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;border-radius:8px;padding:.85rem 1rem;font-size:13px;text-align:center}
+
+/* ═══════════════════════════════════════════════════
+   HAMBURGER / MOBILE NAV
+═══════════════════════════════════════════════════ */
+.mob-toggle{display:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--paper);color:var(--ink);cursor:pointer;align-items:center;justify-content:center;font-size:19px;transition:background .2s,color .2s;flex-shrink:0}
+.mob-toggle:hover{background:var(--paper2)}
+.mob-toggle.active{background:var(--or-pale);border-color:var(--or-border);color:var(--or1)}
+.mob-nav{display:none;position:fixed;left:0;right:0;z-index:99;background:var(--paper);border-bottom:2px solid var(--border);padding:1rem 1.2rem 1.2rem;box-shadow:0 8px 28px rgba(0,0,0,.12);overflow-y:auto}
+.mob-nav.open{display:block;animation:mobSlide .18s ease}
+@keyframes mobSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.mob-search-wrap{position:relative;margin-bottom:.9rem}
+.mob-si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+.mob-search-inp{width:100%;padding:9px 12px 9px 32px;border:1.5px solid var(--border);border-radius:8px;background:var(--paper2);color:var(--ink);font-family:var(--sans);font-size:14px;outline:none;transition:border-color .2s}
+.mob-search-inp:focus{border-color:var(--or1)}
+.mob-search-inp::placeholder{color:var(--muted)}
+.mob-links{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:.9rem}
+.mob-lk{display:block;padding:.8rem 1rem;font-size:14px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);background:var(--paper);cursor:pointer;transition:background .15s,color .15s}
+.mob-lk:last-child{border-bottom:none}
+.mob-lk:hover{background:var(--or-pale);color:var(--or1)}
+.mob-lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.9rem}
+.mob-lang-opt{display:flex;align-items:center;gap:8px;padding:.6rem .85rem;border:1px solid var(--border);border-radius:7px;cursor:pointer;font-size:13px;color:var(--ink);background:var(--paper);transition:background .15s,border-color .15s}
+.mob-lang-opt:hover{background:var(--paper2);border-color:var(--or-border)}
+.mob-lang-opt.mob-lang-active{border-color:var(--or1);background:var(--or-pale);color:var(--or1);font-weight:500}
+.mob-flag{width:20px;height:15px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.1);flex-shrink:0}
+.mob-auth-row{display:flex;gap:8px;align-items:center}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤900px)
+═══════════════════════════════════════════════════ */
+@media(max-width:900px){
+  nav{padding:.75rem 1.5rem}
+  .nav-center{display:none}
+  .mob-toggle{display:flex}
+  .nav-xplore{display:none}
+  .hero{grid-template-columns:1fr;gap:2rem;padding:2.5rem 1.5rem 0}
+  .hero h1{font-size:2.8rem}
+  .hero-right{padding-top:0}
+  .steps{grid-template-columns:1fr;gap:1rem}
+  .step{padding:1.5rem 1.4rem}
+  .loyalty-tiers{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .sell-box{flex-direction:column;align-items:flex-start}
+  .sell-box>button{width:100%}
+  .app-strip-inner{flex-wrap:wrap}
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤600px)
+═══════════════════════════════════════════════════ */
+@media(max-width:600px){
+  nav{padding:.65rem 1rem}
+  .logo-icon{width:44px;height:44px}
+  .logo-type{font-size:1.15rem}
+  .lang-wrap{display:none}
+  #nav-loggedout{display:none!important}
+  #nav-loggedin{display:none!important}
+
+  .hero{grid-template-columns:1fr;padding:1.5rem 1rem 0;gap:1.5rem}
+  .hero h1{font-size:1.95rem}
+  .hero-sub{font-size:.88rem;margin-bottom:1.4rem}
+  .hero-ctas{flex-direction:column;gap:8px}
+  .hero-ctas .cta-main,.hero-ctas .cta-ghost{width:100%;justify-content:center;text-align:center}
+  .hero-nums{grid-template-columns:1fr 1fr}
+  .hnum:last-child{grid-column:1/-1}
+
+  .divider{padding:0 1rem;margin:1.2rem auto 0}
+
+  .market{padding:1.5rem 1rem}
+  .market-top{flex-direction:column;align-items:flex-start;gap:.6rem}
+  .cats{gap:5px}
+  .cat{font-size:11px;padding:4px 10px}
+  .grid{grid-template-columns:1fr}
+
+  .how{padding:2.5rem 1rem}
+  .how h2{font-size:1.7rem;margin-bottom:1.5rem}
+  .step{padding:1.5rem 1.2rem}
+
+  .loyalty{padding:2.5rem 1rem}
+  .loyalty-h{font-size:1.6rem}
+  .loyalty-tiers{grid-template-columns:repeat(2,1fr);gap:.7rem}
+  .loyalty-tier{padding:1rem .85rem}
+
+  .sell{padding:1.2rem 1rem}
+  .sell-box{padding:1.5rem 1.2rem}
+
+  .app-strip{padding:1.2rem 1rem}
+  .app-strip-inner{flex-direction:column;gap:1rem;align-items:flex-start}
+  .app-strip-badges{width:100%}
+  .app-badge{flex:1;justify-content:center;font-size:12px}
+
+  footer{padding:2rem 1rem 0}
+  .footer-grid{grid-template-columns:1fr;gap:1.5rem}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:.8rem}
+  .footer-legal{gap:1rem}
+
+  .mwrap{padding:.75rem}
+  .modal{padding:1.4rem;max-width:calc(100vw - 1.5rem);width:100%;max-height:88vh;border-radius:10px}
+  .m-overlay{padding:.75rem}
+  .m-box{padding:1.4rem;max-width:calc(100vw - 1.5rem);width:100%}
+  .fg2{grid-template-columns:1fr}
+
+  .back-top{width:40px;height:40px;font-size:16px;right:1rem}
+}
+/* ── Cookie Banner ─────────────────────────────── */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:var(--paper);border-top:1px solid var(--border);box-shadow:0 -4px 24px rgba(26,15,0,.1);padding:.9rem 2.5rem}
+.ck-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.ck-text{flex:1;min-width:200px;font-size:13px;color:var(--muted);line-height:1.6}
+.ck-link{color:var(--or1);text-decoration:none;font-weight:500}
+.ck-link:hover{text-decoration:underline}
+.ck-btns{display:flex;gap:.6rem;flex-shrink:0}
+.ck-decline{padding:8px 16px;border:1px solid var(--border);border-radius:40px;background:transparent;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:border-color .15s,color .15s}
+.ck-decline:hover{border-color:var(--ink);color:var(--ink)}
+.ck-accept{padding:8px 18px;border:none;border-radius:40px;background:var(--or1);color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:background .15s}
+.ck-accept:hover{background:var(--or2)}
+@media(max-width:600px){#cookie-banner{padding:.8rem 1rem}.ck-inner{gap:.7rem}.ck-btns{width:100%;justify-content:flex-end}}
 </style>
 </head>
 <body>
@@ -232,25 +579,34 @@ body.dark .splash img{opacity:.55}
     <div class="logo-type">Catch<span class="sep">·</span><em>This</em><span class="sep">·</span>Idea</div>
   </div>
   <div class="nav-center">
-    <a href="#" class="nav-lk" data-t="nav_explore">Explorar</a>
-    <a href="#" class="nav-lk" data-t="nav_cats">Categorias</a>
-    <a href="#" class="nav-lk" data-t="nav_how">Como funciona</a>
+    <div class="search-wrap">
+      <i class="ti ti-search search-icon"></i>
+      <input class="search-input" id="search-input" type="search" autocomplete="off"
+             placeholder="Pesquisar ideias..."
+             oninput="handleSearch(this.value)"
+             onsearch="handleSearch(this.value)"/>
+      <button class="search-clear" id="search-clear" onclick="clearSearch()" aria-label="Limpar pesquisa"><i class="ti ti-x"></i></button>
+    </div>
+    <a href="#listings" class="nav-lk" data-t="nav_cats" onclick="event.preventDefault();document.getElementById('listings').scrollIntoView({behavior:'smooth'})">Categorias</a>
+    <a href="#how" class="nav-lk" data-t="nav_how" onclick="event.preventDefault();document.querySelector('.how').scrollIntoView({behavior:'smooth'})">Como funciona</a>
+    <a href="#loyalty" class="nav-lk" data-t="nav_loyalty" onclick="event.preventDefault();document.getElementById('loyalty').scrollIntoView({behavior:'smooth'})">Programa de Fidelidade</a>
   </div>
   <div class="nav-right">
     <div class="lang-wrap">
       <button class="lang-btn" onclick="toggleLang(event)" aria-label="Seleccionar idioma">
-        <span id="cur-flag">🇵🇹</span><span id="cur-code">PT</span>
+        <img id="cur-flag" class="cur-flag" src="https://flagcdn.com/w40/pt.png" alt="PT"/><span id="cur-code">PT</span>
         <i class="ti ti-chevron-down" style="font-size:12px;color:var(--muted)" aria-hidden="true"></i>
       </button>
       <div class="lang-dd" id="lang-dd">
-        <div class="lang-opt active" onclick="setLang('pt')"><span class="lf">🇵🇹</span><span>Português</span><span class="lc">PT</span></div>
-        <div class="lang-opt" onclick="setLang('en')"><span class="lf">🇬🇧</span><span>English</span><span class="lc">EN</span></div>
-        <div class="lang-opt" onclick="setLang('fr')"><span class="lf">🇫🇷</span><span>Français</span><span class="lc">FR</span></div>
-        <div class="lang-opt" onclick="setLang('es')"><span class="lf">🇪🇸</span><span>Español</span><span class="lc">ES</span></div>
+        <div class="lang-opt active" onclick="setLang('pt')"><img class="lf" src="https://flagcdn.com/w40/pt.png" alt="PT"/><span>Português</span><span class="lc">PT</span></div>
+        <div class="lang-opt" onclick="setLang('en')"><img class="lf" src="https://flagcdn.com/w40/gb.png" alt="EN"/><span>English</span><span class="lc">EN</span></div>
+        <div class="lang-opt" onclick="setLang('fr')"><img class="lf" src="https://flagcdn.com/w40/fr.png" alt="FR"/><span>Français</span><span class="lc">FR</span></div>
+        <div class="lang-opt" onclick="setLang('es')"><img class="lf" src="https://flagcdn.com/w40/es.png" alt="ES"/><span>Español</span><span class="lc">ES</span></div>
       </div>
     </div>
-    <button class="btn-ghost" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'})" data-t="nav_explore">Explorar</button>
+    <button class="btn-ghost nav-xplore" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'})" data-t="nav_explore">Explorar</button>
     <!-- Auth: logged out -->
+    <button class="mob-toggle" id="mob-toggle" onclick="toggleMobNav()" aria-label="Menu"><i class="ti ti-menu-2" id="mob-icon"></i></button>
     <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" title="Mudar tema">
       <i class="ti ti-moon" id="dark-icon"></i>
     </button>
@@ -260,6 +616,7 @@ body.dark .splash img{opacity:.55}
     </div>
     <!-- Auth: logged in -->
     <div id="nav-loggedin" style="display:none;align-items:center;gap:10px">
+      <a href="/admin.html" id="nav-admin-btn" title="Painel de administração" style="display:none;align-items:center;gap:6px;padding:7px 13px;border-radius:20px;background:#7c3aed;color:#fff;font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer"><i class="ti ti-shield" style="font-size:14px"></i> Admin</a>
       <button class="wallet-chip" onclick="openWallet()" title="A minha carteira">
         <i class="ti ti-wallet" style="font-size:14px"></i>
         <span id="nav-balance">€0,00</span>
@@ -270,18 +627,52 @@ body.dark .splash img{opacity:.55}
           <i class="ti ti-chevron-down" style="font-size:11px;color:var(--muted)"></i>
         </button>
         <div class="user-dd" id="user-dd">
-          <div class="user-dd-name" id="user-dd-name">—</div>
+          <div class="user-dd-name" id="user-dd-name" onclick="goToOwnProfile()" style="cursor:pointer" title="Ver o meu perfil">—</div>
           <div class="user-dd-email" id="user-dd-email">—</div>
           <hr style="border:none;border-top:1px solid var(--border);margin:6px 0">
-          <div class="user-dd-item" onclick="openWallet()"><i class="ti ti-wallet"></i> A minha carteira</div>
-          <div class="user-dd-item" onclick="openSell()"><i class="ti ti-bulb"></i> Publicar ideia</div>
+          <div class="user-dd-item" onclick="openWallet()"><i class="ti ti-wallet"></i> <span data-t="dd_wallet">A minha carteira</span></div>
+          <div class="user-dd-item" onclick="openSell()"><i class="ti ti-bulb"></i> <span data-t="f_publish">Publicar ideia</span></div>
+          <div class="user-dd-item" onclick="openWallet('ideas')"><i class="ti ti-list"></i> <span data-t="dd_ideas">Ideias publicadas</span></div>
+          <div class="user-dd-item" onclick="openWallet('settings')"><i class="ti ti-settings"></i> <span data-t="dd_settings">Definições</span></div>
+          <div class="user-dd-item" id="dd-admin-link" onclick="window.location='/admin.html'" style="display:none;color:#7c3aed"><i class="ti ti-shield"></i> <span data-t="dd_admin">Painel de administração</span></div>
           <hr style="border:none;border-top:1px solid var(--border);margin:6px 0">
-          <div class="user-dd-item" style="color:#c0392b" onclick="doLogout()"><i class="ti ti-logout"></i> Terminar sessão</div>
+          <div class="user-dd-item" style="color:#c0392b" onclick="doLogout()"><i class="ti ti-logout"></i> <span data-t="dd_logout">Terminar sessão</span></div>
         </div>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- ══ MOBILE NAV PANEL ════════════════════════════════════════ -->
+<div class="mob-nav" id="mob-nav">
+  <div class="mob-search-wrap">
+    <i class="ti ti-search mob-si"></i>
+    <input class="mob-search-inp" id="mob-search" type="search" autocomplete="off"
+           placeholder="Pesquisar ideias..."
+           oninput="handleSearch(this.value);var si=document.getElementById('search-input');if(si)si.value=this.value"
+           onsearch="handleSearch(this.value)"/>
+  </div>
+  <div class="mob-links">
+    <a class="mob-lk" data-t="nav_cats" onclick="closeMobNav();document.getElementById('listings').scrollIntoView({behavior:'smooth'})">Categorias</a>
+    <a class="mob-lk" data-t="nav_how" onclick="closeMobNav();document.querySelector('.how').scrollIntoView({behavior:'smooth'})">Como funciona</a>
+    <a class="mob-lk" data-t="nav_loyalty" onclick="closeMobNav();document.getElementById('loyalty').scrollIntoView({behavior:'smooth'})">Programa de Fidelidade</a>
+  </div>
+  <div class="mob-lang-grid">
+    <div class="mob-lang-opt mob-lang-active" onclick="setLang('pt')"><img class="mob-flag" src="https://flagcdn.com/w40/pt.png" alt="PT"><span>Português</span></div>
+    <div class="mob-lang-opt" onclick="setLang('en')"><img class="mob-flag" src="https://flagcdn.com/w40/gb.png" alt="EN"><span>English</span></div>
+    <div class="mob-lang-opt" onclick="setLang('fr')"><img class="mob-flag" src="https://flagcdn.com/w40/fr.png" alt="FR"><span>Français</span></div>
+    <div class="mob-lang-opt" onclick="setLang('es')"><img class="mob-flag" src="https://flagcdn.com/w40/es.png" alt="ES"><span>Español</span></div>
+  </div>
+  <div id="mob-auth-out" class="mob-auth-row">
+    <button class="btn-ghost" style="flex:1" onclick="closeMobNav();openAuth('login')" data-t="nav_login">Entrar</button>
+    <button class="btn-pill" style="flex:1" onclick="closeMobNav();openAuth('register')" data-t="nav_register">Criar conta</button>
+  </div>
+  <div id="mob-auth-in" class="mob-auth-row" style="display:none">
+    <div class="user-avatar" id="mob-avatar" style="width:32px;height:32px;font-size:13px">?</div>
+    <span id="mob-username" style="font-size:13px;font-weight:500;flex:1;margin-left:8px;color:var(--ink)"></span>
+    <button class="btn-ghost" style="font-size:13px" onclick="doLogout();closeMobNav()">Sair</button>
+  </div>
+</div>
 
 <!-- ══ MODAL AUTH ══════════════════════════════════════════════ -->
 <div class="m-overlay" id="auth-overlay" onclick="closeAuth(event)">
@@ -367,24 +758,108 @@ body.dark .splash img{opacity:.55}
   </div>
 </div>
 
-<!-- ══ MODAL CARTEIRA ══════════════════════════════════════════ -->
+<!-- ══ MODAL PAINEL DO UTILIZADOR ══════════════════════════════ -->
 <div class="m-overlay" id="wallet-overlay" onclick="closeWallet(event)">
-  <div class="m-box" style="max-width:480px">
+  <div class="m-box" style="max-width:520px">
     <button class="m-close" onclick="closeWallet()">×</button>
-    <div class="m-h">A minha carteira</div>
-
-    <div class="wallet-balance-card">
-      <div style="font-size:.8rem;color:rgba(255,255,255,.75);margin-bottom:.3rem;letter-spacing:.06em;text-transform:uppercase">Saldo disponível</div>
-      <div class="wallet-amount" id="wallet-amount">€0,00</div>
-      <div style="font-size:.75rem;color:rgba(255,255,255,.65);margin-top:.4rem">Utilizável para compras na plataforma</div>
+    <div class="m-h" style="margin-bottom:.9rem" data-t="ud_panel">O meu painel</div>
+    <div class="ud-tabs">
+      <button class="ud-tab active" id="udtab-wallet" onclick="switchUdTab('wallet')"><i class="ti ti-wallet" aria-hidden="true"></i> <span data-t="tab_wallet">Carteira</span></button>
+      <button class="ud-tab" id="udtab-ideas" onclick="switchUdTab('ideas')"><i class="ti ti-bulb" aria-hidden="true"></i> <span data-t="tab_ideas">As minhas ideias</span></button>
+      <button class="ud-tab" id="udtab-settings" onclick="switchUdTab('settings')"><i class="ti ti-settings" aria-hidden="true"></i> <span data-t="dd_settings">Definições</span></button>
+      <button class="ud-tab ud-tab-admin" id="udtab-admin" onclick="switchUdTab('admin')" style="display:none"><i class="ti ti-shield" aria-hidden="true"></i> Admin</button>
     </div>
 
-    <div style="margin-top:1.5rem">
-      <div style="font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Últimos movimentos</div>
-      <div id="wallet-tx-list">
+    <!-- TAB: Carteira -->
+    <div id="ud-wallet" class="ud-panel active">
+      <div class="wallet-balance-card">
+        <div style="font-size:.8rem;color:rgba(255,255,255,.75);margin-bottom:.3rem;letter-spacing:.06em;text-transform:uppercase">Saldo disponível</div>
+        <div class="wallet-amount" id="wallet-amount">€0,00</div>
+        <div style="font-size:.75rem;color:rgba(255,255,255,.65);margin-top:.4rem">Utilizável para compras na plataforma</div>
+      </div>
+      <!-- Loyalty tier card -->
+      <div class="wallet-tier-card" id="wallet-tier-card" style="display:none">
+        <div class="wallet-tier-row">
+          <div class="wallet-tier-badge">
+            <i id="wallet-tier-icon" class="ti ti-bolt"></i>
+            <span id="wallet-tier-name">Faísca</span>
+          </div>
+          <div class="wallet-tier-rate-label">Comissão: <strong id="wallet-tier-rate">10%</strong></div>
+        </div>
+        <div class="wallet-tier-pts-row">
+          <span class="wallet-tier-pts" id="wallet-tier-pts">0 pontos</span>
+          <span class="wallet-tier-pts" id="wallet-tier-next" style="text-align:right"></span>
+        </div>
+        <div class="wallet-tier-bar-wrap">
+          <div class="wallet-tier-bar-fill" id="wallet-tier-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem">
+        <div style="font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem">Últimos movimentos</div>
+        <div id="wallet-tx-list">
+          <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.9rem">A carregar...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: As minhas ideias -->
+    <div id="ud-ideas" class="ud-panel">
+      <div id="ud-ideas-content">
         <div style="text-align:center;padding:2rem;color:var(--muted);font-size:.9rem">A carregar...</div>
       </div>
     </div>
+
+    <!-- TAB: Definições -->
+    <div id="ud-settings" class="ud-panel">
+      <div id="ud-settings-content">
+        <div style="margin-bottom:1.4rem">
+          <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem">Perfil público</div>
+          <div class="fg"><label>Nome de apresentação</label><input type="text" id="cfg-name" maxlength="100" placeholder="O teu nome"></div>
+          <div class="fg"><label>Bio <span style="font-weight:400;color:var(--muted)">(opcional · máx. 500 caracteres)</span></label><textarea id="cfg-bio" rows="3" maxlength="500" placeholder="Descreve-te em poucas palavras..."></textarea></div>
+          <div id="cfg-profile-error" class="auth-error" style="display:none"></div>
+          <button class="btn-cta" id="cfg-profile-btn" onclick="saveProfileSettings()" style="margin-top:.3rem">Guardar perfil</button>
+          <a id="cfg-profile-link" href="#" target="_blank" style="display:block;margin-top:.7rem;font-size:.8rem;color:var(--or1);text-decoration:none"><i class="ti ti-external-link"></i> Ver o meu perfil público</a>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:1.2rem 0">
+        <div>
+          <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem">Segurança</div>
+          <div class="fg"><label>Nova password</label><input type="password" id="cfg-pw1" placeholder="Mínimo 8 caracteres, maiúscula, número"></div>
+          <div class="fg"><label>Confirmar nova password</label><input type="password" id="cfg-pw2" placeholder="Repetir password"></div>
+          <div id="cfg-pw-error" class="auth-error" style="display:none"></div>
+          <button class="btn-cta" id="cfg-pw-btn" onclick="savePasswordSettings()" style="margin-top:.3rem">Alterar password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Admin -->
+    <div id="ud-admin" class="ud-panel">
+      <div id="ud-admin-content">
+        <div class="ud-empty">A carregar...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL AVALIAÇÃO ══════════════════════════════════════════ -->
+<div class="m-overlay" id="rate-overlay" onclick="closeRate(event)">
+  <div class="m-box" style="max-width:380px;text-align:center">
+    <button class="m-close" onclick="closeRate()">×</button>
+    <div style="font-size:2.2rem;margin-bottom:.4rem">🎉</div>
+    <div class="m-h" style="margin-bottom:.4rem">Compra concluída!</div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.65;margin-bottom:1.2rem">Queres deixar uma avaliação ao vendedor?</p>
+    <div id="rate-form">
+      <div class="star-row" id="star-row">
+        <span class="star" data-v="1" onclick="setRatingStar(1)" onmouseenter="hoverStar(1)" onmouseleave="leaveStar()">★</span>
+        <span class="star" data-v="2" onclick="setRatingStar(2)" onmouseenter="hoverStar(2)" onmouseleave="leaveStar()">★</span>
+        <span class="star" data-v="3" onclick="setRatingStar(3)" onmouseenter="hoverStar(3)" onmouseleave="leaveStar()">★</span>
+        <span class="star" data-v="4" onclick="setRatingStar(4)" onmouseenter="hoverStar(4)" onmouseleave="leaveStar()">★</span>
+        <span class="star" data-v="5" onclick="setRatingStar(5)" onmouseenter="hoverStar(5)" onmouseleave="leaveStar()">★</span>
+      </div>
+      <textarea class="rate-comment" id="rate-comment" rows="3" placeholder="Comentário opcional..."></textarea>
+      <button class="btn-cta" style="width:100%;margin-bottom:.5rem" onclick="submitRating()">Enviar avaliação</button>
+      <button class="btn-ghost" style="width:100%;font-size:13px" onclick="closeRate()">Agora não</button>
+    </div>
+    <div id="rate-success" class="rate-success" style="display:none">✓ Avaliação guardada! Obrigado.</div>
   </div>
 </div>
 <div class="hero">
@@ -397,9 +872,9 @@ body.dark .splash img{opacity:.55}
       <button class="cta-ghost" onclick="openSell()"><i class="ti ti-plus" style="font-size:14px" aria-hidden="true"></i><span data-t="cta_sell">Publicar a minha</span></button>
     </div>
     <div class="hero-nums">
-      <div class="hnum"><div class="hnum-v">4.800</div><div class="hnum-l" data-t="stat1">Ideias publicadas</div></div>
-      <div class="hnum"><div class="hnum-v">€2,1M</div><div class="hnum-l" data-t="stat2">Pagos a criadores</div></div>
-      <div class="hnum"><div class="hnum-v">12 mil</div><div class="hnum-l" data-t="stat3">Compradores activos</div></div>
+      <div class="hnum"><div class="hnum-v">Grátis</div><div class="hnum-l" data-t="stat1">Publicar ideias não tem custo</div></div>
+      <div class="hnum"><div class="hnum-v">90%</div><div class="hnum-l" data-t="stat2">Fica sempre contigo</div><a href="/loyalty.html" class="hnum-loyalty" data-t="stat2_loy">Pode chegar a 95% →</a></div>
+      <div class="hnum"><div class="hnum-v">4</div><div class="hnum-l" data-t="stat3">Línguas disponíveis</div><div class="hnum-flags"><img src="https://flagcdn.com/w40/pt.png" alt="PT"><img src="https://flagcdn.com/w40/gb.png" alt="EN"><img src="https://flagcdn.com/w40/fr.png" alt="FR"><img src="https://flagcdn.com/w40/es.png" alt="ES"></div></div>
     </div>
   </div>
   <div class="hero-right">
@@ -408,10 +883,28 @@ body.dark .splash img{opacity:.55}
   </div>
 </div>
 <div class="divider"><hr></div>
-<div class="market" id="listings">
+
+<!-- ══ CARROSSEL — MAIS VISUALIZADAS ═════════════════════════════ -->
+<section class="carousel-section" id="carousel-section" style="display:none">
+  <div class="carousel-hd">
+    <div class="carousel-hl">
+      <span class="carousel-ey">🔥 Em alta</span>
+      <span class="carousel-htxt">Ideias mais visualizadas</span>
+    </div>
+    <div class="carousel-arrows">
+      <button class="carousel-arrow" onclick="scrollCarousel(-1)" aria-label="Anterior"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+      <button class="carousel-arrow" onclick="scrollCarousel(1)" aria-label="Seguinte"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+    </div>
+  </div>
+  <div class="carousel-track" id="carousel-track"></div>
+</section>
+<div class="divider" id="carousel-divider" style="display:none"><hr></div>
+
+<div class="market-section" id="listings">
+<div class="market">
   <div class="market-top">
     <div class="market-title" data-t="all_ideas">Todas as ideias</div>
-    <div class="cats">
+    <div class="cats" id="cats">
       <div class="cat active" onclick="filterCat(this,'all')" data-t="cat_all">Tudo</div>
       <div class="cat" onclick="filterCat(this,'Slogan')">Slogans</div>
       <div class="cat" onclick="filterCat(this,'Nome')" data-t="cat_names">Nomes</div>
@@ -419,19 +912,88 @@ body.dark .splash img{opacity:.55}
       <div class="cat" onclick="filterCat(this,'Negócio')" data-t="cat_biz">Negócios</div>
       <div class="cat" onclick="filterCat(this,'Design')">Design</div>
       <div class="cat" onclick="filterCat(this,'Receita')" data-t="cat_rec">Receitas</div>
+      <div class="cat" onclick="filterCat(this,'Outra')" data-t="cat_other">Outra</div>
     </div>
   </div>
   <div class="grid" id="main-grid"></div>
+</div>
 </div>
 <div class="how">
   <div class="how-inner">
     <div class="how-ey" data-t="how_ey">Como funciona</div>
     <h2 data-t="how_h">Simples como ter<br>uma boa <em>ideia.</em></h2>
     <div class="steps">
-      <div class="step"><div class="step-n"><i class="ti ti-bulb step-emoji"></i>— 01</div><div class="step-t" data-t="s1t">Publica a tua ideia</div><div class="step-d" data-t="s1d">Descreve o conceito, define o preço e escolhe a modalidade.</div></div>
-      <div class="step"><div class="step-n"><i class="ti ti-search step-emoji"></i>— 02</div><div class="step-t" data-t="s2t">Compradores encontram</div><div class="step-d" data-t="s2d">Empreendedores e criativos navegam por categoria e contactam o criador.</div></div>
-      <div class="step"><div class="step-n"><i class="ti ti-coin step-emoji"></i>— 03</div><div class="step-t" data-t="s3t">Recebe pelo teu talento</div><div class="step-d" data-t="s3d">Pagamento protegido. Taxa de 15% sobre vendas concluídas.</div></div>
+      <div class="step">
+        <span class="step-badge">1</span>
+        <div class="step-icon"><i class="ti ti-bulb"></i></div>
+        <div class="step-t" data-t="s1t">Publica a tua ideia</div>
+        <div class="step-d" data-t="s1d">Descreve o conceito, define o preço e escolhe a modalidade.</div>
+      </div>
+      <div class="step">
+        <span class="step-badge">2</span>
+        <div class="step-icon"><i class="ti ti-search"></i></div>
+        <div class="step-t" data-t="s2t">Compradores encontram</div>
+        <div class="step-d" data-t="s2d">Empreendedores e criativos navegam por categoria e contactam o criador.</div>
+      </div>
+      <div class="step">
+        <span class="step-badge">3</span>
+        <div class="step-icon"><i class="ti ti-coin"></i></div>
+        <div class="step-t" data-t="s3t">Recebe pelo teu talento</div>
+        <div class="step-d" data-t="s3d">Pagamento protegido. Ficas com 90% do valor — sempre.</div>
+      </div>
     </div>
+  </div>
+</div>
+<div class="loyalty" id="loyalty">
+  <div class="loyalty-inner">
+    <div class="loyalty-ey" data-t="loy_ey">Programa de fidelidade</div>
+    <h2 class="loyalty-h" data-t="loy_h">Quanto mais vendes,<br><em>menos pagas.</em></h2>
+    <p class="loyalty-sub" data-t="loy_sub">Cada €10 faturados vale 1 ponto. Os pontos acumulam para sempre e baixam a tua comissão até ao mínimo de 5%.</p>
+    <div class="loyalty-tiers">
+      <div class="loyalty-tier">
+        <div class="tier-icon"><i class="ti ti-bolt"></i></div>
+        <div class="tier-pct">10%</div>
+        <div class="tier-name" data-t="t1_name">Faísca</div>
+        <div class="tier-pts"><strong>0–9</strong> pts</div>
+        <div class="tier-pts">€0–€99</div>
+      </div>
+      <div class="loyalty-tier">
+        <div class="tier-icon"><i class="ti ti-hammer"></i></div>
+        <div class="tier-pct">9%</div>
+        <div class="tier-name" data-t="t2_name">Artesão</div>
+        <div class="tier-pts"><strong>10–29</strong> pts</div>
+        <div class="tier-pts">€100–€299</div>
+      </div>
+      <div class="loyalty-tier">
+        <div class="tier-icon"><i class="ti ti-palette"></i></div>
+        <div class="tier-pct">8%</div>
+        <div class="tier-name" data-t="t3_name">Criador</div>
+        <div class="tier-pts"><strong>30–99</strong> pts</div>
+        <div class="tier-pts">€300–€999</div>
+      </div>
+      <div class="loyalty-tier">
+        <div class="tier-icon"><i class="ti ti-feather"></i></div>
+        <div class="tier-pct">7%</div>
+        <div class="tier-name" data-t="t4_name">Autor</div>
+        <div class="tier-pts"><strong>100–249</strong> pts</div>
+        <div class="tier-pts">€1.000–€2.499</div>
+      </div>
+      <div class="loyalty-tier">
+        <div class="tier-icon"><i class="ti ti-award"></i></div>
+        <div class="tier-pct">6%</div>
+        <div class="tier-name" data-t="t5_name">Especialista</div>
+        <div class="tier-pts"><strong>250–499</strong> pts</div>
+        <div class="tier-pts">€2.500–€4.999</div>
+      </div>
+      <div class="loyalty-tier top">
+        <div class="tier-icon"><i class="ti ti-crown"></i></div>
+        <div class="tier-pct">5%</div>
+        <div class="tier-name" data-t="t6_name">Mestre</div>
+        <div class="tier-pts"><strong>500+</strong> pts</div>
+        <div class="tier-pts">€5.000+</div>
+      </div>
+    </div>
+    <p class="loyalty-note" data-t="loy_note">Cada €10 faturados = 1 ponto · Pontos vitalícios · <a href="/loyalty.html" data-t="loy_link">Saber mais →</a></p>
   </div>
 </div>
 <div class="sell">
@@ -480,9 +1042,11 @@ body.dark .splash img{opacity:.55}
         <h4 data-t="f_h_market">Marketplace</h4>
         <ul>
           <li><a href="#" onclick="document.getElementById('listings').scrollIntoView({behavior:'smooth'});return false" data-t="nav_explore">Explorar</a></li>
-          <li><a href="#" data-t="nav_cats">Categorias</a></li>
+          <li><a href="#cats" onclick="event.preventDefault();document.getElementById('cats').scrollIntoView({behavior:'smooth'})" data-t="nav_cats">Categorias</a></li>
           <li><a href="#" onclick="openSell();return false" data-t="f_publish">Publicar ideia</a></li>
           <li><a href="#" onclick="document.querySelector('.how').scrollIntoView({behavior:'smooth'});return false" data-t="nav_how">Como funciona</a></li>
+          <li><a href="/loyalty.html" data-t="f_loyalty">Programa de Fidelidade</a></li>
+          <li><a href="/suggestions.html" data-t="f_suggest">Sugestões</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -518,9 +1082,14 @@ body.dark .splash img{opacity:.55}
     <button class="mclose" onclick="closeBuy()"><i class="ti ti-x" aria-hidden="true"></i></button>
     <div class="m-ey" id="m-cat"></div><div class="m-h" id="m-title"></div><div class="m-desc" id="m-desc"></div>
     <div class="seller-row"><div class="s-av" id="m-av"></div><div><div class="s-name" id="m-name"></div><div class="s-sub" id="m-rating"></div></div></div>
-    <div class="opts-lbl" data-t="modal_opts">Escolhe uma modalidade</div>
-    <div class="opt-list" id="m-opts"></div>
-    <button class="btn-cta" onclick="handleBuy()" data-t="modal_pay">Continuar para pagamento</button>
+    <!-- Modalidades normais -->
+    <div id="m-opts-section">
+      <div class="opts-lbl" data-t="modal_opts">Escolhe uma modalidade</div>
+      <div class="opt-list" id="m-opts"></div>
+      <button class="btn-cta" id="buy-pay-btn" onclick="handleBuy()" data-t="modal_pay">Continuar para pagamento</button>
+    </div>
+    <!-- Ideia por fases -->
+    <div id="m-phases" style="display:none"></div>
   </div>
 </div>
 <div class="mwrap" id="sell-wrap" onclick="if(event.target===this)closeSell()">
@@ -528,25 +1097,137 @@ body.dark .splash img{opacity:.55}
     <button class="mclose" onclick="closeSell()"><i class="ti ti-x" aria-hidden="true"></i></button>
     <div class="m-ey" data-t="sell_modal_ey">Nova publicação</div>
     <div class="m-h" data-t="sell_modal_h">Publicar uma ideia</div>
-    <div class="fg"><label data-t="f_title">Título da ideia</label><input type="text" placeholder="Ex: App de troca de talentos entre vizinhos"></div>
-    <div class="fg"><label data-t="f_cat">Categoria</label><select><option>Slogan</option><option>Nome de empresa</option><option>Conceito de app</option><option>Ideia de negócio</option><option>Receita</option><option>Design</option><option>História / guião</option></select></div>
-    <div class="fg"><label data-t="f_desc">Descrição</label><textarea rows="3" placeholder="Explica a ideia..."></textarea></div>
+    <div class="fg"><label data-t="f_title">Título da ideia</label><input id="sell-title" type="text" placeholder="Ex: App de troca de talentos entre vizinhos"></div>
+    <div class="fg"><label data-t="f_cat">Categoria</label><select id="sell-cat"><option>Slogan</option><option>Nome de empresa</option><option>Conceito de app</option><option>Ideia de negócio</option><option>Receita</option><option>Design</option><option>História / guião</option><option data-t="cat_other">Outra</option></select></div>
+    <div class="fg"><label data-t="f_desc">Descrição</label><textarea id="sell-desc" rows="3" placeholder="Explica a ideia..."></textarea></div>
     <div class="fg2">
-      <div class="fg"><label data-t="f_price">Preço (€)</label><input type="number" placeholder="500"></div>
-      <div class="fg"><label data-t="f_mode">Modalidade</label><select><option>Exclusivo</option><option>Licença múltipla</option><option>Sob encomenda</option></select></div>
+      <div class="fg"><label data-t="f_price">Preço (€)</label><input id="sell-price" type="number" placeholder="500" min="1"></div>
+      <div class="fg"><label data-t="f_mode">Modalidade</label><select id="sell-mode"><option value="exclusive">Exclusivo</option><option value="license">Licença múltipla</option><option value="custom">Sob encomenda</option></select></div>
     </div>
-    <button class="btn-cta" onclick="closeSell()" data-t="sell_submit">Enviar para revisão</button>
+    <div class="m-loyalty-hint"><i class="ti ti-trending-down"></i><span data-t="loy_modal">Cada venda reduz a tua comissão — de 10% até 5%. <a href="/loyalty.html">Saber mais →</a></span></div>
+    <!-- Publicação por fases -->
+    <label class="phase-toggle-row">
+      <input type="checkbox" id="sell-phase-toggle" onchange="toggleSellPhases(this.checked)">
+      <span class="phase-toggle-label" data-t="f_phase_toggle">Publicar em fases</span>
+      <span class="phase-toggle-hint" data-t="f_phase_hint">(para ideias complexas)</span>
+    </label>
+    <div id="sell-phases" style="display:none">
+      <div class="sell-phases-box">
+        <div class="sell-phases-hd" data-t="f_phase_config">Configurar fases</div>
+        <div class="fg">
+          <label><span style="background:#e8f5e9;color:#2e7d32;padding:1px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-right:6px">GRÁTIS</span><span data-t="f_ph1">Fase 1 — Resumo público</span></label>
+          <textarea id="ph1-content" rows="2" placeholder="Descreve o problema que resolves. Não reveles o 'como'."></textarea>
+        </div>
+        <hr class="ph-sep">
+        <div class="fg2">
+          <div class="fg"><label data-t="f_ph2_n">Fase 2 — Título</label><input type="text" id="ph2-name" placeholder="Ex: Conceito detalhado"></div>
+          <div class="fg"><label data-t="f_ph2_p">Preço Fase 2 (€)</label><input type="number" id="ph2-price" min="0" placeholder="200" oninput="updatePackHint()"></div>
+        </div>
+        <div class="fg" style="margin-top:-.3rem"><label data-t="f_ph2_desc">Descrição Fase 2</label><textarea id="ph2-desc" rows="2" placeholder="O que inclui?"></textarea></div>
+        <hr class="ph-sep">
+        <div class="fg2">
+          <div class="fg"><label data-t="f_ph3_n">Fase 3 — Título</label><input type="text" id="ph3-name" placeholder="Ex: Plano de execução"></div>
+          <div class="fg"><label data-t="f_ph3_p">Preço Fase 3 (€)</label><input type="number" id="ph3-price" min="0" placeholder="350" oninput="updatePackHint()"></div>
+        </div>
+        <div class="fg" style="margin-top:-.3rem"><label data-t="f_ph3_desc">Descrição Fase 3</label><textarea id="ph3-desc" rows="2" placeholder="O que inclui?"></textarea></div>
+        <hr class="ph-sep">
+        <div class="fg">
+          <label data-t="f_pack_p">Preço Pack Completo (Fases 2+3) em €</label>
+          <input type="number" id="ph-pack-price" min="0" placeholder="450" oninput="updatePackHint()">
+          <div class="pack-hint" id="pack-hint" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Imagem da ideia (opcional) -->
+    <div class="fg" style="margin-top:.4rem">
+      <label>Imagem da ideia <span class="opt-lbl">(opcional)</span></label>
+      <div id="sell-img-label">
+        <label class="sell-img-drop" for="sell-img-input">
+          <i class="ti ti-photo-plus" aria-hidden="true"></i>
+          <span class="img-drop-txt">Arrasta uma imagem ou clica para selecionar</span>
+          <span class="sell-img-types">JPEG · PNG · WebP · máx. 5 MB</span>
+        </label>
+      </div>
+      <input type="file" id="sell-img-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleImageSelect(event)">
+      <div class="sell-img-preview" id="sell-img-preview" style="display:none">
+        <img id="sell-img-thumb" src="" alt="">
+        <button class="sell-img-remove" onclick="removeImage()" type="button" aria-label="Remover imagem">×</button>
+      </div>
+      <div id="sell-img-status" class="sell-img-status" style="display:none"></div>
+    </div>
+    <!-- Documento PDF (opcional) -->
+    <div class="fg" style="margin-top:.2rem">
+      <label>Documento PDF <span class="opt-lbl">(opcional · privado · entregue após compra)</span></label>
+      <div id="sell-doc-label">
+        <label class="sell-img-drop sell-doc-drop" for="sell-doc-input">
+          <i class="ti ti-file-type-pdf" aria-hidden="true"></i>
+          <span class="img-drop-txt">Clica para selecionar um PDF</span>
+          <span class="sell-img-types">PDF · máx. 10 MB · acesso privado após compra</span>
+        </label>
+      </div>
+      <input type="file" id="sell-doc-input" accept="application/pdf,.pdf" style="display:none" onchange="handleDocSelect(event)">
+      <div class="sell-doc-preview" id="sell-doc-preview" style="display:none">
+        <i class="ti ti-file-type-pdf" style="font-size:1.5rem;color:#e63946"></i>
+        <div style="flex:1;min-width:0">
+          <div id="sell-doc-name" style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+          <div id="sell-doc-size" style="font-size:11px;color:var(--muted)"></div>
+        </div>
+        <button class="sell-img-remove" onclick="removeDoc()" type="button" aria-label="Remover documento" style="position:static;margin-left:auto">×</button>
+      </div>
+      <div id="sell-doc-status" class="sell-img-status" style="display:none"></div>
+    </div>
+    <!-- Aviso legal e confirmação -->
+    <div class="sell-legal-box">
+      <div class="sell-legal-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span data-t="sell_legal_title">Declarações obrigatórias</span></div>
+      <ul class="sell-legal-list" id="sell-legal-list">
+        <li>Esta ideia é original e da minha autoria (ou tenho os direitos legais para a vender)</li>
+        <li>Não infringe patentes, marcas ou direitos de autor de terceiros do meu conhecimento</li>
+        <li>Não contém conteúdo ilegal, fraudulento ou que promova atividades criminosas</li>
+      </ul>
+      <div class="sell-legal-note" id="sell-legal-note">⚖ Todo o conteúdo será revisto antes de publicação. A plataforma não se responsabiliza pela originalidade das ideias nem por eventuais conflitos de propriedade intelectual. <a href="/terms.html" target="_blank" data-t="f_terms">Ler Termos →</a></div>
+    </div>
+    <label class="sell-confirm-row">
+      <input type="checkbox" id="sell-confirm-legal" onchange="toggleSellSubmit(this.checked)">
+      <span id="sell-confirm-txt">Confirmo que li e aceito os <a href="/terms.html" target="_blank" onclick="event.stopPropagation()">Termos de Uso</a> e que esta ideia cumpre todas as declarações acima.</span>
+    </label>
+    <div id="sell-error" class="auth-error" style="display:none"></div>
+    <button class="btn-cta" id="sell-submit-btn" onclick="submitSell()" disabled data-t="sell_submit">Enviar para revisão</button>
   </div>
 </div>
 <script>
 const T={
-  pt:{nav_explore:'Explorar',nav_cats:'Categorias',nav_how:'Como funciona',nav_sell:'Vender ideia',nav_login:'Entrar',nav_register:'Criar conta',kicker:'O mercado de ideias por realizar',h1:'Ideias guardadas<br>na gaveta<br><em>têm valor.</em>',hero_sub:'Vende slogans, nomes de empresas, conceitos de apps, receitas, designs e negócios completos. Os compradores licenciam, adquirem com exclusividade ou encomendam versões personalizadas.',cta_browse:'Ver ideias à venda',cta_sell:'Publicar a minha',stat1:'Ideias publicadas',stat2:'Pagos a criadores',stat3:'Compradores activos',feat_label:'Em destaque agora',all_ideas:'Todas as ideias',cat_all:'Tudo',cat_names:'Nomes',cat_biz:'Negócios',cat_rec:'Receitas',how_ey:'Como funciona',how_h:'Simples como ter<br>uma boa <em>ideia.</em>',s1t:'Publica a tua ideia',s1d:'Descreve o conceito, define o preço e escolhe a modalidade: exclusividade, licença múltipla ou encomenda personalizada.',s2t:'Compradores encontram',s2d:'Empreendedores, agências e criativos navegam por categoria e entram em contacto directo com o criador.',s3t:'Recebe pelo teu talento',s3d:'Pagamento protegido. A ideia só é entregue após confirmação. Taxa de 15% sobre vendas concluídas.',sell_h:'Tens uma ideia à espera de ser apanhada.',sell_p:'Não importa se é um slogan genial, um nome de empresa ou um conceito de app — há alguém que quer isso. Publica agora e transforma criatividade em rendimento.',sell_btn:'Publicar agora',modal_opts:'Escolhe uma modalidade',modal_pay:'Continuar para pagamento',sell_modal_ey:'Nova publicação',sell_modal_h:'Publicar uma ideia',f_title:'Título da ideia',f_cat:'Categoria',f_desc:'Descrição',f_price:'Preço (€)',f_mode:'Modalidade',sell_submit:'Enviar para revisão',app_t:'App em desenvolvimento',app_sub:'Em breve no iOS e Android — leva o marketplace contigo.',app_ios:'App Store — Brevemente',app_android:'Google Play — Brevemente',f_tag:'O marketplace onde ideias criativas encontram quem as quer realizar.',f_h_market:'Marketplace',f_publish:'Publicar ideia',f_h_company:'Empresa',f_about:'Sobre nós',f_blog:'Blog',f_contact:'Contacto',f_h_legal:'Legal',f_terms:'Termos de uso',f_privacy:'Privacidade',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · Todos os direitos reservados',flag:'🇵🇹',code:'PT'},
-  en:{nav_explore:'Explore',nav_cats:'Categories',nav_how:'How it works',nav_sell:'Sell an idea',nav_login:'Sign in',nav_register:'Create account',kicker:'The marketplace for unrealised ideas',h1:'Ideas sitting<br>in a drawer<br><em>have value.</em>',hero_sub:'Sell slogans, company names, app concepts, recipes, designs and full business plans.',cta_browse:'Browse ideas',cta_sell:'List mine',stat1:'Ideas listed',stat2:'Paid to creators',stat3:'Active buyers',feat_label:'Featured now',all_ideas:'All ideas',cat_all:'All',cat_names:'Names',cat_biz:'Business',cat_rec:'Recipes',how_ey:'How it works',how_h:'As simple as having<br>a great <em>idea.</em>',s1t:'Post your idea',s1d:'Describe the concept, set the price and choose the modality: exclusivity, multiple licence or custom order.',s2t:'Buyers discover it',s2d:'Entrepreneurs, agencies and creatives browse by category and contact the creator directly.',s3t:'Get paid for your brilliance',s3d:'Protected payment. The idea is only delivered after confirmation. 15% fee on completed sales.',sell_h:'You have an idea waiting to be caught.',sell_p:"Whether it's a brilliant slogan, a company name or an app concept — someone wants it.",sell_btn:'List now',modal_opts:'Choose a modality',modal_pay:'Continue to payment',sell_modal_ey:'New listing',sell_modal_h:'Post an idea',f_title:'Idea title',f_cat:'Category',f_desc:'Description',f_price:'Price (€)',f_mode:'Modality',sell_submit:'Submit for review',app_t:'App in development',app_sub:'Coming soon on iOS & Android — take the marketplace with you.',app_ios:'App Store — Coming soon',app_android:'Google Play — Coming soon',f_tag:'The marketplace where creative ideas meet those who want to bring them to life.',f_h_market:'Marketplace',f_publish:'Post an idea',f_h_company:'Company',f_about:'About us',f_blog:'Blog',f_contact:'Contact',f_h_legal:'Legal',f_terms:'Terms of use',f_privacy:'Privacy',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · All rights reserved',flag:'🇬🇧',code:'EN'},
-  fr:{nav_explore:'Explorer',nav_cats:'Catégories',nav_how:'Comment ça marche',nav_sell:'Vendre une idée',nav_login:'Se connecter',nav_register:'Créer un compte',kicker:'Le marché des idées non réalisées',h1:'Des idées dans<br>un tiroir<br><em>ont de la valeur.</em>',hero_sub:"Vendez des slogans, des noms d'entreprises, des concepts d'apps, des recettes et des plans d'affaires.",cta_browse:'Voir les idées',cta_sell:'Publier la mienne',stat1:'Idées publiées',stat2:'Payés aux créateurs',stat3:'Acheteurs actifs',feat_label:'À la une',all_ideas:'Toutes les idées',cat_all:'Tout',cat_names:'Noms',cat_biz:'Business',cat_rec:'Recettes',how_ey:'Comment ça marche',how_h:"Aussi simple qu'avoir<br>une bonne <em>idée.</em>",s1t:'Publiez votre idée',s1d:"Décrivez le concept, fixez le prix et choisissez la modalité.",s2t:'Les acheteurs trouvent',s2d:"Des entrepreneurs et créatifs parcourent les catégories et contactent le créateur.",s3t:'Soyez rémunéré',s3d:"Paiement protégé. Commission de 15% sur les ventes conclues.",sell_h:"Vous avez une idée qui attend d'être saisie.",sell_p:"Qu'il s'agisse d'un slogan ou d'un concept d'app — quelqu'un le veut.",sell_btn:'Publier maintenant',modal_opts:'Choisissez une modalité',modal_pay:'Continuer vers le paiement',sell_modal_ey:'Nouvelle annonce',sell_modal_h:'Publier une idée',f_title:"Titre de l'idée",f_cat:'Catégorie',f_desc:'Description',f_price:'Prix (€)',f_mode:'Modalité',sell_submit:'Soumettre pour révision',app_t:'App en développement',app_sub:'Bientôt sur iOS et Android — emportez le marketplace avec vous.',app_ios:'App Store — Bientôt',app_android:'Google Play — Bientôt',f_tag:'Le marketplace où les idées créatives rencontrent ceux qui veulent les réaliser.',f_h_market:'Marketplace',f_publish:'Publier une idée',f_h_company:'Entreprise',f_about:'À propos',f_blog:'Blog',f_contact:'Contact',f_h_legal:'Légal',f_terms:"Conditions d'utilisation",f_privacy:'Confidentialité',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · Tous droits réservés',flag:'🇫🇷',code:'FR'},
-  es:{nav_explore:'Explorar',nav_cats:'Categorías',nav_how:'Cómo funciona',nav_sell:'Vender una idea',nav_login:'Iniciar sesión',nav_register:'Crear cuenta',kicker:'El mercado de ideas no realizadas',h1:'Ideas guardadas<br>en un cajón<br><em>tienen valor.</em>',hero_sub:'Vende slogans, nombres de empresas, conceptos de apps, recetas, diseños y planes de negocio.',cta_browse:'Ver ideas en venta',cta_sell:'Publicar la mía',stat1:'Ideas publicadas',stat2:'Pagados a creadores',stat3:'Compradores activos',feat_label:'Destacados ahora',all_ideas:'Todas las ideas',cat_all:'Todo',cat_names:'Nombres',cat_biz:'Negocios',cat_rec:'Recetas',how_ey:'Cómo funciona',how_h:'Tan simple como tener<br>una buena <em>idea.</em>',s1t:'Publica tu idea',s1d:'Describe el concepto, fija el precio y elige la modalidad.',s2t:'Los compradores la encuentran',s2d:'Emprendedores y creativos navegan por categoría y contactan al creador.',s3t:'Cobra por tu talento',s3d:'Pago protegido. Comisión del 15% sobre ventas concluidas.',sell_h:'Tienes una idea esperando ser capturada.',sell_p:'Da igual si es un eslogan o un concepto de app — alguien lo quiere.',sell_btn:'Publicar ahora',modal_opts:'Elige una modalidad',modal_pay:'Continuar al pago',sell_modal_ey:'Nueva publicación',sell_modal_h:'Publicar una idea',f_title:'Título de la idea',f_cat:'Categoría',f_desc:'Descripción',f_price:'Precio (€)',f_mode:'Modalidad',sell_submit:'Enviar para revisión',app_t:'App en desarrollo',app_sub:'Próximamente en iOS y Android — lleva el marketplace contigo.',app_ios:'App Store — Próximamente',app_android:'Google Play — Próximamente',f_tag:'El marketplace donde las ideas creativas encuentran a quienes quieren realizarlas.',f_h_market:'Marketplace',f_publish:'Publicar idea',f_h_company:'Empresa',f_about:'Sobre nosotros',f_blog:'Blog',f_contact:'Contacto',f_h_legal:'Legal',f_terms:'Términos de uso',f_privacy:'Privacidad',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · Todos los derechos reservados',flag:'🇪🇸',code:'ES'}
+  pt:{nav_explore:'Explorar',nav_cats:'Categorias',nav_how:'Como funciona',nav_sell:'Vender ideia',nav_login:'Entrar',nav_register:'Criar conta',kicker:'O mercado de ideias por realizar',h1:'Ideias guardadas<br>na gaveta<br><em>têm valor.</em>',hero_sub:'Vende slogans, nomes de empresas, conceitos de apps, receitas, designs e negócios completos. Os compradores licenciam, adquirem com exclusividade ou encomendam versões personalizadas.',cta_browse:'Ver ideias à venda',cta_sell:'Publicar a minha',stat1:'Publicar ideias não tem custo',stat2:'Fica sempre contigo',stat2_loy:'Pode chegar a 95% →',stat3:'Línguas disponíveis',feat_label:'Em destaque agora',all_ideas:'Todas as ideias',cat_all:'Tudo',cat_names:'Nomes',cat_biz:'Negócios',cat_rec:'Receitas',how_ey:'Como funciona',how_h:'Simples como ter<br>uma boa <em>ideia.</em>',s1t:'Publica a tua ideia',s1d:'Descreve o conceito, define o preço e escolhe a modalidade: exclusividade, licença múltipla ou encomenda personalizada.',s2t:'Compradores encontram',s2d:'Empreendedores, agências e criativos navegam por categoria e entram em contacto directo com o criador.',s3t:'Recebe pelo teu talento',s3d:'Pagamento protegido. A ideia só é entregue após confirmação. Ficas com 90% do valor — sempre.',sell_h:'Tens uma ideia à espera de ser apanhada.',sell_p:'Não importa se é um slogan genial, um nome de empresa ou um conceito de app — há alguém que quer isso. Publica agora e transforma criatividade em rendimento.',sell_btn:'Publicar agora',modal_opts:'Escolhe uma modalidade',modal_pay:'Continuar para pagamento',sell_modal_ey:'Nova publicação',sell_modal_h:'Publicar uma ideia',f_title:'Título da ideia',f_cat:'Categoria',f_desc:'Descrição',f_price:'Preço (€)',f_mode:'Modalidade',sell_submit:'Enviar para revisão',app_t:'App em desenvolvimento',app_sub:'Em breve no iOS e Android — leva o marketplace contigo.',app_ios:'App Store — Brevemente',app_android:'Google Play — Brevemente',f_tag:'O marketplace onde ideias criativas encontram quem as quer realizar.',f_h_market:'Marketplace',f_publish:'Publicar ideia',f_h_company:'Empresa',f_about:'Sobre nós',f_blog:'Blog',f_contact:'Contacto',f_h_legal:'Legal',f_terms:'Termos de uso',f_privacy:'Privacidade',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · Todos os direitos reservados',nav_loyalty:'Programa de Fidelidade',cat_other:'Outra',f_suggest:'Sugestões',f_loyalty:'Programa de Fidelidade',loy_ey:'Programa de fidelidade',loy_h:'Quanto mais vendes,<br><em>menos pagas.</em>',loy_sub:'Cada €10 faturados vale 1 ponto. Os pontos acumulam para sempre e baixam a tua comissão até ao mínimo de 5%.',loy_note:'Cada €10 faturados = 1 ponto · Pontos vitalícios · <a href="/loyalty.html">Saber mais →</a>',loy_modal:'Cada venda reduz a tua comissão — de 10% até 5%. <a href="/loyalty.html">Saber mais →</a>',t1_name:'Faísca',t2_name:'Artesão',t3_name:'Criador',t4_name:'Autor',t5_name:'Especialista',t6_name:'Mestre',
+    modal_phases:'Descobre a ideia por fases',ph_free_lbl:'GRÁTIS',ph_read:'Ler resumo',ph_buy:'Comprar',ph_best:'Melhor valor',ph_pack_name:'Pack Completo',ph_pack_sub:'Fases 2 + 3 desbloqueadas',ph_saves:'Economizas',ph_unlock:'Desbloquear tudo',card_phases:'3 fases',card_from_free:'Inclui resumo grátis',
+    f_phase_toggle:'Publicar em fases',f_phase_hint:'(para ideias complexas)',f_phase_config:'Configurar fases',f_ph1:'Fase 1 — Resumo público',f_ph2_n:'Fase 2 — Título',f_ph2_p:'Preço Fase 2 (€)',f_ph2_desc:'Descrição Fase 2',f_ph3_n:'Fase 3 — Título',f_ph3_p:'Preço Fase 3 (€)',f_ph3_desc:'Descrição Fase 3',f_pack_p:'Preço Pack Completo (Fases 2+3) em €',
+    sell_legal_title:'Declarações obrigatórias',
+    ck_text:'Usamos cookies para melhorar a tua experiência e analisar o tráfego. Podes aceitar todos ou apenas os essenciais. <a href="/cookies.html" class="ck-link">Saber mais</a>',ck_accept:'Aceitar todos',ck_decline:'Só essenciais',
+    dd_wallet:'A minha carteira',dd_ideas:'Ideias publicadas',dd_settings:'Definições',dd_admin:'Painel de administração',dd_logout:'Terminar sessão',tab_wallet:'Carteira',tab_ideas:'As minhas ideias',ud_panel:'O meu painel',
+    flag:'🇵🇹',code:'PT'},
+  en:{nav_explore:'Explore',nav_cats:'Categories',nav_how:'How it works',nav_sell:'Sell an idea',nav_login:'Sign in',nav_register:'Create account',kicker:'The marketplace for unrealised ideas',h1:'Ideas sitting<br>in a drawer<br><em>have value.</em>',hero_sub:'Sell slogans, company names, app concepts, recipes, designs and full business plans.',cta_browse:'Browse ideas',cta_sell:'List mine',stat1:'Publishing ideas is free',stat2:'Always yours to keep',stat2_loy:'Can reach 95% →',stat3:'Available languages',feat_label:'Featured now',all_ideas:'All ideas',cat_all:'All',cat_names:'Names',cat_biz:'Business',cat_rec:'Recipes',how_ey:'How it works',how_h:'As simple as having<br>a great <em>idea.</em>',s1t:'Post your idea',s1d:'Describe the concept, set the price and choose the modality: exclusivity, multiple licence or custom order.',s2t:'Buyers discover it',s2d:'Entrepreneurs, agencies and creatives browse by category and contact the creator directly.',s3t:'Get paid for your brilliance',s3d:'Protected payment. The idea is only delivered after confirmation. You keep 90% of the value — always.',sell_h:'You have an idea waiting to be caught.',sell_p:"Whether it's a brilliant slogan, a company name or an app concept — someone wants it.",sell_btn:'List now',modal_opts:'Choose a modality',modal_pay:'Continue to payment',sell_modal_ey:'New listing',sell_modal_h:'Post an idea',f_title:'Idea title',f_cat:'Category',f_desc:'Description',f_price:'Price (€)',f_mode:'Modality',sell_submit:'Submit for review',app_t:'App in development',app_sub:'Coming soon on iOS & Android — take the marketplace with you.',app_ios:'App Store — Coming soon',app_android:'Google Play — Coming soon',f_tag:'The marketplace where creative ideas meet those who want to bring them to life.',f_h_market:'Marketplace',f_publish:'Post an idea',f_h_company:'Company',f_about:'About us',f_blog:'Blog',f_contact:'Contact',f_h_legal:'Legal',f_terms:'Terms of use',f_privacy:'Privacy',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · All rights reserved',nav_loyalty:'Loyalty Programme',cat_other:'Other',f_suggest:'Suggestions',f_loyalty:'Loyalty Programme',loy_ey:'Loyalty programme',loy_h:'The more you sell,<br><em>the less you pay.</em>',loy_sub:'Every €10 earned equals 1 point. Points accumulate forever and reduce your commission down to a minimum of 5%.',loy_note:'Every €10 earned = 1 point · Lifetime points · <a href="/loyalty.html">Learn more →</a>',loy_modal:'Every sale reduces your commission — from 10% down to 5%. <a href="/loyalty.html">Learn more →</a>',t1_name:'Spark',t2_name:'Artisan',t3_name:'Creator',t4_name:'Author',t5_name:'Expert',t6_name:'Master',
+    modal_phases:'Discover the idea in stages',ph_free_lbl:'FREE',ph_read:'Read summary',ph_buy:'Buy',ph_best:'Best value',ph_pack_name:'Complete Pack',ph_pack_sub:'Phases 2 + 3 unlocked',ph_saves:'You save',ph_unlock:'Unlock everything',card_phases:'3 stages',card_from_free:'Includes free summary',
+    f_phase_toggle:'Publish in stages',f_phase_hint:'(for complex ideas)',f_phase_config:'Configure stages',f_ph1:'Phase 1 — Public summary',f_ph2_n:'Phase 2 — Title',f_ph2_p:'Phase 2 price (€)',f_ph2_desc:'Phase 2 description',f_ph3_n:'Phase 3 — Title',f_ph3_p:'Phase 3 price (€)',f_ph3_desc:'Phase 3 description',f_pack_p:'Complete Pack price (Phases 2+3) in €',
+    sell_legal_title:'Required declarations',
+    ck_text:'We use cookies to improve your experience and analyse site traffic. You can accept all or essential cookies only. <a href="/cookies.html" class="ck-link">Learn more</a>',ck_accept:'Accept all',ck_decline:'Essential only',
+    dd_wallet:'My wallet',dd_ideas:'My ideas',dd_settings:'Settings',dd_admin:'Admin panel',dd_logout:'Sign out',tab_wallet:'Wallet',tab_ideas:'My ideas',ud_panel:'My panel',
+    flag:'🇬🇧',code:'EN'},
+  fr:{nav_explore:'Explorer',nav_cats:'Catégories',nav_how:'Comment ça marche',nav_sell:'Vendre une idée',nav_login:'Se connecter',nav_register:'Créer un compte',kicker:'Le marché des idées non réalisées',h1:'Des idées dans<br>un tiroir<br><em>ont de la valeur.</em>',hero_sub:"Vendez des slogans, des noms d'entreprises, des concepts d'apps, des recettes et des plans d'affaires.",cta_browse:'Voir les idées',cta_sell:'Publier la mienne',stat1:'Publier des idées est gratuit',stat2:'Toujours pour vous',stat2_loy:'Peut atteindre 95% →',stat3:'Langues disponibles',feat_label:'À la une',all_ideas:'Toutes les idées',cat_all:'Tout',cat_names:'Noms',cat_biz:'Business',cat_rec:'Recettes',how_ey:'Comment ça marche',how_h:"Aussi simple qu'avoir<br>une bonne <em>idée.</em>",s1t:'Publiez votre idée',s1d:"Décrivez le concept, fixez le prix et choisissez la modalité.",s2t:'Les acheteurs trouvent',s2d:"Des entrepreneurs et créatifs parcourent les catégories et contactent le créateur.",s3t:'Soyez rémunéré',s3d:"Paiement protégé. L'idée n'est livrée qu'après confirmation. Vous gardez 90% de la valeur — toujours.",sell_h:"Vous avez une idée qui attend d'être saisie.",sell_p:"Qu'il s'agisse d'un slogan ou d'un concept d'app — quelqu'un le veut.",sell_btn:'Publier maintenant',modal_opts:'Choisissez une modalité',modal_pay:'Continuer vers le paiement',sell_modal_ey:'Nouvelle annonce',sell_modal_h:'Publier une idée',f_title:"Titre de l'idée",f_cat:'Catégorie',f_desc:'Description',f_price:'Prix (€)',f_mode:'Modalité',sell_submit:'Soumettre pour révision',app_t:'App en développement',app_sub:'Bientôt sur iOS et Android — emportez le marketplace avec vous.',app_ios:'App Store — Bientôt',app_android:'Google Play — Bientôt',f_tag:'Le marketplace où les idées créatives rencontrent ceux qui veulent les réaliser.',f_h_market:'Marketplace',f_publish:'Publier une idée',f_h_company:'Entreprise',f_about:'À propos',f_blog:'Blog',f_contact:'Contact',f_h_legal:'Légal',f_terms:"Conditions d'utilisation",f_privacy:'Confidentialité',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · Tous droits réservés',nav_loyalty:'Programme de fidélité',cat_other:'Autre',f_suggest:'Suggestions',f_loyalty:'Programme de fidélité',loy_ey:'Programme de fidélité',loy_h:'Plus vous vendez,<br><em>moins vous payez.</em>',loy_sub:"Chaque €10 facturés vaut 1 point. Les points s'accumulent à vie et réduisent votre commission jusqu'à 5% minimum.",loy_note:'Chaque €10 facturés = 1 point · Points à vie · <a href="/loyalty.html">En savoir plus →</a>',loy_modal:'Chaque vente réduit votre commission — de 10% à 5%. <a href="/loyalty.html">En savoir plus →</a>',t1_name:'Étincelle',t2_name:'Artisan',t3_name:'Créateur',t4_name:'Auteur',t5_name:'Expert',t6_name:'Maître',
+    modal_phases:'Découvrez l\'idée par étapes',ph_free_lbl:'GRATUIT',ph_read:'Lire le résumé',ph_buy:'Acheter',ph_best:'Meilleure valeur',ph_pack_name:'Pack Complet',ph_pack_sub:'Phases 2 + 3 débloquées',ph_saves:'Économie de',ph_unlock:'Tout débloquer',card_phases:'3 étapes',card_from_free:'Résumé gratuit inclus',
+    f_phase_toggle:'Publier en étapes',f_phase_hint:'(pour idées complexes)',f_phase_config:'Configurer les étapes',f_ph1:'Étape 1 — Résumé public',f_ph2_n:'Étape 2 — Titre',f_ph2_p:'Prix étape 2 (€)',f_ph2_desc:'Description étape 2',f_ph3_n:'Étape 3 — Titre',f_ph3_p:'Prix étape 3 (€)',f_ph3_desc:'Description étape 3',f_pack_p:'Prix Pack Complet (Étapes 2+3) en €',
+    sell_legal_title:'Déclarations obligatoires',
+    ck_text:'Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic. Vous pouvez tout accepter ou seulement les essentiels. <a href="/cookies.html" class="ck-link">En savoir plus</a>',ck_accept:'Tout accepter',ck_decline:'Essentiels uniquement',
+    dd_wallet:'Mon portefeuille',dd_ideas:'Mes idées',dd_settings:'Paramètres',dd_admin:'Administration',dd_logout:'Se déconnecter',tab_wallet:'Portefeuille',tab_ideas:'Mes idées',ud_panel:'Mon tableau de bord',
+    flag:'🇫🇷',code:'FR'},
+  es:{nav_explore:'Explorar',nav_cats:'Categorías',nav_how:'Cómo funciona',nav_sell:'Vender una idea',nav_login:'Iniciar sesión',nav_register:'Crear cuenta',kicker:'El mercado de ideas no realizadas',h1:'Ideas guardadas<br>en un cajón<br><em>tienen valor.</em>',hero_sub:'Vende slogans, nombres de empresas, conceptos de apps, recetas, diseños y planes de negocio.',cta_browse:'Ver ideas en venta',cta_sell:'Publicar la mía',stat1:'Publicar ideas es gratuito',stat2:'Siempre para ti',stat2_loy:'Puede llegar al 95% →',stat3:'Idiomas disponibles',feat_label:'Destacados ahora',all_ideas:'Todas las ideas',cat_all:'Todo',cat_names:'Nombres',cat_biz:'Negocios',cat_rec:'Recetas',how_ey:'Cómo funciona',how_h:'Tan simple como tener<br>una buena <em>idea.</em>',s1t:'Publica tu idea',s1d:'Describe el concepto, fija el precio y elige la modalidad.',s2t:'Los compradores la encuentran',s2d:'Emprendedores y creativos navegan por categoría y contactan al creador.',s3t:'Cobra por tu talento',s3d:'Pago protegido. La idea solo se entrega tras la confirmación. Te quedas con el 90% del valor — siempre.',sell_h:'Tienes una idea esperando ser capturada.',sell_p:'Da igual si es un eslogan o un concepto de app — alguien lo quiere.',sell_btn:'Publicar ahora',modal_opts:'Elige una modalidad',modal_pay:'Continuar al pago',sell_modal_ey:'Nueva publicación',sell_modal_h:'Publicar una idea',f_title:'Título de la idea',f_cat:'Categoría',f_desc:'Descripción',f_price:'Precio (€)',f_mode:'Modalidad',sell_submit:'Enviar para revisión',app_t:'App en desarrollo',app_sub:'Próximamente en iOS y Android — lleva el marketplace contigo.',app_ios:'App Store — Próximamente',app_android:'Google Play — Próximamente',f_tag:'El marketplace donde las ideas creativas encuentran a quienes quieren realizarlas.',f_h_market:'Marketplace',f_publish:'Publicar idea',f_h_company:'Empresa',f_about:'Sobre nosotros',f_blog:'Blog',f_contact:'Contacto',f_h_legal:'Legal',f_terms:'Términos de uso',f_privacy:'Privacidad',f_cookies:'Cookies',f_copy:'© 2026 Catch This Idea · Todos los derechos reservados',nav_loyalty:'Programa de Fidelidad',cat_other:'Otra',f_suggest:'Sugerencias',f_loyalty:'Programa de Fidelidad',loy_ey:'Programa de fidelidad',loy_h:'Cuanto más vendes,<br><em>menos pagas.</em>',loy_sub:'Cada €10 facturados vale 1 punto. Los puntos se acumulan de por vida y reducen tu comisión hasta un mínimo del 5%.',loy_note:'Cada €10 facturados = 1 punto · Puntos vitalicios · <a href="/loyalty.html">Saber más →</a>',loy_modal:'Cada venta reduce tu comisión — del 10% al 5%. <a href="/loyalty.html">Saber más →</a>',t1_name:'Chispa',t2_name:'Artesano',t3_name:'Creador',t4_name:'Autor',t5_name:'Experto',t6_name:'Maestro',
+    modal_phases:'Descubre la idea por fases',ph_free_lbl:'GRATIS',ph_read:'Leer resumen',ph_buy:'Comprar',ph_best:'Mejor valor',ph_pack_name:'Pack Completo',ph_pack_sub:'Fases 2 + 3 desbloqueadas',ph_saves:'Ahorras',ph_unlock:'Desbloquear todo',card_phases:'3 fases',card_from_free:'Incluye resumen gratis',
+    f_phase_toggle:'Publicar en fases',f_phase_hint:'(para ideas complejas)',f_phase_config:'Configurar fases',f_ph1:'Fase 1 — Resumen público',f_ph2_n:'Fase 2 — Título',f_ph2_p:'Precio Fase 2 (€)',f_ph2_desc:'Descripción Fase 2',f_ph3_n:'Fase 3 — Título',f_ph3_p:'Precio Fase 3 (€)',f_ph3_desc:'Descripción Fase 3',f_pack_p:'Precio Pack Completo (Fases 2+3) en €',
+    sell_legal_title:'Declaraciones obligatorias',
+    ck_text:'Usamos cookies para mejorar tu experiencia y analizar el tráfico del sitio. Puedes aceptar todos o solo los esenciales. <a href="/cookies.html" class="ck-link">Más información</a>',ck_accept:'Aceptar todos',ck_decline:'Solo esenciales',
+    dd_wallet:'Mi cartera',dd_ideas:'Mis ideas',dd_settings:'Configuración',dd_admin:'Panel de administración',dd_logout:'Cerrar sesión',tab_wallet:'Cartera',tab_ideas:'Mis ideas',ud_panel:'Mi panel',
+    flag:'🇪🇸',code:'ES'}
 };
 let lang='pt';
-function setLang(l){lang=l;document.getElementById('lang-dd').classList.remove('open');document.getElementById('cur-flag').textContent=T[l].flag;document.getElementById('cur-code').textContent=T[l].code;document.querySelectorAll('.lang-opt').forEach(o=>o.classList.toggle('active',o.getAttribute('onclick').includes("'"+l+"'")));document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(T[l][k]!==undefined)el.innerHTML=T[l][k];});renderFeat();renderGrid();}
+const searchPlaceholder={pt:'Pesquisar ideias...',en:'Search ideas...',fr:'Rechercher des idées...',es:'Buscar ideas...'};
+function setLang(l){lang=l;document.getElementById('lang-dd').classList.remove('open');const si=document.getElementById('search-input');if(si)si.placeholder=searchPlaceholder[l]||searchPlaceholder.pt;const flagCodes={pt:'pt',en:'gb',fr:'fr',es:'es'};const cf=document.getElementById('cur-flag');cf.src='https://flagcdn.com/w40/'+flagCodes[l]+'.png';cf.alt=T[l].code;document.getElementById('cur-code').textContent=T[l].code;document.querySelectorAll('.lang-opt').forEach(o=>o.classList.toggle('active',o.getAttribute('onclick').includes("'"+l+"'")));document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(T[l][k]!==undefined)el.innerHTML=T[l][k];});renderFeat();renderGrid();updateMobLang();const ms=document.getElementById('mob-search');if(ms)ms.placeholder=searchPlaceholder[l]||searchPlaceholder.pt;}
 function toggleLang(e){e.stopPropagation();document.getElementById('lang-dd').classList.toggle('open');}
 document.addEventListener('click',()=>document.getElementById('lang-dd').classList.remove('open'));
 const listings=[
@@ -555,25 +1236,781 @@ const listings=[
   {id:3,em:'🏢',cat:'Nome',tp:{pt:'Canoa',en:'Canoa',fr:'Canoa',es:'Canoa'},dp:{pt:'Nome para startup de microcrédito ou cooperativa.',en:'Name for a microcredit startup or cooperative.',fr:'Nom pour une startup de microcrédit.',es:'Nombre para startup de microcrédito.'},seller:'Carlos S.',av:'CS',rp:{pt:'Criador verificado · 4.8 ★ (41 vendas)',en:'Verified creator · 4.8 ★ (41 sales)',fr:'Créateur vérifié · 4.8 ★ (41 ventes)',es:'Creador verificado · 4.8 ★ (41 ventas)'},price:'€620',op:{pt:[{t:'Nome + briefing',p:'€620',d:'Conceito e justificativa.'},{t:'Nome + identidade verbal',p:'€1.400',d:'Posicionamento completo.'}],en:[{t:'Name + briefing',p:'€620',d:'Concept and rationale.'},{t:'Name + verbal identity',p:'€1,400',d:'Full positioning.'}],fr:[{t:'Nom + briefing',p:'€620',d:'Concept et justificatif.'},{t:'Nom + identité verbale',p:'€1 400',d:'Positionnement complet.'}],es:[{t:'Nombre + briefing',p:'€620',d:'Concepto y justificativa.'},{t:'Nombre + identidad verbal',p:'€1.400',d:'Posicionamiento completo.'}]},badge:null},
   {id:4,em:'🍽️',cat:'Receita',tp:{pt:'Brigadeiro de fermentação natural',en:'Natural-fermentation chocolate truffle',fr:'Truffe à fermentation naturelle',es:'Brigadeiro de fermentación natural'},dp:{pt:'Usa levain em vez de manteiga processada. Testada 12 vezes.',en:'Uses levain instead of butter. Tested 12 times.',fr:'Utilise du levain. Testée 12 fois.',es:'Usa levain en lugar de mantequilla. Probada 12 veces.'},seller:'Ana F.',av:'AF',rp:{pt:'Criadora verificada · 4.7 ★ (9 vendas)',en:'Verified creator · 4.7 ★ (9 sales)',fr:'Créatrice vérifiée · 4.7 ★ (9 ventes)',es:'Creadora verificada · 4.7 ★ (9 ventas)'},price:'€180',op:{pt:[{t:'Receita completa',p:'€180',d:'PDF com passo a passo.'},{t:'Licença comercial',p:'€550',d:'Usa no teu negócio.'}],en:[{t:'Full recipe',p:'€180',d:'Step-by-step PDF.'},{t:'Commercial licence',p:'€550',d:'Use in your business.'}],fr:[{t:'Recette complète',p:'€180',d:'PDF pas à pas.'},{t:'Licence commerciale',p:'€550',d:'Usage commercial.'}],es:[{t:'Receta completa',p:'€180',d:'PDF paso a paso.'},{t:'Licencia comercial',p:'€550',d:'Uso comercial.'}]},badge:'new'},
   {id:5,em:'📦',cat:'Negócio',tp:{pt:'Subscrição de excedentes de restaurantes',en:'Restaurant surplus subscription',fr:'Abonnement aux surplus de restaurants',es:'Suscripción de excedentes de restaurantes'},dp:{pt:'Liga restaurantes com sobra de comida a moradores.',en:'Connects restaurants with surplus food to residents.',fr:'Relie les restaurants avec excédents aux habitants.',es:'Conecta restaurantes con excedente a vecinos.'},seller:'Pedro M.',av:'PM',rp:{pt:'Criador verificado · 4.9 ★ (5 vendas)',en:'Verified creator · 4.9 ★ (5 sales)',fr:'Créateur vérifié · 4.9 ★ (5 ventes)',es:'Creador verificado · 4.9 ★ (5 ventas)'},price:'€3.200',op:{pt:[{t:'Conceito completo',p:'€3.200',d:'Modelo, mercado, persona.'},{t:'Exclusividade + consultoria',p:'€7.500',d:'Pedro acompanha-te 30 dias.'}],en:[{t:'Full concept',p:'€3,200',d:'Model, market, persona.'},{t:'Exclusivity + consulting',p:'€7,500',d:'30-day support.'}],fr:[{t:'Concept complet',p:'€3 200',d:'Modèle, marché, persona.'},{t:'Exclusivité + conseil',p:'€7 500',d:'30 jours de support.'}],es:[{t:'Concepto completo',p:'€3.200',d:'Modelo, mercado, persona.'},{t:'Exclusividad + consultoría',p:'€7.500',d:'30 días de apoyo.'}]},badge:'hot'},
+  {id:7,em:'🏗️',cat:'Negócio',
+    tp:{pt:'Marketplace de trocas de competências',en:'Skills exchange marketplace',fr:'Marketplace d\'échange de compétences',es:'Marketplace de intercambio de habilidades'},
+    dp:{pt:'Plataforma onde profissionais trocam serviços diretamente — sem dinheiro, através de créditos de competência.',en:'Platform where professionals exchange services directly — no money, through skill credits.',fr:'Plateforme où les professionnels échangent des services — sans argent, via des crédits de compétences.',es:'Plataforma donde profesionales intercambian servicios directamente — sin dinero, con créditos de habilidades.'},
+    seller:'Beatriz A.',av:'BA',
+    rp:{pt:'Criadora verificada · 4.8 ★ (7 vendas)',en:'Verified creator · 4.8 ★ (7 sales)',fr:'Créatrice vérifiée · 4.8 ★ (7 ventes)',es:'Creadora verificada · 4.8 ★ (7 ventas)'},
+    price:'A partir de grátis',badge:'hot',
+    phases:[
+      {tp:{pt:'Resumo',en:'Overview',fr:'Résumé',es:'Resumen'},
+       dp:{pt:'Os serviços de freelancing estão a commoditizar. Identifiquei uma janela de oportunidade num modelo de troca direta de competências que nenhuma plataforma explorou a sério — aqui está o porquê.',en:'Freelancing is being commoditised. I identified a window of opportunity in a direct skills-exchange model that no platform has seriously explored — here\'s why.',fr:'Le freelancing se commoditise. J\'ai identifié une fenêtre d\'opportunité dans un modèle d\'échange direct de compétences — voici pourquoi.',es:'El freelancing se está commoditizando. Identifiqué una ventana de oportunidad en un modelo de intercambio directo de habilidades — aquí está el porqué.'},
+       price:0},
+      {tp:{pt:'Conceito completo',en:'Full concept',fr:'Concept complet',es:'Concepto completo'},
+       dp:{pt:'Modelo de negócio detalhado, sistema de créditos, análise competitiva vs. Upwork e LinkedIn, perfil do cliente ideal e proposta de valor diferenciada.',en:'Detailed business model, credits system, competitive analysis vs. Upwork & LinkedIn, ideal customer profile and differentiated value proposition.',fr:'Modèle économique détaillé, système de crédits, analyse concurrentielle vs Upwork et LinkedIn, profil client idéal.',es:'Modelo de negocio detallado, sistema de créditos, análisis competitivo vs. Upwork y LinkedIn, perfil de cliente ideal.'},
+       price:420},
+      {tp:{pt:'Plano de execução',en:'Execution plan',fr:"Plan d'exécution",es:'Plan de ejecución'},
+       dp:{pt:'Tech stack recomendado, roadmap de produto para 12 meses, estratégia de aquisição de utilizadores, modelo de monetização e projeções financeiras com 3 cenários.',en:'Recommended tech stack, 12-month product roadmap, user acquisition strategy, monetisation model and financial projections with 3 scenarios.',fr:'Stack tech recommandée, roadmap produit 12 mois, stratégie d\'acquisition, modèle de monétisation et projections financières.',es:'Stack tech recomendado, roadmap de producto 12 meses, estrategia de adquisición, modelo de monetización y proyecciones financieras.'},
+       price:780}
+    ],
+    pack:990},
   {id:6,em:'🎨',cat:'Design',tp:{pt:'Sistema de ícones para apps de bem-estar',en:'Icon system for wellness apps',fr:"Système d'icônes bien-être",es:'Sistema de iconos para apps de bienestar'},dp:{pt:'120 ícones com traço orgânico. Paleta de tons terrosos. Figma + SVG.',en:'120 icons, organic stroke, earthy palette. Figma + SVG.',fr:'120 icônes trait organique. Tons naturels. Figma + SVG.',es:'120 iconos trazo orgánico. Tonos terrosos. Figma + SVG.'},seller:'Julia K.',av:'JK',rp:{pt:'Criadora verificada · 5.0 ★ (22 vendas)',en:'Verified creator · 5.0 ★ (22 sales)',fr:'Créatrice vérifiée · 5.0 ★ (22 ventes)',es:'Creadora verificada · 5.0 ★ (22 ventas)'},price:'€890',op:{pt:[{t:'Licença pessoal',p:'€890',d:'Até 1 projecto pessoal.'},{t:'Licença comercial',p:'€2.100',d:'Uso ilimitado comercial.'}],en:[{t:'Personal licence',p:'€890',d:'1 personal project.'},{t:'Commercial licence',p:'€2,100',d:'Unlimited commercial.'}],fr:[{t:'Licence personnelle',p:'€890',d:'1 projet.'},{t:'Licence commerciale',p:'€2 100',d:'Commercial illimité.'}],es:[{t:'Licencia personal',p:'€890',d:'1 proyecto.'},{t:'Licencia comercial',p:'€2.100',d:'Comercial ilimitado.'}]},badge:null},
 ];
 const bTxt={pt:{hot:'Tendência',new:'Novo'},en:{hot:'Trending',new:'New'},fr:{hot:'Tendance',new:'Nouveau'},es:{hot:'Tendencia',new:'Nuevo'}};
 const bCls={hot:'b-hot',new:'b-new'};
-function gT(l){return l.tp[lang]||l.tp.pt}
-function gD(l){return l.dp[lang]||l.dp.pt}
-function gO(l){return l.op[lang]||l.op.pt}
-function gR(l){return l.rp[lang]||l.rp.pt}
+function gT(l){
+  if(l.tp) return l.tp[lang]||l.tp.pt||'';
+  return l['title_'+lang]||l.title_pt||'';
+}
+function gD(l){
+  if(l.dp) return l.dp[lang]||l.dp.pt||'';
+  return l['desc_'+lang]||l.desc_pt||'';
+}
+function gO(l){
+  if(l.op) return l.op[lang]||l.op.pt||[];
+  const opts=Array.isArray(l.options)?l.options:[];
+  if(!opts.length) return [{t:'Licença de uso',p:l.price_display||'—',d:''}];
+  return opts.map(o=>({
+    t:o.name_pt||o.type||'Opção',
+    p:o.price_eur!=null?`€${Number(o.price_eur).toLocaleString('pt-PT')}`:l.price_display||'—',
+    d:'',
+  }));
+}
+function gR(l){
+  if(l.rp) return l.rp[lang]||l.rp.pt||'';
+  const r=Number(l.avg_rating||0);
+  const v=Number(l.views_count||0);
+  if(r>0) return `★ ${r.toFixed(1)}${v>0?' · '+v+' view'+(v!==1?'s':''):''}`;
+  return v>0?v+' view'+(v!==1?'s':''):'Sem avaliações';
+}
 function renderFeat(){const fc=document.getElementById('feat-cards');fc.innerHTML='';[listings[0],listings[4],listings[5]].forEach(l=>{const d=document.createElement('div');d.className='fcard';const b=l.badge?`<span class="badge ${bCls[l.badge]}">${bTxt[lang][l.badge]}</span>`:'';d.innerHTML=`<div class="fcard-in"><div class="fcard-bar"></div><div class="fcard-body"><div class="fcard-top"><span class="fcard-cat">${l.cat}</span>${b}</div><div class="fcard-title">${gT(l)}</div><div class="fcard-meta"><span class="fcard-price">${l.price}</span><span class="fcard-seller">${l.seller}</span></div></div></div>`;d.onclick=()=>openBuy(l);fc.appendChild(d);});}
 let curCat='all';
-function renderGrid(){const g=document.getElementById('main-grid');g.innerHTML='';const fl=curCat==='all'?listings:listings.filter(l=>l.cat===curCat);fl.forEach(l=>{const d=document.createElement('div');d.className='card';const b=l.badge?`<span class="badge ${bCls[l.badge]}">${bTxt[lang][l.badge]}</span>`:'';d.innerHTML=`${l.badge?'<div class="corner-tri"></div>':''}<div class="card-em">${l.em}</div><div class="card-top"><span class="card-cat">${l.cat}</span>${b}</div><div class="card-title">${gT(l)}</div><div class="card-desc">${gD(l)}</div><div class="card-foot"><span class="card-price">${l.price}</span><span class="card-opts">${gO(l).length} opc.</span></div>`;d.onclick=()=>openBuy(l);g.appendChild(d);});}
+let searchQuery='';
+function handleSearch(val){
+  searchQuery=val.trim().toLowerCase();
+  document.getElementById('search-clear').classList.toggle('on',searchQuery.length>0);
+  if(searchQuery)document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+  renderGrid();
+}
+function clearSearch(){
+  document.getElementById('search-input').value='';
+  searchQuery='';
+  document.getElementById('search-clear').classList.remove('on');
+  renderGrid();
+}
+function renderGrid(){const g=document.getElementById('main-grid');g.innerHTML='';let fl=curCat==='all'?listings:listings.filter(l=>l.cat===curCat);if(searchQuery){fl=fl.filter(l=>gT(l).toLowerCase().includes(searchQuery)||gD(l).toLowerCase().includes(searchQuery)||l.cat.toLowerCase().includes(searchQuery));}if(fl.length===0){g.innerHTML=`<div class="no-results">${{pt:'Nenhuma ideia encontrada para "<em>'+searchQuery+'</em>".',en:'No ideas found for "<em>'+searchQuery+'</em>".',fr:'Aucune idée trouvée pour "<em>'+searchQuery+'</em>".',es:'Ninguna idea encontrada para "<em>'+searchQuery+'</em>".'}[lang]}</div>`;return;}fl.forEach(l=>{const d=document.createElement('div');d.className='card';const b=l.badge?`<span class="badge ${bCls[l.badge]}">${bTxt[lang][l.badge]}</span>`:'';const foot=l.phases?`<span class="badge-phase">${T[lang].card_phases}</span><span style="font-size:11px;color:#2e7d32;font-weight:500">${T[lang].card_from_free}</span>`:`<span class="card-price">${l.price}</span><span class="card-opts">${(l.op&&l.op[lang]||[]).length} opc.</span>`;d.innerHTML=`${l.badge?'<div class="corner-tri"></div>':''}<div class="card-em">${l.em}</div><div class="card-top"><span class="card-cat">${l.cat}</span>${b}</div><div class="card-title">${gT(l)}</div><div class="card-desc">${gD(l)}</div><div class="card-foot">${foot}</div>`;d.onclick=()=>openBuy(l);g.appendChild(d);});}
 function filterCat(el,cat){document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));el.classList.add('active');curCat=cat;renderGrid();}
 let selOpt=0;
-function openBuy(l){document.getElementById('m-cat').textContent=l.cat;document.getElementById('m-title').textContent=gT(l);document.getElementById('m-desc').textContent=gD(l);document.getElementById('m-av').textContent=l.av;document.getElementById('m-name').textContent=l.seller;document.getElementById('m-rating').textContent=gR(l);const ol=document.getElementById('m-opts');ol.innerHTML='';gO(l).forEach((o,i)=>{const el=document.createElement('div');el.className='opt'+(i===0?' sel':'');el.innerHTML=`<div class="opt-rb"></div><div><div class="opt-t">${o.t}</div><div class="opt-p">${o.p}</div><div class="opt-d">${o.d}</div></div>`;el.onclick=()=>{selOpt=i;ol.querySelectorAll('.opt').forEach((x,j)=>x.classList.toggle('sel',j===i));};ol.appendChild(el);});selOpt=0;document.getElementById('buy-wrap').classList.add('open');}
-function closeBuy(){document.getElementById('buy-wrap').classList.remove('open');}
-function handleBuy(){closeBuy();setTimeout(()=>alert('A redirecionar para pagamento seguro...'),100);}
-function openSell(){document.getElementById('sell-wrap').classList.add('open');}
-function closeSell(){document.getElementById('sell-wrap').classList.remove('open');}
+let _currentListing=null;
+function openBuy(l){
+  _currentListing=l;
+  // Track view for Supabase-originated ideas (UUID format)
+  if(l.id&&typeof l.id==='string'&&l.id.includes('-')){
+    fetch('/api/views',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idea_id:l.id})}).catch(()=>{});
+  }
+  document.getElementById('m-cat').textContent=l.cat||l.category||'—';
+  document.getElementById('m-title').textContent=gT(l);
+  document.getElementById('m-desc').textContent=gD(l);
+  const sellerName=l.seller||l.seller_name||'—';
+  const sellerAv=l.av||(sellerName[0]||'?').toUpperCase();
+  document.getElementById('m-av').textContent=sellerAv;
+  const nameEl=document.getElementById('m-name');
+  nameEl.textContent=sellerName;
+  if(l.seller_id){
+    nameEl.style.cssText='cursor:pointer;text-decoration:underline;text-underline-offset:2px';
+    nameEl.onclick=()=>window.open('/perfil.html?id='+l.seller_id,'_blank','noopener');
+  } else {
+    nameEl.style.cssText='';
+    nameEl.onclick=null;
+  }
+  document.getElementById('m-rating').textContent=gR(l);
+  const optsSection=document.getElementById('m-opts-section');
+  const phasesDiv=document.getElementById('m-phases');
+  if(l.phases){
+    optsSection.style.display='none';
+    phasesDiv.style.display='block';
+    renderPhases(l);
+  } else {
+    optsSection.style.display='block';
+    phasesDiv.style.display='none';
+    const ol=document.getElementById('m-opts');
+    ol.innerHTML='';
+    gO(l).forEach((o,i)=>{
+      const el=document.createElement('div');
+      el.className='opt'+(i===0?' sel':'');
+      el.innerHTML=`<div class="opt-rb"></div><div><div class="opt-t">${o.t}</div><div class="opt-p">${o.p}</div><div class="opt-d">${o.d}</div></div>`;
+      el.onclick=()=>{selOpt=i;ol.querySelectorAll('.opt').forEach((x,j)=>x.classList.toggle('sel',j===i));};
+      ol.appendChild(el);
+    });
+    selOpt=0;
+  }
+  // lockScroll só aqui — depois de todo o render, para nunca ficar preso em caso de erro
+  lockScroll();
+  document.getElementById('buy-wrap').classList.add('open');
+}
+function closeBuy(){document.getElementById('buy-wrap').classList.remove('open');unlockScroll();}
+async function handleBuy(){
+  if(!session){closeBuy();setTimeout(()=>openAuth('login'),200);return;}
+  const l=_currentListing;
+  // Listagem demo (sem UUID real) — mostrar aviso em vez de iniciar pagamento
+  if(!l||!l.id||!String(l.id).includes('-')){
+    alert('Esta é uma ideia de demonstração.\nAs ideias reais publicadas na plataforma têm um processo de pagamento completo.');
+    return;
+  }
+  await startCheckout({idea_id:l.id,option_idx:selOpt});
+}
+
+async function startCheckout(body){
+  const btn=document.getElementById('buy-pay-btn');
+  const origTxt=btn?.textContent;
+  if(btn){btn.disabled=true;btn.textContent='A processar...';}
+  try{
+    const res=await fetch('/api/checkout',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+      body:JSON.stringify(body),
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Erro ao iniciar pagamento');
+    // Redirecionar para Stripe Checkout
+    window.location.href=data.checkout_url;
+  }catch(e){
+    if(btn){btn.disabled=false;btn.textContent=origTxt;}
+    alert('Erro ao processar pagamento:\n'+e.message);
+  }
+}
+
+function renderPhases(l){
+  const t=T[lang];
+  const container=document.getElementById('m-phases');
+  const paidTotal=l.phases.filter(p=>p.price>0).reduce((s,p)=>s+p.price,0);
+  const saves=paidTotal-l.pack;
+  let phaseNum=0;
+  let html=`<div class="m-phases-hd">${t.modal_phases}</div>`;
+  l.phases.forEach((ph,idx)=>{
+    const isFree=ph.price===0;
+    const phName=ph.tp?.[lang]||ph.tp?.pt||ph.name||`Fase ${idx+1}`;
+    const phDesc=ph.dp?.[lang]||ph.dp?.pt||ph.desc||'';
+    if(isFree){
+      html+=`<div class="ph-row">
+        <div class="ph-icon ph-free"><i class="ti ti-eye" aria-hidden="true"></i></div>
+        <div class="ph-body">
+          <div class="ph-label ph-free-lbl">${t.ph_free_lbl}</div>
+          <div class="ph-name">${phName}</div>
+          <div class="ph-desc">${phDesc}</div>
+        </div>
+        <div class="ph-right">
+          <div class="ph-price-free">${t.ph_free_lbl}</div>
+          <button class="ph-btn ph-btn-free" onclick="handlePhaseBuy(0,'read',${idx})">${t.ph_read}</button>
+        </div>
+      </div>`;
+    } else {
+      phaseNum++;
+      html+=`<div class="ph-row">
+        <div class="ph-icon ph-paid"><i class="ti ti-lock-open" aria-hidden="true"></i></div>
+        <div class="ph-body">
+          <div class="ph-label">Fase ${phaseNum+1}</div>
+          <div class="ph-name">${phName}</div>
+          <div class="ph-desc">${phDesc}</div>
+        </div>
+        <div class="ph-right">
+          <div class="ph-price">€${ph.price.toLocaleString('pt-PT')}</div>
+          <button class="ph-btn ph-btn-pay" onclick="handlePhaseBuy(${ph.price},'phase',${idx})">${t.ph_buy}</button>
+        </div>
+      </div>`;
+    }
+  });
+  const savesStr=saves>0?` · ${t.ph_saves} €${saves.toLocaleString('pt-PT')}`:'';
+  html+=`<div class="ph-pack">
+    <div class="ph-pack-top">
+      <div class="ph-pack-badge">${t.ph_best}</div>
+      <div class="ph-pack-price">€${l.pack.toLocaleString('pt-PT')}</div>
+    </div>
+    <div class="ph-pack-name">${t.ph_pack_name}</div>
+    <div class="ph-pack-sub">${t.ph_pack_sub}${savesStr}</div>
+    <button class="ph-pack-cta" onclick="handlePhaseBuy(${l.pack},'pack')">${t.ph_unlock}</button>
+  </div>`;
+  container.innerHTML=html;
+}
+
+function handlePhaseBuy(price,type,phaseIdx){
+  if(type==='read'){
+    // Fase gratuita — sem autenticação necessária
+    closeBuy();
+    setTimeout(()=>alert('Resumo disponível — estás a ler gratuitamente!'),100);
+    return;
+  }
+  // Fase paga / pack — requer login
+  if(!session){closeBuy();setTimeout(()=>openAuth('login'),200);return;}
+  const l=_currentListing;
+  if(!l||!l.id||!String(l.id).includes('-')){
+    alert('Esta é uma ideia de demonstração.\nAs ideias reais publicadas na plataforma têm um processo de pagamento completo.');
+    return;
+  }
+  const body=type==='pack'
+    ?{idea_id:l.id,pack:true}
+    :{idea_id:l.id,phase_idx:phaseIdx};
+  closeBuy();
+  startCheckout(body);
+}
+
+function toggleSellPhases(on){
+  document.getElementById('sell-phases').style.display=on?'block':'none';
+}
+
+function updatePackHint(){
+  const p2=parseFloat(document.getElementById('ph2-price').value)||0;
+  const p3=parseFloat(document.getElementById('ph3-price').value)||0;
+  const pack=parseFloat(document.getElementById('ph-pack-price').value)||0;
+  const hint=document.getElementById('pack-hint');
+  if(p2>0&&p3>0&&pack>0){
+    const total=p2+p3;
+    const saves=total-pack;
+    hint.style.display='block';
+    if(saves>0){
+      hint.style.color='';
+      hint.textContent='✓ Comprador economiza €'+saves.toFixed(0)+' vs compra separada (€'+total.toFixed(0)+' → €'+pack.toFixed(0)+')';
+    } else if(saves===0){
+      hint.style.color='var(--muted)';
+      hint.textContent='Pack com o mesmo preço da compra separada.';
+    } else {
+      hint.style.color='#c0392b';
+      hint.textContent='⚠ Pack mais caro que a compra separada — considera um preço mais baixo.';
+    }
+  } else {
+    hint.style.display='none';
+  }
+}
+
+function openSell(){
+  if(!session){openAuth('login');return;}
+  lockScroll();
+  // Reset legal checkbox every time modal opens
+  const chk=document.getElementById('sell-confirm-legal');
+  const btn=document.getElementById('sell-submit-btn');
+  if(chk)chk.checked=false;
+  if(btn)btn.disabled=true;
+  // Reset image + doc upload
+  removeImage();
+  removeDoc();
+  document.getElementById('sell-wrap').classList.add('open');
+}
+function closeSell(){
+  document.getElementById('sell-wrap').classList.remove('open');
+  unlockScroll();
+  // Limpar campos
+  ['sell-title','sell-desc','sell-price','ph1-content','ph2-name','ph2-desc','ph3-name','ph3-desc','ph-pack-price'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+  ['ph2-price','ph3-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const phToggle=document.getElementById('sell-phase-toggle');
+  if(phToggle){phToggle.checked=false;toggleSellPhases(false);}
+  const errEl=document.getElementById('sell-error');
+  if(errEl)errEl.style.display='none';
+}
+function toggleSellSubmit(checked){
+  const btn=document.getElementById('sell-submit-btn');
+  if(btn)btn.disabled=!checked;
+}
+async function submitSell(){
+  const chk=document.getElementById('sell-confirm-legal');
+  if(!chk||!chk.checked){alert('Deves confirmar as declarações legais antes de submeter.');return;}
+  if(!session){openAuth('login');return;}
+
+  // Recolher valores dos campos
+  const titlePt = document.getElementById('sell-title')?.value?.trim();
+  const cat     = document.getElementById('sell-cat')?.value?.trim();
+  const desc    = document.getElementById('sell-desc')?.value?.trim();
+  const price   = parseFloat(document.getElementById('sell-price')?.value);
+  const mode    = document.getElementById('sell-mode')?.value;
+  const hasPhases = document.getElementById('sell-phase-toggle')?.checked;
+
+  // Validação
+  const errEl = document.getElementById('sell-error');
+  const showErr = msg => { if(errEl){errEl.textContent=msg;errEl.style.display='';} };
+  if(errEl) errEl.style.display='none';
+
+  if(!titlePt){ showErr('O título é obrigatório.'); return; }
+  if(!cat){     showErr('A categoria é obrigatória.'); return; }
+
+  // Construir payload
+  let options=null, phases=null, packPrice=null;
+
+  if(hasPhases){
+    // Ideia por fases
+    phases=[
+      { name: 'Resumo', price: 0,
+        desc: document.getElementById('ph1-content')?.value?.trim()||'' },
+      { name: document.getElementById('ph2-name')?.value?.trim()||'Fase 2',
+        price: parseFloat(document.getElementById('ph2-price')?.value)||0,
+        desc:  document.getElementById('ph2-desc')?.value?.trim()||'' },
+      { name: document.getElementById('ph3-name')?.value?.trim()||'Fase 3',
+        price: parseFloat(document.getElementById('ph3-price')?.value)||0,
+        desc:  document.getElementById('ph3-desc')?.value?.trim()||'' },
+    ];
+    packPrice = parseFloat(document.getElementById('ph-pack-price')?.value)||null;
+  } else {
+    // Modalidade normal
+    if(!price||price<=0){ showErr('Indica um preço válido.'); return; }
+    const modeNames={exclusive:'Exclusividade',license:'Licença de uso',custom:'Sob encomenda'};
+    options=[{ type: mode, price_eur: price, name_pt: modeNames[mode]||mode }];
+  }
+
+  const payload={
+    title_pt:     titlePt,
+    desc_pt:      desc||null,
+    category:     cat,
+    price_display: options ? `€${price.toLocaleString('pt-PT')}` : null,
+    image_url:    _sellImageUrl||null,
+    doc_url:      _sellDocPath||null,
+    options,
+    has_phases:   hasPhases,
+    phases,
+    pack_price:   packPrice,
+  };
+
+  // Enviar para a API
+  const btn=document.getElementById('sell-submit-btn');
+  const origTxt=btn?.textContent;
+  if(btn){btn.disabled=true;btn.textContent='A submeter...';}
+
+  try{
+    const res=await fetch('/api/ideas',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+      body:JSON.stringify(payload),
+    });
+    const data=await res.json();
+    if(res.status===403 && data.suspended){
+      closeSell();
+      if(btn){btn.disabled=false;btn.textContent=origTxt;}
+      showToast('🚫 '+(data.error||'Conta suspensa. Não podes publicar novas ideias.'),'err');
+      return;
+    }
+    if(!res.ok) throw new Error(data.error||'Erro ao submeter ideia');
+
+    // Fechar modal e mostrar resultado
+    closeSell();
+    if(data.moderation_status==='approved'){
+      showToast('🎉 Ideia publicada com sucesso!','ok');
+    } else if(data.moderation_status==='flagged'){
+      showToast('⚠️ Ideia enviada para revisão humana. Serás contactado em breve.','warn');
+    } else {
+      showToast('✓ Ideia submetida! Será publicada em até 72 horas após revisão.','ok');
+    }
+    // Atualizar dashboard se estiver aberto
+    if(_udTab==='ideas') loadMyIdeas();
+
+  }catch(e){
+    showErr(e.message||'Erro ao submeter. Tenta novamente.');
+    if(btn){btn.disabled=false;btn.textContent=origTxt;}
+  }
+}
 renderFeat();renderGrid();
+loadCarousel();
+
+// ── Deep-link de ideia a partir do perfil de vendedor ─────────
+(function handleIdeaDeeplink(){
+  const params = new URLSearchParams(window.location.search);
+  const ideaId = params.get('idea');
+  if (!ideaId) return;
+  window.history.replaceState({}, '', window.location.pathname);
+  fetch('/api/ideas?id=' + encodeURIComponent(ideaId))
+    .then(r => r.ok ? r.json() : null)
+    .then(idea => { if (idea) setTimeout(() => openBuy(idea), 350); })
+    .catch(() => {});
+})();
+
+// ── Regresso do Stripe (success / cancelled) ──────────────────
+(function handleStripeReturn(){
+  const params=new URLSearchParams(window.location.search);
+  const payment=params.get('payment');
+  if(!payment)return;
+  // Limpar URL sem recarregar a página
+  window.history.replaceState({},'',window.location.pathname);
+  if(payment==='success'){
+    showToast('🎉 Pagamento confirmado! A ideia foi adquirida com sucesso.','ok');
+    // Abrir painel do utilizador se estiver logado
+    if(session) setTimeout(()=>openWallet('wallet'),600);
+  } else if(payment==='cancelled'){
+    showToast('Pagamento cancelado. Podes tentar novamente quando quiseres.','warn');
+  }
+})();
+
+function showToast(msg,type='ok'){
+  const t=document.createElement('div');
+  t.className='stripe-toast stripe-toast-'+type;
+  t.textContent=msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400);},5000);
+}
+
+// ══════════════════════════════════════════════
+// CAROUSEL — MAIS VISUALIZADAS
+// ══════════════════════════════════════════════
+
+async function loadCarousel(){
+  try{
+    const res=await fetch('/api/ideas?top_views=6');
+    if(!res.ok) return;
+    const ideas=await res.json();
+    if(!ideas||!ideas.length) return;
+    renderCarousel(ideas);
+  }catch(e){
+    console.warn('carousel load error',e);
+  }
+}
+
+function renderCarousel(ideas){
+  const section=document.getElementById('carousel-section');
+  const divider=document.getElementById('carousel-divider');
+  const track=document.getElementById('carousel-track');
+  if(!ideas.length){return;}
+  section.style.display='';
+  divider.style.display='';
+  track.innerHTML='';
+  ideas.forEach(l=>{
+    const title=l['title_'+lang]||l.title_pt||'—';
+    const stars=l.avg_rating>0?'★ '+Number(l.avg_rating).toFixed(1):'';
+    const priceHtml=l.has_phases
+      ?`<span style="font-size:11px;color:#2e7d32;font-weight:500">${T[lang].card_from_free||'Inclui resumo grátis'}</span>`
+      :`<span class="csl-price">${l.price_display||''}</span>`;
+    const views=Number(l.views_count||0);
+    const card=document.createElement('div');
+    card.className='csl-card';
+    card.innerHTML=`<div class="csl-em">${l.emoji||'💡'}</div>
+      <div class="csl-cat">${l.category}</div>
+      <div class="csl-title">${title}</div>
+      <div class="csl-foot">
+        <span class="csl-views"><i class="ti ti-eye" style="font-size:12px" aria-hidden="true"></i>${views}</span>
+        ${stars?`<span class="csl-stars">${stars}</span>`:priceHtml}
+      </div>`;
+    card.onclick=()=>openBuy(l);
+    track.appendChild(card);
+  });
+}
+
+function scrollCarousel(dir){
+  const t=document.getElementById('carousel-track');
+  t.scrollBy({left:dir*260,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════
+// DASHBOARD — AS MINHAS IDEIAS
+// ══════════════════════════════════════════════
+
+let _udTab='wallet';
+let _isAdmin=false;
+
+function switchUdTab(tab){
+  _udTab=tab;
+  ['wallet','ideas','settings','admin'].forEach(t=>{
+    const btnEl=document.getElementById('udtab-'+t);
+    const panEl=document.getElementById('ud-'+t);
+    if(btnEl) btnEl.classList.toggle('active',t===tab);
+    if(panEl) panEl.classList.toggle('active',t===tab);
+  });
+  if(tab==='ideas')    loadMyIdeas();
+  if(tab==='settings') loadProfileSettings();
+  if(tab==='admin')    loadAdminPanel();
+}
+
+async function loadMyIdeas(){
+  const el=document.getElementById('ud-ideas-content');
+  if(!session){el.innerHTML='<div class="ud-empty">Necessário fazer login.</div>';return;}
+  el.innerHTML='<div class="ud-empty">A carregar...</div>';
+  try{
+    const res=await apiFetch('/api/ideas?seller_id='+session.user.id);
+    if(!res.ok)throw new Error('api error');
+    const ideas=await res.json();
+    renderMyIdeas(ideas,el);
+  }catch(e){
+    el.innerHTML='<div class="ud-empty">Erro ao carregar. Tenta novamente.</div>';
+  }
+}
+
+const statusLbl={active:'Ativa',hidden:'Oculta',invalidated:'Invalidada'};
+const statusCls={active:'s-active',hidden:'s-hidden',invalidated:'s-invalidated'};
+
+function renderMyIdeas(ideas,el){
+  if(!ideas.length){
+    el.innerHTML=`<div class="ud-empty">Ainda não tens ideias publicadas.</div>
+    <div class="ud-sell-hint" onclick="closeWallet();setTimeout(openSell,150)">
+      <i class="ti ti-plus" aria-hidden="true"></i> Publicar a minha primeira ideia →
+    </div>`;
+    return;
+  }
+  const rows=ideas.map(l=>{
+    // Badge reflects moderation state first, then visibility state
+    let badge, badgeCls;
+    if(l.moderation_status==='pending'){badge='Em análise';badgeCls='s-pending';}
+    else if(l.moderation_status==='flagged'){badge='Em revisão';badgeCls='s-flagged';}
+    else{badge=statusLbl[l.status]||l.status;badgeCls=statusCls[l.status]||'s-hidden';}
+
+    // Action buttons — only available for approved, non-invalidated ideas
+    const canAct=l.moderation_status==='approved'&&l.status!=='invalidated';
+    const actions=`
+      ${canAct&&l.status==='active'?`<button class="ia-btn ia-hide" onclick="updateIdeaStatus('${l.id}','hidden',this)">Ocultar</button>`:''}
+      ${canAct&&l.status==='hidden'?`<button class="ia-btn ia-show" onclick="updateIdeaStatus('${l.id}','active',this)">Mostrar</button>`:''}
+      ${l.status!=='invalidated'&&l.moderation_status!=='pending'?`<button class="ia-btn ia-inv" onclick="confirmInvalidate('${l.id}',this)">Invalidar</button>`:''}
+    `;
+    const pdfBtn=l.doc_url
+      ?`<button class="ia-btn" style="border-color:#e63946;color:#e63946;margin-left:3px" onclick="downloadIdeaDoc('${l.id}')" title="Descarregar PDF"><i class="ti ti-file-type-pdf"></i></button>`
+      :'';
+    return `<tr>
+      <td><span style="font-size:1.1rem;margin-right:5px">${l.emoji||'💡'}</span><span style="font-weight:500">${l.title_pt}</span><br><span style="font-size:11px;color:var(--muted)">${l.category}</span></td>
+      <td><span class="idea-status ${badgeCls}">${badge}</span></td>
+      <td style="text-align:center;color:var(--muted)">${l.views_count||0}</td>
+      <td style="text-align:center;color:var(--muted)">${l.sales_count||0}</td>
+      <td style="text-align:center;color:var(--or3)">${l.avg_rating>0?'★ '+Number(l.avg_rating).toFixed(1):'—'}</td>
+      <td>${actions}${pdfBtn}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML=`<div style="overflow-x:auto">
+    <table class="ideas-tbl">
+      <thead><tr>
+        <th>Ideia</th><th>Estado</th>
+        <th style="text-align:center"><i class="ti ti-eye" aria-hidden="true"></i></th>
+        <th style="text-align:center">Vendas</th>
+        <th style="text-align:center">Rating</th>
+        <th>Ações</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  <div class="ud-sell-hint" onclick="closeWallet();setTimeout(openSell,150)" style="margin-top:.9rem">
+    <i class="ti ti-plus" aria-hidden="true"></i> Publicar nova ideia →
+  </div>`;
+}
+
+async function updateIdeaStatus(id,status,btn){
+  if(!session) return;
+  const orig=btn.textContent;
+  btn.disabled=true;btn.textContent='...';
+  try{
+    const res=await fetch('/api/ideas',{
+      method:'PATCH',
+      headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},
+      body:JSON.stringify({id,status}),
+    });
+    if(!res.ok)throw new Error();
+    loadMyIdeas(); // refresh whole table
+  }catch(e){
+    btn.disabled=false;btn.textContent=orig;
+    alert('Erro ao atualizar. Tenta novamente.');
+  }
+}
+
+function confirmInvalidate(id,btn){
+  if(!confirm('Invalidar esta ideia? Ela deixará de aparecer publicamente. Esta ação não pode ser desfeita facilmente.'))return;
+  updateIdeaStatus(id,'invalidated',btn);
+}
+
+// ══════════════════════════════════════════════
+// IMAGEM — UPLOAD PARA O MODAL DE VENDA
+// ══════════════════════════════════════════════
+
+let _sellImageUrl=null;
+
+function removeImage(){
+  _sellImageUrl=null;
+  const inp=document.getElementById('sell-img-input');
+  if(inp)inp.value='';
+  const thumb=document.getElementById('sell-img-thumb');
+  if(thumb)thumb.src='';
+  const prev=document.getElementById('sell-img-preview');
+  if(prev)prev.style.display='none';
+  const lbl=document.getElementById('sell-img-label');
+  if(lbl)lbl.style.display='';
+  const st=document.getElementById('sell-img-status');
+  if(st){st.style.display='none';st.textContent='';st.className='sell-img-status';}
+}
+
+async function handleImageSelect(evt){
+  const file=evt.target.files[0];
+  if(!file)return;
+
+  // Show local preview immediately
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const thumb=document.getElementById('sell-img-thumb');
+    const prev=document.getElementById('sell-img-preview');
+    const lbl=document.getElementById('sell-img-label');
+    if(thumb)thumb.src=e.target.result;
+    if(prev)prev.style.display='';
+    if(lbl)lbl.style.display='none';
+  };
+  reader.readAsDataURL(file);
+
+  // Upload to server
+  const statusEl=document.getElementById('sell-img-status');
+  if(statusEl){statusEl.style.display='';statusEl.className='sell-img-status loading';statusEl.textContent='A carregar imagem...';}
+
+  if(!session){
+    if(statusEl){statusEl.className='sell-img-status error';statusEl.textContent='Necessário fazer login para carregar imagens.';}
+    removeImage();return;
+  }
+
+  try{
+    const fd=new FormData();
+    fd.append('image',file);
+    const res=await fetch('/api/upload',{
+      method:'POST',
+      headers:{Authorization:'Bearer '+session.access_token},
+      body:fd,
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Erro ao carregar');
+    _sellImageUrl=data.url;
+    if(statusEl){statusEl.className='sell-img-status ok';statusEl.textContent='✓ Imagem carregada com sucesso';}
+  }catch(e){
+    _sellImageUrl=null;
+    if(statusEl){statusEl.className='sell-img-status error';statusEl.textContent=e.message||'Erro ao carregar imagem.';}
+    // Keep preview (user can retry), don't removeImage() so they see the error
+  }
+}
+
+// ── PDF ──────────────────────────────────────
+let _sellDocPath=null;
+
+function removeDoc(){
+  _sellDocPath=null;
+  const inp=document.getElementById('sell-doc-input');
+  if(inp)inp.value='';
+  const prev=document.getElementById('sell-doc-preview');
+  if(prev)prev.style.display='none';
+  const lbl=document.getElementById('sell-doc-label');
+  if(lbl)lbl.style.display='';
+  const st=document.getElementById('sell-doc-status');
+  if(st){st.style.display='none';st.textContent='';st.className='sell-img-status';}
+}
+
+async function handleDocSelect(evt){
+  const file=evt.target.files[0];
+  if(!file)return;
+
+  const statusEl=document.getElementById('sell-doc-status');
+  const prev=document.getElementById('sell-doc-preview');
+  const lbl=document.getElementById('sell-doc-label');
+
+  // Mostrar preview com nome e tamanho
+  document.getElementById('sell-doc-name').textContent=file.name;
+  document.getElementById('sell-doc-size').textContent=(file.size/1024/1024).toFixed(2)+' MB';
+  if(prev)prev.style.display='flex';
+  if(lbl)lbl.style.display='none';
+
+  if(statusEl){statusEl.style.display='';statusEl.className='sell-img-status loading';statusEl.textContent='A carregar PDF...';}
+
+  if(!session){
+    if(statusEl){statusEl.className='sell-img-status error';statusEl.textContent='Necessário fazer login para carregar documentos.';}
+    removeDoc();return;
+  }
+
+  try{
+    const fd=new FormData();
+    fd.append('document',file);
+    const res=await fetch('/api/upload',{
+      method:'POST',
+      headers:{Authorization:'Bearer '+session.access_token},
+      body:fd,
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error||'Erro ao carregar');
+    if(data.kind!=='document')throw new Error('Ficheiro não reconhecido como documento.');
+    _sellDocPath=data.path;
+    if(statusEl){statusEl.className='sell-img-status ok';statusEl.textContent='✓ PDF carregado — será entregue ao comprador após pagamento';}
+  }catch(e){
+    _sellDocPath=null;
+    if(statusEl){statusEl.className='sell-img-status error';statusEl.textContent=e.message||'Erro ao carregar PDF.';}
+  }
+}
+
+async function downloadIdeaDoc(ideaId){
+  if(!session){alert('Necessário fazer login para aceder ao documento.');return;}
+  try{
+    const res=await fetch('/api/download?idea_id='+ideaId,{headers:{Authorization:'Bearer '+session.access_token}});
+    const data=await res.json();
+    if(res.status===403&&data.requires_purchase){
+      // Conteúdo bloqueado — informar claramente e oferecer compra
+      alert('📄 Este documento fica disponível após adquirires a ideia.\n\nFecha este painel e clica em "Comprar" no card da ideia para a adquirir.');
+      return;
+    }
+    if(!res.ok)throw new Error(data.error||'Erro ao obter link de download');
+    // Abrir em nova aba — o browser trata do download
+    window.open(data.signed_url,'_blank','noopener,noreferrer');
+  }catch(e){
+    alert('Não foi possível descarregar o documento:\n'+e.message);
+  }
+}
+
+// ══════════════════════════════════════════════
+// AVALIAÇÃO — STAR RATING
+// ══════════════════════════════════════════════
+
+let _ratingListing=null;
+let _ratingStars=0;
+
+function openRate(l){
+  _ratingListing=l;
+  _ratingStars=0;
+  document.getElementById('rate-form').style.display='block';
+  document.getElementById('rate-success').style.display='none';
+  document.getElementById('rate-comment').value='';
+  document.querySelectorAll('#star-row .star').forEach(s=>s.classList.remove('on','hover'));
+  document.getElementById('rate-overlay').classList.add('open');
+  lockScroll();
+}
+function closeRate(e){
+  if(e&&e.target!==document.getElementById('rate-overlay'))return;
+  document.getElementById('rate-overlay').classList.remove('open');
+  unlockScroll();
+}
+function setRatingStar(n){
+  _ratingStars=n;
+  document.querySelectorAll('#star-row .star').forEach((s,i)=>s.classList.toggle('on',i<n));
+}
+function hoverStar(n){
+  document.querySelectorAll('#star-row .star').forEach((s,i)=>{
+    s.classList.toggle('hover',i<n&&!s.classList.contains('on'));
+  });
+}
+function leaveStar(){
+  document.querySelectorAll('#star-row .star').forEach(s=>s.classList.remove('hover'));
+}
+
+async function submitRating(){
+  if(!_ratingStars){alert('Seleciona o número de estrelas.');return;}
+  if(!session){alert('Necessário fazer login para avaliar.');return;}
+  if(!_ratingListing){return;}
+
+  const btn=document.querySelector('#rate-form .btn-cta');
+  btn.disabled=true;btn.textContent='A guardar...';
+
+  const comment=document.getElementById('rate-comment').value.trim();
+  try{
+    const res=await fetch('/api/ratings',{
+      method:'POST',
+      headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},
+      body:JSON.stringify({
+        idea_id:_ratingListing.id,
+        seller_id:_ratingListing.seller_id,
+        stars:_ratingStars,
+        comment:comment||null,
+      }),
+    });
+    if(!res.ok){
+      const d=await res.json();
+      throw new Error(d.error||'Erro ao guardar');
+    }
+    document.getElementById('rate-form').style.display='none';
+    document.getElementById('rate-success').style.display='block';
+    setTimeout(closeRate,2500);
+  }catch(e){
+    alert(e.message);
+    btn.disabled=false;btn.textContent='Enviar avaliação';
+  }
+}
 
 // ══════════════════════════════════════════════
 // AUTH & WALLET
@@ -583,6 +2020,42 @@ let session = JSON.parse(localStorage.getItem('cti_session') || 'null');
 
 function saveSession(s){ session = s; localStorage.setItem('cti_session', JSON.stringify(s)); }
 function clearSession(){ session = null; localStorage.removeItem('cti_session'); }
+
+// ── Refresh automático de token JWT (expira ao fim de ~1h) ─────
+async function refreshSession() {
+  if (!session?.refresh_token) return false;
+  try {
+    const res = await fetch('/api/auth', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ action: 'refresh', refresh_token: session.refresh_token }),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    saveSession({ ...session, ...data });
+    return true;
+  } catch { return false; }
+}
+
+// Wrapper fetch que renova o token em caso de 401 e retenta automaticamente
+async function apiFetch(url, options = {}) {
+  if (session?.access_token) {
+    options.headers = { ...options.headers, 'Authorization': 'Bearer ' + session.access_token };
+  }
+  let res = await fetch(url, options);
+  if (res.status === 401 && session?.refresh_token) {
+    const ok = await refreshSession();
+    if (ok) {
+      options.headers = { ...options.headers, 'Authorization': 'Bearer ' + session.access_token };
+      res = await fetch(url, options);
+    } else {
+      // Token inválido — forçar logout
+      clearSession();
+      updateNavAuth();
+    }
+  }
+  return res;
+}
 
 function updateNavAuth(){
   const out = document.getElementById('nav-loggedout');
@@ -599,12 +2072,29 @@ function updateNavAuth(){
     out.style.display = 'flex';
     inn.style.display = 'none';
   }
+  // Mobile nav auth state
+  const mobOut=document.getElementById('mob-auth-out');
+  const mobIn=document.getElementById('mob-auth-in');
+  if(mobOut&&mobIn){
+    if(session){
+      mobOut.style.display='none';
+      mobIn.style.display='flex';
+      const av=document.getElementById('mob-avatar');
+      const un=document.getElementById('mob-username');
+      const ini=(session.user.name||session.user.email||'?').charAt(0).toUpperCase();
+      if(av)av.textContent=ini;
+      if(un)un.textContent=session.user.name||session.user.email||'—';
+    }else{
+      mobOut.style.display='flex';
+      mobIn.style.display='none';
+    }
+  }
 }
 
 async function loadWalletBalance(){
   if(!session) return;
   try {
-    const r = await fetch('/api/wallet', { headers:{ Authorization:`Bearer ${session.access_token}` }});
+    const r = await apiFetch('/api/wallet');
     if(!r.ok) return;
     const d = await r.json();
     document.getElementById('nav-balance').textContent = '€' + Number(d.balance_eur).toLocaleString('pt-PT',{minimumFractionDigits:2});
@@ -621,11 +2111,13 @@ function openAuth(mode = 'login'){
   document.getElementById('auth-overlay').classList.add('open');
   document.getElementById('auth-error').style.display = 'none';
   document.getElementById('auth-form').reset();
+  lockScroll();
 }
 
 function closeAuth(e){
   if(e && e.target !== document.getElementById('auth-overlay')) return;
   document.getElementById('auth-overlay').classList.remove('open');
+  unlockScroll();
 }
 
 function switchAuthTab(mode){
@@ -724,6 +2216,7 @@ async function submitAuth(e){
     saveSession(d);
     document.getElementById('auth-overlay').classList.remove('open');
     updateNavAuth();
+    checkAdminRole();
 
   } catch(err){
     errEl.className = 'auth-error';
@@ -827,6 +2320,7 @@ async function submitReset(e){
     if(!r.ok) throw new Error(d.error || 'Erro ao redefinir a password.');
 
     document.getElementById('reset-overlay').classList.remove('open');
+    unlockScroll();
     resetToken = null;
     setTimeout(() => {
       openAuth('login');
@@ -844,15 +2338,20 @@ async function submitReset(e){
 }
 
 // ── Wallet modal ──────────────────────────────
-function openWallet(){
+function openWallet(tab){
+  lockScroll();
   document.getElementById('wallet-overlay').classList.add('open');
   document.getElementById('user-dd').classList.remove('open');
-  refreshWalletModal();
+  // Reset to requested tab or wallet by default
+  const targetTab=tab||'wallet';
+  switchUdTab(targetTab);
+  if(targetTab==='wallet') refreshWalletModal();
 }
 
 function closeWallet(e){
   if(e && e.target !== document.getElementById('wallet-overlay')) return;
   document.getElementById('wallet-overlay').classList.remove('open');
+  unlockScroll();
 }
 
 async function refreshWalletModal(){
@@ -864,6 +2363,27 @@ async function refreshWalletModal(){
   if(!d){ listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted)">Erro ao carregar.</div>'; return; }
 
   amtEl.textContent = '€' + Number(d.balance_eur).toLocaleString('pt-PT',{minimumFractionDigits:2});
+
+  // ── Tier de loyalty ─────────────────────────────────────────
+  if(d.tier){
+    const tierCard = document.getElementById('wallet-tier-card');
+    const pts      = d.loyalty_points ?? 0;
+    document.getElementById('wallet-tier-icon').className = 'ti ' + d.tier.icon;
+    document.getElementById('wallet-tier-name').textContent = d.tier.name;
+    document.getElementById('wallet-tier-rate').textContent = Math.round(d.tier.rate * 100) + '%';
+    document.getElementById('wallet-tier-pts').textContent  = pts + (pts === 1 ? ' ponto' : ' pontos');
+    if(d.tier.next){
+      const ptsLeft = d.tier.nextPts - pts;
+      const range   = d.tier.nextPts - d.tier.prevPts;
+      const pct     = range > 0 ? Math.min(100, Math.round((pts - d.tier.prevPts) / range * 100)) : 0;
+      document.getElementById('wallet-tier-next').textContent = ptsLeft + ' pontos para ' + d.tier.next;
+      document.getElementById('wallet-tier-bar').style.width  = pct + '%';
+    } else {
+      document.getElementById('wallet-tier-next').textContent = '🎉 Nível máximo!';
+      document.getElementById('wallet-tier-bar').style.width  = '100%';
+    }
+    tierCard.style.display = '';
+  }
 
   if(!d.transactions || d.transactions.length === 0){
     listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:.9rem">Ainda não há movimentos.</div>';
@@ -886,6 +2406,12 @@ async function refreshWalletModal(){
 }
 
 // ── Logout ────────────────────────────────────
+function goToOwnProfile(){
+  if(!session?.user?.id) return;
+  document.getElementById('user-dd').classList.remove('open');
+  window.location.href='/perfil.html?id='+session.user.id;
+}
+
 async function doLogout(){
   if(session){
     fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'logout'})});
@@ -938,6 +2464,7 @@ document.addEventListener('click', () => {
     // Link de recuperação de password clicado — abrir modal de nova password
     resetToken = token;
     setTimeout(() => {
+      lockScroll();
       document.getElementById('reset-overlay').classList.add('open');
     }, 200);
   } else if (type === 'signup' || token) {
@@ -952,7 +2479,284 @@ document.addEventListener('click', () => {
 })();
 
 updateNavAuth();
+if(session) checkAdminRole();
+
+// ══════════════════════════════════════════════
+// ADMIN — PAINEL DE MODERAÇÃO
+// ══════════════════════════════════════════════
+
+// ── Definições de perfil ──────────────────────────────────────
+async function loadProfileSettings(){
+  if(!session) return;
+  try{
+    const res=await fetch('/api/profile?user_id='+session.user.id);
+    if(!res.ok) return;
+    const data=await res.json();
+    const nameEl=document.getElementById('cfg-name');
+    const bioEl=document.getElementById('cfg-bio');
+    const linkEl=document.getElementById('cfg-profile-link');
+    if(nameEl) nameEl.value=data.display_name||session.user.name||'';
+    if(bioEl)  bioEl.value=data.bio||'';
+    if(linkEl) linkEl.href='/perfil.html?id='+session.user.id;
+  }catch(e){}
+}
+async function saveProfileSettings(){
+  if(!session) return;
+  const btn=document.getElementById('cfg-profile-btn');
+  const errEl=document.getElementById('cfg-profile-error');
+  const name=document.getElementById('cfg-name')?.value?.trim();
+  const bio=document.getElementById('cfg-bio')?.value?.trim();
+  errEl.style.display='none';
+  btn.disabled=true; btn.textContent='A guardar...';
+  try{
+    const res=await fetch('/api/profile',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+      body:JSON.stringify({display_name:name,bio}),
+    });
+    if(!res.ok) throw new Error((await res.json()).error||'Erro');
+    // Atualizar sessão local e nav imediatamente com o novo nome
+    if(name) saveSession({...session, user:{...session.user, name}});
+    updateNavAuth();
+    showToast('✓ Perfil atualizado com sucesso!','ok');
+  }catch(e){
+    errEl.textContent=e.message; errEl.style.display='';
+  } finally {
+    btn.disabled=false; btn.textContent='Guardar perfil';
+  }
+}
+async function savePasswordSettings(){
+  if(!session) return;
+  const btn=document.getElementById('cfg-pw-btn');
+  const errEl=document.getElementById('cfg-pw-error');
+  const pw1=document.getElementById('cfg-pw1')?.value;
+  const pw2=document.getElementById('cfg-pw2')?.value;
+  errEl.style.display='none';
+  if(!pw1||pw1.length<8||!/[A-Z]/.test(pw1)||!/[0-9]/.test(pw1)){
+    errEl.textContent='Mínimo 8 caracteres, 1 maiúscula e 1 número.'; errEl.style.display=''; return;
+  }
+  if(pw1!==pw2){errEl.textContent='As passwords não coincidem.'; errEl.style.display=''; return;}
+  btn.disabled=true; btn.textContent='A alterar...';
+  try{
+    const res=await fetch('/api/auth',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'reset',new_password:pw1,access_token:session.access_token}),
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Erro');
+    document.getElementById('cfg-pw1').value='';
+    document.getElementById('cfg-pw2').value='';
+    showToast('✓ Password alterada com sucesso!','ok');
+  }catch(e){
+    errEl.textContent=e.message; errEl.style.display='';
+  } finally {
+    btn.disabled=false; btn.textContent='Alterar password';
+  }
+}
+
+async function checkAdminRole(){
+  if(!session) return;
+  try{
+    const res=await fetch('/api/admin?action=check',{headers:{Authorization:'Bearer '+session.access_token}});
+    const data=await res.json();
+    _isAdmin=!!data.is_admin;
+    const adminTab=document.getElementById('udtab-admin');
+    if(adminTab) adminTab.style.display=_isAdmin?'':'none';
+    const ddLink=document.getElementById('dd-admin-link');
+    if(ddLink) ddLink.style.display=_isAdmin?'':'none';
+    const navBtn=document.getElementById('nav-admin-btn');
+    if(navBtn) navBtn.style.display=_isAdmin?'flex':'none';
+  }catch(e){ _isAdmin=false; }
+}
+
+async function loadAdminPanel(){
+  if(!session||!_isAdmin) return;
+  const el=document.getElementById('ud-admin-content');
+  el.innerHTML='<div class="ud-empty">A carregar...</div>';
+  try{
+    const [pendRes,flagRes]=await Promise.all([
+      fetch('/api/admin?action=pending',{headers:{Authorization:'Bearer '+session.access_token}}),
+      fetch('/api/admin?action=flagged',{headers:{Authorization:'Bearer '+session.access_token}}),
+    ]);
+    const pending=await pendRes.json();
+    const flagged=await flagRes.json();
+    renderAdminPanel(pending,flagged,el);
+  }catch(e){
+    el.innerHTML='<div class="ud-empty">Erro ao carregar painel admin.</div>';
+  }
+}
+
+function renderAdminPanel(pending,flagged,el){
+  let html='';
+
+  // Sinalizadas (urgente primeiro)
+  html+=`<div class="admin-section-hd"><i class="ti ti-alert-triangle" style="color:#ad1457"></i> Sinalizadas (${flagged.length})</div>`;
+  if(!flagged.length){
+    html+='<div class="admin-empty">Sem ideias sinalizadas ✓</div>';
+  } else {
+    flagged.forEach(idea=>{
+      html+=adminCard(idea,'flagged');
+    });
+  }
+
+  // Em análise
+  html+=`<div class="admin-section-hd" style="margin-top:1.2rem"><i class="ti ti-clock" style="color:#e65100"></i> Em análise (${pending.length})</div>`;
+  if(!pending.length){
+    html+='<div class="admin-empty">Sem ideias pendentes ✓</div>';
+  } else {
+    pending.forEach(idea=>{
+      html+=adminCard(idea,'pending');
+    });
+  }
+
+  el.innerHTML=html;
+}
+
+function adminCard(idea,type){
+  const cls=type==='flagged'?'admin-card admin-card-flagged':'admin-card';
+  const date=new Date(idea.created_at).toLocaleDateString('pt-PT');
+  const desc=(idea.desc_pt||'(sem descrição)').slice(0,120);
+  const reason=idea.moderation_reason?`<div style="font-size:11px;color:#ad1457;margin-bottom:.5rem">⚠ ${idea.moderation_reason}</div>`:'';
+  return `<div class="${cls}" id="admin-card-${idea.id}">
+    <div class="admin-card-title">${idea.emoji||'💡'} ${idea.title_pt}</div>
+    <div class="admin-card-meta">${idea.category} · ${idea.seller_name||'—'} · ${date}</div>
+    ${reason}
+    <div class="admin-card-desc">${desc}</div>
+    <div class="admin-actions">
+      <button class="admin-btn admin-btn-approve" onclick="adminAction('approve','${idea.id}')">✓ Aprovar</button>
+      <button class="admin-btn admin-btn-reject"  onclick="adminReject('${idea.id}')">✕ Rejeitar</button>
+      <button class="admin-btn admin-btn-ai"      onclick="adminAction('remoderate','${idea.id}')">🤖 Re-analisar IA</button>
+    </div>
+  </div>`;
+}
+
+async function adminAction(action,ideaId,reason){
+  if(!session||!_isAdmin) return;
+  const card=document.getElementById('admin-card-'+ideaId);
+  if(card) card.style.opacity='.5';
+  try{
+    const res=await fetch('/api/admin',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+      body:JSON.stringify({action,idea_id:ideaId,reason}),
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Erro');
+    if(card) card.remove();
+    const msg=action==='approve'?'✓ Ideia aprovada e publicada'
+             :action==='reject'?'🗑 Conteúdo eliminado permanentemente'
+             :'🤖 Re-analisada: '+data.moderation?.decision;
+    showToast(msg,'ok');
+    if(action==='remoderate') loadAdminPanel(); // recarregar para refletir novo estado
+  }catch(e){
+    if(card) card.style.opacity='1';
+    alert('Erro: '+e.message);
+  }
+}
+
+function adminReject(ideaId){
+  const reason=prompt('Motivo da rejeição (será visível ao vendedor):');
+  if(!reason||!reason.trim()) return;
+  adminAction('reject',ideaId,reason.trim());
+}
+
+// ── Body scroll lock (fix modal position on iOS) ──────────────
+let _scrollY=0;
+function lockScroll(){
+  _scrollY=window.scrollY;
+  document.body.style.overflow='hidden';
+  document.body.style.position='fixed';
+  document.body.style.top='-'+_scrollY+'px';
+  document.body.style.width='100%';
+}
+function unlockScroll(){
+  document.body.style.overflow='';
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.width='';
+  window.scrollTo(0,_scrollY);
+}
+
+// ── Mobile nav ────────────────────────────────
+function toggleMobNav(){
+  const mn=document.getElementById('mob-nav');
+  const navEl=document.querySelector('nav');
+  const isOpen=mn.classList.toggle('open');
+  const tog=document.getElementById('mob-toggle');
+  const ic=document.getElementById('mob-icon');
+  ic.className=isOpen?'ti ti-x':'ti ti-menu-2';
+  if(tog)tog.classList.toggle('active',isOpen);
+  if(isOpen){
+    const h=navEl.offsetHeight;
+    mn.style.top=h+'px';
+    mn.style.maxHeight=(window.innerHeight-h-20)+'px';
+  }
+}
+function closeMobNav(){
+  const mn=document.getElementById('mob-nav');
+  if(!mn)return;
+  mn.classList.remove('open');
+  const ic=document.getElementById('mob-icon');
+  if(ic)ic.className='ti ti-menu-2';
+  const tog=document.getElementById('mob-toggle');
+  if(tog)tog.classList.remove('active');
+}
+function updateMobLang(){
+  const langs=['pt','en','fr','es'];
+  document.querySelectorAll('.mob-lang-opt').forEach((opt,i)=>{
+    opt.classList.toggle('mob-lang-active',langs[i]===lang);
+  });
+}
+// Close mob nav when clicking outside
+document.addEventListener('click',function(e){
+  const mn=document.getElementById('mob-nav');
+  const mt=document.getElementById('mob-toggle');
+  if(mn&&mt&&mn.classList.contains('open')&&!mn.contains(e.target)&&!mt.contains(e.target)){
+    closeMobNav();
+  }
+});
+// Close mob nav on resize to desktop
+window.addEventListener('resize',function(){
+  const mn=document.getElementById('mob-nav');
+  if(window.innerWidth>900&&mn&&mn.classList.contains('open'))closeMobNav();
+  if(mn&&mn.classList.contains('open')){
+    const navEl=document.querySelector('nav');
+    mn.style.top=navEl.offsetHeight+'px';
+    mn.style.maxHeight=(window.innerHeight-navEl.offsetHeight-20)+'px';
+  }
+});
+
+function updateBackTop(){const btn=document.getElementById('back-top');if(!btn)return;const footer=document.querySelector('footer,.legal-footer');if(footer){const ft=footer.getBoundingClientRect().top;const vh=window.innerHeight;btn.style.bottom=ft<vh?(vh-ft+14)+'px':''}btn.classList.toggle('show',window.scrollY>350);}
+window.addEventListener('scroll',updateBackTop);
+
+// ── Cookie Banner ───────────────────────────────
+function initCookieBanner(){
+  if(!localStorage.getItem('cti_cookies'))
+    document.getElementById('cookie-banner').style.display='';
+}
+function acceptCookies(){
+  localStorage.setItem('cti_cookies','accepted');
+  document.getElementById('cookie-banner').style.display='none';
+}
+function declineCookies(){
+  localStorage.setItem('cti_cookies','declined');
+  document.getElementById('cookie-banner').style.display='none';
+}
+initCookieBanner();
 
 </script>
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo"><i class="ti ti-arrow-up"></i></button>
+
+<!-- Cookie consent banner -->
+<div id="cookie-banner" style="display:none" role="dialog" aria-label="Cookies">
+  <div class="ck-inner">
+    <div class="ck-text" data-t="ck_text">Usamos cookies para melhorar a tua experiência e analisar o tráfego. Podes aceitar todos ou apenas os essenciais. <a href="/cookies.html" class="ck-link">Saber mais</a></div>
+    <div class="ck-btns">
+      <button class="ck-decline" data-t="ck_decline" onclick="declineCookies()">Só essenciais</button>
+      <button class="ck-accept" data-t="ck_accept" onclick="acceptCookies()">Aceitar todos</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

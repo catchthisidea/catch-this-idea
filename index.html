@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,8 +21,19 @@
       --or2:     #f07800;
       --or3:     #fab030;
       --or-pale: #fff0e0;
-      --muted:   #7a6040;
-      --border:  #ddd0b8;
+      --muted:     #7a6040;
+      --border:    #ddd0b8;
+      --or-border: #f5c890;
+    }
+
+    body.dark {
+      --ink:       #f0ece4;
+      --paper:     #1e1b18;
+      --paper2:    #252220;
+      --or-pale:   #2d2319;
+      --muted:     #9a8a70;
+      --border:    #3a3028;
+      --or-border: #4a3520;
     }
 
     html, body { height: 100%; }
@@ -37,7 +49,28 @@
       min-height: 100vh;
       padding: 2rem;
       text-align: center;
+      transition: background .25s, color .25s;
     }
+
+    /* Dark toggle */
+    .dark-btn {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.4rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 18px;
+      transition: background .2s, border-color .2s;
+    }
+    .dark-btn:hover { background: var(--paper2); }
 
     /* Logo */
     .logo {
@@ -72,7 +105,7 @@
       text-transform: uppercase;
       padding: .35rem .9rem;
       border-radius: 999px;
-      border: 1px solid #f5d0a8;
+      border: 1px solid var(--or-border);
       margin-bottom: 2rem;
     }
 
@@ -129,10 +162,10 @@
       border-radius: 10px;
       font-family: 'DM Sans', sans-serif;
       font-size: .95rem;
-      background: #fff;
+      background: var(--paper);
       color: var(--ink);
       outline: none;
-      transition: border-color .2s;
+      transition: border-color .2s, background .25s;
     }
 
     .form input:focus { border-color: var(--or1); }
@@ -208,6 +241,10 @@
 </head>
 <body>
 
+  <button class="dark-btn" onclick="toggleDark()" id="dark-btn" aria-label="Alternar tema">
+    <i class="ti ti-moon" id="dark-icon"></i>
+  </button>
+
   <!-- Logo -->
   <div class="logo">
     <img class="logo-icon" src="/logotipo.png" alt="Catch This Idea logo"/>
@@ -259,6 +296,17 @@
   <footer>© 2026 Catch This Idea</footer>
 
   <script>
+    (function(){
+      const saved=localStorage.getItem('cti_theme');
+      const dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(saved==='dark'||(!saved&&dark)){document.body.classList.add('dark');document.getElementById('dark-icon').className='ti ti-sun';}
+    })();
+    function toggleDark(){
+      const on=document.body.classList.toggle('dark');
+      document.getElementById('dark-icon').className=on?'ti ti-sun':'ti ti-moon';
+      localStorage.setItem('cti_theme',on?'dark':'light');
+    }
+
     document.getElementById('waitlistForm').addEventListener('submit', function(e) {
       e.preventDefault();
       this.style.display = 'none';

@@ -42,6 +42,22 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem
 .legal-footer{background:var(--paper2);border-top:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:.5rem}
 .legal-footer-links a{color:var(--muted);text-decoration:none;margin-left:1.2rem}
 .legal-footer-links a:hover{color:var(--ink)}
+.back-top{position:fixed;bottom:1.6rem;right:1.6rem;width:44px;height:44px;border-radius:50%;background:var(--or1);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 16px rgba(232,96,0,.35);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s,background .15s;z-index:500;pointer-events:none}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.back-top:hover{background:var(--or2)}
+@media(max-width:600px){
+  nav{padding:.65rem 1rem}
+  .logo-icon{width:36px;height:36px}
+  .logo-type{font-size:1.1rem}
+  .lang-wrap{gap:4px}
+  .lang-pill{padding:4px 8px;font-size:11px}
+  .legal-wrap{padding:2rem 1rem 4rem}
+  .legal-wrap h1{font-size:1.8rem}
+  .rights-grid{grid-template-columns:1fr 1fr}
+  .legal-footer{padding:1rem;flex-direction:column;gap:.6rem}
+  .legal-footer-links a{margin-left:.8rem}
+  .back-top{width:40px;height:40px;font-size:16px;right:1rem}
+}
 </style>
 </head>
 <body>
@@ -102,7 +118,7 @@ const C={
     terms:'Termos de Uso', privacy:'Privacidade', cookies:'Cookies',
     html:`
 <h2>1. Responsável pelo Tratamento</h2>
-<p>O responsável pelo tratamento dos seus dados pessoais é a <strong>Catch This Idea</strong>, contactável através de <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a>.</p>
+<p>O responsável pelo tratamento dos seus dados pessoais é a <strong>Catch This Idea</strong>, contactável através de <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>.</p>
 
 <h2>2. Dados Recolhidos</h2>
 <p>Recolhemos os seguintes dados pessoais:</p>
@@ -142,7 +158,7 @@ const C={
   <div class="right-item"><i class="ti ti-transfer"></i> Portabilidade dos dados</div>
   <div class="right-item"><i class="ti ti-flag"></i> Reclamação à CNPD</div>
 </div>
-<p>Para exercer os seus direitos, contacte: <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a>. Tem também o direito de apresentar reclamação à <a href="https://www.cnpd.pt" target="_blank" rel="noopener">CNPD</a>.</p>
+<p>Para exercer os seus direitos, contacte: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a>. Tem também o direito de apresentar reclamação à <a href="https://www.cnpd.pt" target="_blank" rel="noopener">CNPD</a>.</p>
 
 <h2>7. Segurança</h2>
 <p>Aplicamos medidas técnicas e organizativas para proteger os seus dados, incluindo encriptação em trânsito (HTTPS/TLS) e em repouso, e autenticação segura.</p>
@@ -157,7 +173,7 @@ const C={
 <p>Em caso de alterações significativas, notificaremos os utilizadores registados por email. A versão em vigor está sempre disponível nesta página.</p>
 
 <h2>11. Contacto</h2>
-<p>Para questões de privacidade: <a href="mailto:privacidade@catchthisidea.com">privacidade@catchthisidea.com</a></p>
+<p>Para questões de privacidade: <a href="mailto:privacy@catchthisidea.com">privacy@catchthisidea.com</a></p>
 `},
   en:{
     title:'Privacy Policy — Catch This Idea',
@@ -377,6 +393,9 @@ function setLang(l){
   localStorage.setItem('cti_lang',l);
 }
 setLang(localStorage.getItem('cti_lang')||'pt');
+function updateBackTop(){const btn=document.getElementById('back-top');if(!btn)return;const footer=document.querySelector('footer,.legal-footer');if(footer){const ft=footer.getBoundingClientRect().top;const vh=window.innerHeight;btn.style.bottom=ft<vh?(vh-ft+14)+'px':''}btn.classList.toggle('show',window.scrollY>350);}
+window.addEventListener('scroll',updateBackTop);
 </script>
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo"><i class="ti ti-arrow-up"></i></button>
 </body>
 </html>
