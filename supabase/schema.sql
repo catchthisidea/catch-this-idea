@@ -417,3 +417,389 @@ create index if not exists idx_admin_log_created_at
 
 create index if not exists idx_blacklist_email
   on public.blacklist(email) where email is not null;
+
+
+-- ============================================================
+-- 10. RGPD (GDPR) BY DESIGN
+--
+-- Implementa os direitos dos titulares de dados (RGPD Cap. III):
+--   Art. 15 — Direito de acesso
+--   Art. 17 — Direito ao apagamento ("direito a ser esquecido")
+--   Art. 20 — Portabilidade dos dados
+--   Art. 7(3) — Revogação de consentimento
+--
+-- PCI-DSS: este schema nunca armazena dados de cartão.
+--   Só se armazena o stripe_session_id (identificador de sessão).
+--   Dados de cartão são processados exclusivamente pela Stripe (SAQ-A).
+-- ============================================================
+
+-- Extensão para hashing e encriptação ao nível de coluna
+create extension if not exists pgcrypto;
+
+-- ── 10a. CONSENTS — prova de consentimento e base legal ──────
+--
+-- Regista o momento exacto, versão do documento e IP pseudonimizado
+-- (SHA-256 do IP — nunca o IP em claro, RGPD recital 26).
+-- Permite provar o consentimento (RGPD Art. 7(1)) e detectar
+-- quando é necessário pedir novo consentimento (actualizações de política).
+--
+-- Classificação dos dados:
+--   ip_hash     → dado pseudonimizado (não permite re-identificação directa)
+--   user_agent  → dado técnico não-pessoal (truncado a 200 chars)
+--   type        → não pessoal
+create table if not exists public.consents (
+  id           uuid primary key default gen_random_uuid(),
+  user_id      uuid not null references auth.users(id) on delete cascade,
+  type         text not null
+               check (type in ('terms', 'privacy', 'marketing_email')),
+  version      text not null default '1.0',    -- versão do documento aceite
+  ip_hash      text,                            -- SHA-256 do IP (pseudonimizado)
+  user_agent   text,                            -- browser, truncado a 200 chars
+  consented_at timestamptz default now(),
+  revoked_at   timestamptz                      -- preenchido ao revogar
+);
+
+alter table public.consents enable row level security;
+
+drop policy if exists "Utilizador vê os próprios consentimentos"   on public.consents;
+drop policy if exists "Utilizador regista consentimento"           on public.consents;
+drop policy if exists "Utilizador revoga consentimento"            on public.consents;
+
+create policy "Utilizador vê os próprios consentimentos"
+  on public.consents for select using (auth.uid() = user_id);
+
+create policy "Utilizador regista consentimento"
+  on public.consents for insert with check (auth.uid() = user_id);
+
+create policy "Utilizador revoga consentimento"
+  on public.consents for update using (auth.uid() = user_id);
+
+grant select, insert, update on public.consents to authenticated, service_role;
+
+create index if not exists idx_consents_user_id
+  on public.consents(user_id);
+
+
+-- ── 10b. GDPR_REQUESTS — registo de exercício de direitos ────
+--
+-- Mantido 5 anos para demonstrar conformidade (accountability, Art. 5(2)).
+-- email_hash mantém-se mesmo após apagamento do utilizador (user_id = null)
+-- para verificar que o pedido foi processado sem guardar o email em claro.
+create table if not exists public.gdpr_requests (
+  id           uuid primary key default gen_random_uuid(),
+  user_id      uuid references auth.users(id) on delete set null,
+  email_hash   text not null,                   -- SHA-256 do email (pseudonimizado)
+  type         text not null
+               check (type in ('access', 'deletion', 'portability', 'rectification', 'restriction')),
+  status       text not null default 'pending'
+               check (status in ('pending', 'processing', 'completed', 'rejected')),
+  requested_at timestamptz default now(),
+  completed_at timestamptz,
+  completed_by text,                            -- 'system' (auto) ou email do admin
+  notes        text
+);
+
+alter table public.gdpr_requests enable row level security;
+
+drop policy if exists "Utilizador vê os próprios pedidos RGPD" on public.gdpr_requests;
+drop policy if exists "Utilizador cria pedido RGPD"            on public.gdpr_requests;
+
+create policy "Utilizador vê os próprios pedidos RGPD"
+  on public.gdpr_requests for select using (auth.uid() = user_id);
+
+create policy "Utilizador cria pedido RGPD"
+  on public.gdpr_requests for insert with check (auth.uid() = user_id);
+
+grant select, insert        on public.gdpr_requests to authenticated;
+grant select, insert, update on public.gdpr_requests to service_role;
+
+create index if not exists idx_gdpr_requests_user_id
+  on public.gdpr_requests(user_id);
+
+create index if not exists idx_gdpr_requests_status
+  on public.gdpr_requests(status) where status = 'pending';
+
+
+-- ── 10c. FUNÇÃO: anonimizar dados pessoais de um utilizador ──
+--
+-- RGPD Art. 17 — Direito ao apagamento.
+--
+-- NÃO elimina registos de transações (obrigação legal de retenção por
+-- 7 anos: Lei Geral Tributária PT Art. 52, Directiva 2006/112/CE).
+-- RGPD Art. 17(3)(b) permite preservar dados quando existe obrigação legal.
+--
+-- Processo:
+--  1. Remove PII do perfil (nome, bio, avatar)
+--  2. Anonimiza avaliações (mantém estrelas para integridade do avg_rating)
+--  3. Anonimiza nome do vendedor nas ideias (mantém conteúdo — compradores pagaram)
+--  4. Revoga consentimentos activos
+--  5. Regista a anonimização para accountability
+--
+-- ⚠ APÓS chamar esta função, o caller deve também:
+--    a) Alterar o email em auth.users para um alias anónimo
+--    b) Banir a conta em auth.users (ban_duration: '876000h')
+--   Estes passos requerem a Admin API e são feitos na função serverless.
+create or replace function public.anonymize_user(user_uuid uuid)
+returns jsonb language plpgsql security definer as $$
+declare
+  anon text := '[Conta eliminada]';
+begin
+  -- 1. Anonimizar perfil (manter linha — integridade referencial das transações)
+  update public.profiles set
+    display_name      = anon,
+    bio               = null,
+    avatar_url        = null,
+    suspended         = true,
+    suspension_reason = 'GDPR_DELETION'
+  where id = user_uuid;
+
+  -- 2. Anonimizar avaliações dadas pelo utilizador
+  --    (manter stars — integridade de avg_rating das ideias compradas)
+  update public.ratings set
+    buyer_name = anon,
+    comment    = null
+  where buyer_id = user_uuid;
+
+  -- 3. Anonimizar nome do vendedor nas suas ideias
+  --    (manter conteúdo da ideia — compradores pagaram por ele)
+  update public.ideas set
+    seller_name = anon
+  where seller_id = user_uuid;
+
+  -- 4. Revogar todos os consentimentos activos
+  update public.consents set
+    revoked_at = now()
+  where user_id = user_uuid
+    and revoked_at is null;
+
+  -- 5. Desassociar entradas da blacklist sem eliminar o registo de segurança
+  update public.blacklist set
+    display_name = anon,
+    user_id      = null
+  where user_id = user_uuid;
+
+  -- 6. Registar para accountability (RGPD Art. 5(2))
+  insert into public.admin_log (admin_email, action, target_type, target_id, details)
+  values (
+    'system@gdpr',
+    'anonymize_user',
+    'user',
+    user_uuid::text,
+    'RGPD Art. 17 — direito ao apagamento executado. Transações preservadas (obrigação legal).'
+  );
+
+  return jsonb_build_object(
+    'anonymized', true,
+    'user_id',    user_uuid,
+    'timestamp',  now(),
+    'note',       'Dados financeiros preservados 7 anos por obrigação legal (LGT Art. 52)'
+  );
+end;
+$$;
+
+grant execute on function public.anonymize_user(uuid) to service_role;
+
+
+-- ── 10d. FUNÇÃO: exportar todos os dados de um utilizador ────
+--
+-- RGPD Art. 15 (direito de acesso) + Art. 20 (portabilidade).
+-- Devolve jsonb com todos os dados pessoais do titular.
+-- Não inclui dados de outros utilizadores.
+-- Formato estruturado e legível por máquina (RGPD Art. 20(1)).
+create or replace function public.export_user_data(user_uuid uuid)
+returns jsonb language plpgsql security definer as $$
+declare
+  result jsonb;
+begin
+  select jsonb_strip_nulls(jsonb_build_object(
+
+    'export_metadata', jsonb_build_object(
+      'export_date',    now(),
+      'format',         'JSON (RGPD Art. 20 — formato estruturado e legível por máquina)',
+      'controller',     'Catch This Idea | catchthisidea.com',
+      'legal_basis',    'RGPD Art. 15 e Art. 20',
+      'contact',        'suporte@catchthisidea.com'
+    ),
+
+    -- Perfil público
+    'profile', (
+      select jsonb_build_object(
+        'display_name',   p.display_name,
+        'bio',            p.bio,
+        'role',           p.role,
+        'loyalty_points', p.loyalty_points,
+        'created_at',     p.created_at
+      )
+      from public.profiles p where p.id = user_uuid
+    ),
+
+    -- Ideias publicadas como vendedor
+    'ideas_published', (
+      select jsonb_agg(jsonb_build_object(
+        'id',          i.id,
+        'title',       i.title_pt,
+        'category',    i.category,
+        'price',       i.price,
+        'status',      i.status,
+        'sales_count', i.sales_count,
+        'views_count', i.views_count,
+        'avg_rating',  i.avg_rating,
+        'created_at',  i.created_at
+      ))
+      from public.ideas i where i.seller_id = user_uuid
+    ),
+
+    -- Compras realizadas como comprador
+    'purchases', (
+      select jsonb_agg(jsonb_build_object(
+        'idea_id',     p.idea_id,
+        'amount_eur',  p.amount_eur,
+        'option_type', p.option_type,
+        'status',      p.status,
+        'created_at',  p.created_at
+      ))
+      from public.purchases p where p.buyer_id = user_uuid
+    ),
+
+    -- Avaliações submetidas como comprador
+    'ratings_given', (
+      select jsonb_agg(jsonb_build_object(
+        'idea_id',    r.idea_id,
+        'stars',      r.stars,
+        'comment',    r.comment,
+        'created_at', r.created_at
+      ))
+      from public.ratings r where r.buyer_id = user_uuid
+    ),
+
+    -- Carteira (saldo em euros)
+    'wallet', (
+      select jsonb_build_object(
+        'balance_eur', round((w.balance / 100.0)::numeric, 2),
+        'updated_at',  w.updated_at
+      )
+      from public.wallets w where w.user_id = user_uuid
+    ),
+
+    -- Histórico de movimentos financeiros
+    'transactions', (
+      select jsonb_agg(jsonb_build_object(
+        'type',        t.type,
+        'amount_eur',  round((t.amount / 100.0)::numeric, 2),
+        'description', t.description,
+        'created_at',  t.created_at
+      ) order by t.created_at desc)
+      from public.transactions t where t.user_id = user_uuid
+    ),
+
+    -- Consentimentos registados
+    'consents', (
+      select jsonb_agg(jsonb_build_object(
+        'type',         c.type,
+        'version',      c.version,
+        'consented_at', c.consented_at,
+        'revoked_at',   c.revoked_at
+      ))
+      from public.consents c where c.user_id = user_uuid
+    ),
+
+    -- Histórico de pedidos RGPD
+    'gdpr_requests', (
+      select jsonb_agg(jsonb_build_object(
+        'type',         g.type,
+        'status',       g.status,
+        'requested_at', g.requested_at,
+        'completed_at', g.completed_at
+      ))
+      from public.gdpr_requests g where g.user_id = user_uuid
+    )
+
+  )) into result;
+
+  return result;
+end;
+$$;
+
+grant execute on function public.export_user_data(uuid) to service_role;
+
+
+-- ── 10e. FUNÇÃO: aplicar políticas de retenção ───────────────
+--
+-- RGPD Art. 5(1)(e) — limitação da conservação.
+-- Chamar mensalmente via cron-data-retention.js.
+--
+-- Períodos de retenção:
+--   admin_log       → 2 anos  (auditoria interna)
+--   rejection_log   → 1 ano   (utilizadores não suspensos)
+--   gdpr_requests   → 5 anos  (accountability RGPD — Art. 5(2))
+--   transactions    → 7 anos  (NÃO eliminar — obrigação fiscal LGT Art. 52)
+--   consents        → enquanto conta activa + 1 ano (manter prova de consentimento)
+create or replace function public.enforce_data_retention()
+returns jsonb language plpgsql security definer as $$
+declare
+  n_admin_logs     int := 0;
+  n_rejection_logs int := 0;
+  n_gdpr_anon      int := 0;
+begin
+  -- admin_log: eliminar após 2 anos
+  delete from public.admin_log
+  where created_at < now() - interval '2 years';
+  get diagnostics n_admin_logs = row_count;
+
+  -- rejection_log: eliminar após 1 ano para utilizadores não suspensos
+  delete from public.rejection_log rl
+  where rl.rejected_at < now() - interval '1 year'
+    and not exists (
+      select 1 from public.profiles p
+      where p.id = rl.user_id and p.suspended = true
+    );
+  get diagnostics n_rejection_logs = row_count;
+
+  -- gdpr_requests: após 5 anos, anonimizar email_hash (já pseudonimizado, mas boa prática)
+  -- Manter o registo para accountability mas tornar completamente anónimo
+  update public.gdpr_requests
+  set email_hash = 'purged',
+      notes      = coalesce(notes, '') || ' | email_hash purgado após 5 anos (RGPD Art. 5(1)(e))'
+  where requested_at < now() - interval '5 years'
+    and email_hash != 'purged';
+  get diagnostics n_gdpr_anon = row_count;
+
+  -- ⚠ transactions: NÃO eliminar (7 anos — LGT Art. 52 + Directiva IVA)
+  -- ⚠ purchases:    NÃO eliminar (7 anos — mesma base legal)
+
+  -- Registar execução
+  insert into public.admin_log (admin_email, action, target_type, target_id, details)
+  values (
+    'system@retention',
+    'enforce_data_retention',
+    'system',
+    null,
+    format(
+      'admin_logs=%s rejection_logs=%s gdpr_anon=%s',
+      n_admin_logs, n_rejection_logs, n_gdpr_anon
+    )
+  );
+
+  return jsonb_build_object(
+    'admin_logs_deleted',       n_admin_logs,
+    'rejection_logs_deleted',   n_rejection_logs,
+    'gdpr_requests_anonymized', n_gdpr_anon,
+    'note_transactions',        'Preservadas (7 anos, LGT Art. 52)',
+    'executed_at',              now()
+  );
+end;
+$$;
+
+grant execute on function public.enforce_data_retention() to service_role;
+
+
+-- ── 10f. Nota de conformidade PCI-DSS ────────────────────────
+--
+-- Este schema NÃO armazena dados de cartão de pagamento.
+-- O único identificador Stripe guardado é:
+--   purchases.stripe_session_id  (não é dado de cartão — é ID de sessão)
+--
+-- Todos os dados de cartão são processados exclusivamente pela Stripe
+-- através do Stripe Checkout (hosted page).
+-- Nível de conformidade PCI-DSS: SAQ-A (mais simples).
+-- Referência: https://stripe.com/docs/security/guide

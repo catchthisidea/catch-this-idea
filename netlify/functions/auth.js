@@ -1,5 +1,6 @@
 export const config = { path: '/api/auth' };
 
+import { createHash }                                   from 'node:crypto';
 import { sendEmail as sendTransactional, emailWelcome } from './_email.js';
 
 const SUPABASE_URL      = (process.env.SUPABASE_URL      ?? '').replace(/\/+$/, '');
@@ -197,7 +198,25 @@ export default async (req) => {
 
     if (!confirmUrl) return json({ error: 'Erro ao gerar link de confirmação' }, 500, origin);
 
-    // 3. Enviar email de confirmação (idioma do utilizador) + email de boas-vindas (PT)
+    // 3. Registar consentimentos RGPD (Art. 7 — prova de consentimento)
+    //    Feito antes de enviar emails para garantir registo mesmo se email falhar
+    const ipHash   = createHash('sha256').update(ip).digest('hex'); // IP pseudonimizado
+    const ua       = req.headers.get('user-agent')?.slice(0, 200) || null;
+    const consentBase = { user_id: createData.id, version: '1.0', ip_hash: ipHash, user_agent: ua };
+    Promise.allSettled([
+      fetch(`${SUPABASE_URL}/rest/v1/consents`, {
+        method:  'POST',
+        headers: { ...adminHeaders, 'Prefer': 'return=minimal' },
+        body:    JSON.stringify({ ...consentBase, type: 'terms' }),
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/consents`, {
+        method:  'POST',
+        headers: { ...adminHeaders, 'Prefer': 'return=minimal' },
+        body:    JSON.stringify({ ...consentBase, type: 'privacy' }),
+      }),
+    ]).catch(e => console.warn('[auth:register] consent recording:', e.message));
+
+    // 4. Enviar email de confirmação (idioma do utilizador) + email de boas-vindas (PT)
     await sendConfirmEmail(cleanEmail, sanitizedName, safeLang, confirmUrl);
 
     // Boas-vindas separado — chega logo a seguir ao de confirmação

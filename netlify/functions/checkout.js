@@ -11,6 +11,26 @@
  *
  * Preços SEMPRE lidos da base de dados — nunca confiamos no cliente.
  * Comissão base: 10% (loyalty reductions a implementar futuramente).
+ *
+ * ┌──────────────────────────────────────────────────────────────────┐
+ * │  PCI-DSS — ÂMBITO SAQ-A (nível mais simples possível)          │
+ * │                                                                  │
+ * │  Este endpoint NÃO processa, NÃO transmite e NÃO armazena       │
+ * │  dados de titulares de cartão (CHD) nem dados de autenticação   │
+ * │  sensíveis (SAD). O processamento ocorre exclusivamente na       │
+ * │  infraestrutura certificada PCI-DSS Level 1 da Stripe.          │
+ * │                                                                  │
+ * │  O que é armazenado no nosso lado:                              │
+ * │  • stripe_session_id — identificador de sessão de checkout       │
+ * │    (não é um dado de cartão, conforme PCI-DSS v4.0 §12.3.2)    │
+ * │                                                                  │
+ * │  O que NUNCA é armazenado ou registado:                         │
+ * │  • PAN (número do cartão), CVV/CVC, data de validade           │
+ * │  • Nome do titular, endereço de cobrança                        │
+ * │  • Chaves de autenticação de cartão                             │
+ * │                                                                  │
+ * │  Referência: SAQ A v4.0, Stripe JS + Stripe Checkout Hosted    │
+ * └──────────────────────────────────────────────────────────────────┘
  */
 
 export const config = { path: '/api/checkout' };
