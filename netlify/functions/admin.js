@@ -29,6 +29,18 @@
 export const config = { path: '/api/admin' };
 
 import { analyzeIdea } from './moderation.js';
+import {
+  sendEmail,
+  emailIdeaApproved,
+  emailIdeaRejected,
+  emailSecondRejectionWarning,
+  emailAccountSuspended,
+  emailSuspensionLifted,
+  emailAccountBanned,
+  emailIdeaFeatured,
+  emailRefundBuyer,
+  emailRefundSeller,
+} from './_email.js';
 
 /* ── Env ── */
 const SUPABASE_URL    = (process.env.SUPABASE_URL ?? '').replace(/\/+$/, '');
@@ -65,6 +77,45 @@ const svc = () => ({
 function getCount(res) {
   const range = res.headers.get('Content-Range');
   return parseInt(range?.split('/')?.[1] ?? '0', 10);
+}
+
+/* ── Helper: obter email de um utilizador via Auth API ── */
+async function getUserEmail(userId) {
+  if (!userId) return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${userId}`, { headers: svc() });
+    if (!res.ok) return null;
+    const u = await res.json();
+    return u.email ?? null;
+  } catch { return null; }
+}
+
+/* ── Helper: obter display_name de um utilizador ── */
+async function getUserName(userId) {
+  if (!userId) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=display_name&limit=1`,
+      { headers: svc() }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows[0]?.display_name ?? null;
+  } catch { return null; }
+}
+
+/* ── Helper: obter título e seller_id de uma ideia ── */
+async function getIdeaBasic(ideaId) {
+  if (!ideaId) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/ideas?id=eq.${ideaId}&select=title_pt,seller_id&limit=1`,
+      { headers: svc() }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return rows[0] ?? null;
+  } catch { return null; }
 }
 
 /* ── Helper: log admin action to admin_log table ── */
@@ -153,7 +204,10 @@ async function purgeIdea(ideaId) {
 }
 
 /* Regista rejeição e suspende utilizador se necessário (>=3 rejeições) */
-async function logRejectionAndMaybeSuspend(userId, ideaId, ideaTitle, reason, adminEmail) {
+async function logRejectionAndMaybeSuspend(
+  userId, ideaId, ideaTitle, reason, adminEmail,
+  sellerEmail = null, sellerName = null
+) {
   await fetch(`${SUPABASE_URL}/rest/v1/rejection_log`, {
     method:  'POST',
     headers: { ...svc(), 'Prefer': 'return=minimal' },
@@ -189,6 +243,19 @@ async function logRejectionAndMaybeSuspend(userId, ideaId, ideaTitle, reason, ad
     headers: { ...svc(), 'Prefer': 'return=minimal' },
     body:    JSON.stringify(update),
   });
+
+  // Notificações por email
+  if (sellerEmail) {
+    if (shouldSuspend) {
+      // 3ª+ rejeição → conta suspensa
+      const em = emailAccountSuspended(sellerName);
+      sendEmail(sellerEmail, em.subject, em.html).catch(() => {});
+    } else if (newCount === 2) {
+      // 2ª rejeição → aviso
+      const em = emailSecondRejectionWarning(sellerName, ideaTitle);
+      sendEmail(sellerEmail, em.subject, em.html).catch(() => {});
+    }
+  }
 
   return { newCount, suspended: shouldSuspend };
 }
@@ -479,8 +546,25 @@ export default async (req) => {
     if (action === 'approve') {
       const { idea_id } = body;
       if (!idea_id) return json({ error: 'idea_id é obrigatório' }, 400, origin);
-      const update = await applyDecision(idea_id, 'approved', 'Aprovado manualmente', 'human');
+
+      // Buscar info da ideia para email (em paralelo com a decisão)
+      const ideaInfo = await getIdeaBasic(idea_id);
+      const update   = await applyDecision(idea_id, 'approved', 'Aprovado manualmente', 'human');
       await logAdminAction(admin.email, 'approve', 'idea', idea_id, '');
+
+      // Email ao vendedor (não bloqueia a resposta)
+      if (ideaInfo?.seller_id) {
+        const [sellerEmail, sellerName] = await Promise.all([
+          getUserEmail(ideaInfo.seller_id),
+          getUserName(ideaInfo.seller_id),
+        ]);
+        if (sellerEmail) {
+          const em = emailIdeaApproved(sellerName, ideaInfo.title_pt);
+          sendEmail(sellerEmail, em.subject, em.html)
+            .catch(e => console.warn('[admin:approve] email:', e.message));
+        }
+      }
+
       return json({ ok: true, update }, 200, origin);
     }
 
@@ -492,11 +576,28 @@ export default async (req) => {
 
       const purged = await purgeIdea(idea_id);
       let suspension = null;
+
       if (purged?.seller_id) {
+        // Buscar email e nome do vendedor em paralelo
+        const [sellerEmail, sellerName] = await Promise.all([
+          getUserEmail(purged.seller_id),
+          getUserName(purged.seller_id),
+        ]);
+
+        // Email de rejeição
+        if (sellerEmail) {
+          const em = emailIdeaRejected(sellerName, purged.title_pt, reason);
+          sendEmail(sellerEmail, em.subject, em.html)
+            .catch(e => console.warn('[admin:reject] email:', e.message));
+        }
+
+        // Contabilizar rejeição + possível suspensão + avisos automáticos
         suspension = await logRejectionAndMaybeSuspend(
-          purged.seller_id, idea_id, purged.title_pt, reason, admin.email
+          purged.seller_id, idea_id, purged.title_pt, reason, admin.email,
+          sellerEmail, sellerName
         ).catch(e => { console.warn('[admin:reject] suspension error:', e.message); return null; });
       }
+
       await logAdminAction(admin.email, 'reject', 'idea', idea_id, reason);
       console.log(`[admin:reject] idea=${idea_id} reason="${reason}" by=${admin.email} suspended=${suspension?.suspended} at=${new Date().toISOString()}`);
       return json({ ok: true, deleted: true, suspension }, 200, origin);
@@ -566,6 +667,13 @@ export default async (req) => {
 
       await logAdminAction(admin.email, 'ban', 'user', user_id, banReason);
       console.log(`[admin:ban] user=${user_id} email=${user.email} phone=${phone||'—'} reason="${banReason}" by=${admin.email} at=${new Date().toISOString()}`);
+
+      // Email de banimento
+      if (user.email) {
+        const em = emailAccountBanned(profiles[0]?.display_name);
+        sendEmail(user.email, em.subject, em.html).catch(() => {});
+      }
+
       return json({ ok: true, banned: true }, 200, origin);
     }
 
@@ -573,6 +681,14 @@ export default async (req) => {
     if (action === 'unsuspend') {
       const { user_id } = body;
       if (!user_id) return json({ error: 'user_id é obrigatório' }, 400, origin);
+
+      // Buscar dados para email antes de alterar
+      const [unsuspUserRes, unsuspProfileRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/auth/v1/admin/users/${user_id}`, { headers: svc() }),
+        fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${user_id}&select=display_name&limit=1`, { headers: svc() }),
+      ]);
+      const unsuspUser    = unsuspUserRes.ok    ? await unsuspUserRes.json()    : {};
+      const unsuspProfiles = unsuspProfileRes.ok ? await unsuspProfileRes.json() : [];
 
       await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${user_id}`, {
         method:  'PATCH',
@@ -587,6 +703,13 @@ export default async (req) => {
 
       await logAdminAction(admin.email, 'unsuspend', 'user', user_id, '');
       console.log(`[admin:unsuspend] user=${user_id} by=${admin.email} at=${new Date().toISOString()}`);
+
+      // Email de reativação
+      if (unsuspUser.email) {
+        const em = emailSuspensionLifted(unsuspProfiles[0]?.display_name);
+        sendEmail(unsuspUser.email, em.subject, em.html).catch(() => {});
+      }
+
       return json({ ok: true }, 200, origin);
     }
 
@@ -602,6 +725,22 @@ export default async (req) => {
       });
 
       await logAdminAction(admin.email, 'feature', 'idea', idea_id, featured ? 'em destaque' : 'destaque removido');
+
+      // Email ao vendedor apenas quando a ideia é promovida a destaque
+      if (featured) {
+        const ideaInfo = await getIdeaBasic(idea_id);
+        if (ideaInfo?.seller_id) {
+          const [sellerEmail, sellerName] = await Promise.all([
+            getUserEmail(ideaInfo.seller_id),
+            getUserName(ideaInfo.seller_id),
+          ]);
+          if (sellerEmail) {
+            const em = emailIdeaFeatured(sellerName, ideaInfo.title_pt);
+            sendEmail(sellerEmail, em.subject, em.html).catch(() => {});
+          }
+        }
+      }
+
       return json({ ok: true }, 200, origin);
     }
 
@@ -661,10 +800,18 @@ export default async (req) => {
     /* ── refund: processar reembolso via Stripe ── */
     if (action === 'refund') {
       const { purchase_id, stripe_session_id, reason } = body;
-      if (!purchase_id)      return json({ error: 'purchase_id é obrigatório' }, 400, origin);
+      if (!purchase_id)       return json({ error: 'purchase_id é obrigatório' }, 400, origin);
       if (!stripe_session_id) return json({ error: 'stripe_session_id é obrigatório' }, 400, origin);
-      if (!reason)           return json({ error: 'Motivo do reembolso é obrigatório' }, 400, origin);
-      if (!STRIPE_SECRET)    return json({ error: 'STRIPE_SECRET_KEY não configurada' }, 500, origin);
+      if (!reason)            return json({ error: 'Motivo do reembolso é obrigatório' }, 400, origin);
+      if (!STRIPE_SECRET)     return json({ error: 'STRIPE_SECRET_KEY não configurada' }, 500, origin);
+
+      // 0. Buscar info da compra para emails (antecipado)
+      const purchInfoRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/purchases?id=eq.${purchase_id}&select=buyer_id,seller_id,amount_eur,idea_id&limit=1`,
+        { headers: svc() }
+      );
+      const purchRows = purchInfoRes.ok ? await purchInfoRes.json() : [];
+      const purchInfo = purchRows[0] ?? null;
 
       // 1. Obter a Checkout Session do Stripe para extrair o payment_intent
       const sessionRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${stripe_session_id}`, {
@@ -703,6 +850,27 @@ export default async (req) => {
       });
 
       await logAdminAction(admin.email, 'refund', 'purchase', purchase_id, `reason=${reason} stripe_refund_id=${refund.id}`);
+
+      // 4. Emails de notificação ao comprador e ao vendedor
+      if (purchInfo) {
+        const [buyerEmail, sellerEmail, ideaInfo] = await Promise.all([
+          getUserEmail(purchInfo.buyer_id),
+          getUserEmail(purchInfo.seller_id),
+          getIdeaBasic(purchInfo.idea_id),
+        ]);
+        const ideaTitle = ideaInfo?.title_pt ?? 'Ideia';
+        const amountEur = purchInfo.amount_eur;
+
+        if (buyerEmail) {
+          const em = emailRefundBuyer(ideaTitle, amountEur);
+          sendEmail(buyerEmail, em.subject, em.html).catch(() => {});
+        }
+        if (sellerEmail) {
+          const em = emailRefundSeller(ideaTitle, amountEur);
+          sendEmail(sellerEmail, em.subject, em.html).catch(() => {});
+        }
+      }
+
       return json({ ok: true, refund_id: refund.id }, 200, origin);
     }
 

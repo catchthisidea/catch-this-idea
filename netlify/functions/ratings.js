@@ -1,5 +1,7 @@
 export const config = { path: '/api/ratings' };
 
+import { sendEmail, emailNewRating } from './_email.js';
+
 const SUPABASE_URL      = (process.env.SUPABASE_URL ?? '').replace(/\/+$/, '');
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SVC_KEY  = process.env.SUPABASE_SERVICE_KEY;
@@ -28,6 +30,36 @@ function userH(token) {
 }
 function svcH() {
   return { 'apikey': SUPABASE_SVC_KEY, 'Authorization': `Bearer ${SUPABASE_SVC_KEY}`, 'Content-Type': 'application/json' };
+}
+
+/* ── Notificação de nova avaliação ao vendedor ───── */
+async function notifySellerNewRating(sellerId, ideaId, stars, comment, buyerName) {
+  if (!sellerId || !ideaId) return;
+
+  // Buscar email do vendedor e título da ideia em paralelo
+  const [authRes, ideaRes] = await Promise.all([
+    fetch(`${SUPABASE_URL}/auth/v1/admin/users/${sellerId}`, { headers: svcH() }),
+    fetch(`${SUPABASE_URL}/rest/v1/ideas?id=eq.${ideaId}&select=title_pt&limit=1`, { headers: svcH() }),
+  ]);
+
+  const sellerUser = authRes.ok ? await authRes.json() : {};
+  const ideaRows  = ideaRes.ok  ? await ideaRes.json() : [];
+
+  const sellerEmail = sellerUser.email ?? null;
+  const ideaTitle   = ideaRows[0]?.title_pt ?? 'Ideia';
+
+  // Buscar nome do vendedor
+  const profileRes  = await fetch(
+    `${SUPABASE_URL}/rest/v1/profiles?id=eq.${sellerId}&select=display_name&limit=1`,
+    { headers: svcH() }
+  );
+  const profiles  = profileRes.ok ? await profileRes.json() : [];
+  const sellerName = profiles[0]?.display_name ?? null;
+
+  if (sellerEmail) {
+    const em = emailNewRating(sellerName, ideaTitle, stars, comment, buyerName);
+    await sendEmail(sellerEmail, em.subject, em.html);
+  }
 }
 
 export default async (req) => {
@@ -109,6 +141,10 @@ export default async (req) => {
       headers: svcH(),
       body:    JSON.stringify({ idea_uuid: idea_id }),
     }).catch(() => {});
+
+    // Notificar vendedor por email (não bloqueia a resposta)
+    notifySellerNewRating(seller_id, idea_id, starsInt, String(comment || '').trim(), user.user_metadata?.full_name)
+      .catch(e => console.warn('[ratings] email notification:', e.message));
 
     return json((await ratingRes.json())[0], 201, origin);
   }
